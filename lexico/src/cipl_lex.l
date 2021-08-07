@@ -12,10 +12,37 @@
   int current_column = 1;
 %}
 
-WSPACE  [ \t]+
-NLINE   \n
-DIGIT   [0-9]
-ID      [_a-zA-Z][_a-zA-Z0-9]*
+WSPACE      [ \t]+
+NLINE       (\n)
+SLCOMMENT   (//).+
+MLCOMMENT   (/*)(\n|[^(*/)])*(*/)
+
+ID          [_a-zA-Z][_a-zA-Z0-9]*
+DIGIT       [0-9]
+FLOAT       (-)?{DIGIT}*\.{DIGIT}+
+INT         (-)?{DIGIT}+
+
+OP_ARITH    [+-*/]
+OP_LOGIC    (&&)|(||)|(!)
+OP_RELAT    (<)|(<=)|(>)|(>=)|(==)|(!=)
+OP_ASSIG    (=)
+
+OP_LIST     (?)|(!)
+DESTRUCTOR  (%)
+FUNC_LIST   (>>)|(<<)
+CONSTRUCTOR (:)
+
+TYPE        (int)|(float)|(list)
+NIL         (NIL)
+KEYWORD     (if)|(else)|(for)|(return)
+INPUT       (read)
+OUTPUT      (write)|(writeln)
+
+SEMICOLON   (;)
+COMMA       (,)
+CURLYB      [{}]
+PARENTHESIS [()]
+QUOTES      [\"\']
 
 %%
 
@@ -28,15 +55,105 @@ ID      [_a-zA-Z][_a-zA-Z0-9]*
   current_line++;
 }
 
-(-)?{DIGIT}*\.{DIGIT}+ {
+{SLCOMMENT} {
+  printf("%3d \t %4d \t ", current_line, current_column);
+  printf("Single line comment found\n");
+  current_column += yyleng;
+}
+
+{MLCOMMENT} {
+  printf("%3d \t %4d \t ", current_line, current_column);
+  printf("Multi line comment found\n");
+  current_column += yyleng;
+}
+
+{FLOAT} {
   printf("%3d \t %4d \t ", current_line, current_column);
   printf("Float: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
   current_column += yyleng;
 }
 
-(-)?{DIGIT}+ {
+{INT} {
   printf("%3d \t %4d \t ", current_line, current_column);
   printf("Int: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  current_column += yyleng;
+}
+
+{OP_ARITH} {
+  printf("%3d \t %4d \t ", current_line, current_column);
+  printf("Arithmetic Operator: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  current_column += yyleng;
+}
+
+{OP_LOGIC} {
+  printf("%3d \t %4d \t ", current_line, current_column);
+  printf("Logic Operator: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  current_column += yyleng;
+}
+
+{OP_RELAT} {
+  printf("%3d \t %4d \t ", current_line, current_column);
+  printf("Relational Operator: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  current_column += yyleng;
+}
+
+{OP_ASSIG} {
+  printf("%3d \t %4d \t ", current_line, current_column);
+  printf("Assignment: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  current_column += yyleng;
+}
+
+{OP_LIST} {
+  printf("%3d \t %4d \t ", current_line, current_column);
+  printf("List Operator: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  current_column += yyleng;
+}
+
+{DESTRUCTOR} {
+  printf("%3d \t %4d \t ", current_line, current_column);
+  printf("List Destructor: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  current_column += yyleng;
+}
+
+{FUNC_LIST} {
+  printf("%3d \t %4d \t ", current_line, current_column);
+  printf("List Function: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  current_column += yyleng;
+}
+
+{CONSTRUCTOR} {
+  printf("%3d \t %4d \t ", current_line, current_column);
+  printf("List Constructor: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  current_column += yyleng;
+}
+
+{TYPE} {
+  printf("%3d \t %4d \t ", current_line, current_column);
+  printf("Type: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  current_column += yyleng;
+}
+
+{NIL} {
+  printf("%3d \t %4d \t ", current_line, current_column);
+  printf("NIL const: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  current_column += yyleng;
+}
+
+{KEYWORD} {
+  printf("%3d \t %4d \t ", current_line, current_column);
+  printf("Keyword: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  current_column += yyleng;
+}
+
+{INPUT} {
+  printf("%3d \t %4d \t ", current_line, current_column);
+  printf("Input: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  current_column += yyleng;
+}
+
+{OUTPUT} {
+  printf("%3d \t %4d \t ", current_line, current_column);
+  printf("Output: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
   current_column += yyleng;
 }
 
@@ -46,7 +163,35 @@ ID      [_a-zA-Z][_a-zA-Z0-9]*
   current_column += yyleng;
 }
 
+{SEMICOLON} {
+  printf("%3d \t %4d \t ", current_line, current_column);
+  printf("Semicolon: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  current_column += yyleng;
+}
 
+{COMMA} {
+  printf("%3d \t %4d \t ", current_line, current_column);
+  printf("Comma: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  current_column += yyleng;
+}
+
+{CURLYB} {
+  printf("%3d \t %4d \t ", current_line, current_column);
+  printf("Curly bracket: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  current_column += yyleng;
+}
+
+{PARENTHESIS} {
+  printf("%3d \t %4d \t ", current_line, current_column);
+  printf("Parenthesis: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  current_column += yyleng;
+}
+
+{QUOTES} {
+  printf("%3d \t %4d \t ", current_line, current_column);
+  printf("Quotation mark: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  current_column += yyleng;
+}
 
 %%
 
