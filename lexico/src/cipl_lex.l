@@ -14,20 +14,20 @@
 
 WSPACE      [ \t]+
 NLINE       (\n)
-SLCOMMENT   (//).+
-MLCOMMENT   (/*)(\n|[^(*/)])*(*/)
 
 ID          [_a-zA-Z][_a-zA-Z0-9]*
 DIGIT       [0-9]
 FLOAT       (-)?{DIGIT}*\.{DIGIT}+
 INT         (-)?{DIGIT}+
 
-OP_ARITH    [+-*/]
-OP_LOGIC    (&&)|(||)|(!)
+OP_ARITH    [+*/-]
+OP_LOGIC    (&&)|(\|\|)
 OP_RELAT    (<)|(<=)|(>)|(>=)|(==)|(!=)
 OP_ASSIG    (=)
 
-OP_LIST     (?)|(!)
+OP_EXCL     (!)
+
+OP_LIST     (\?)
 DESTRUCTOR  (%)
 FUNC_LIST   (>>)|(<<)
 CONSTRUCTOR (:)
@@ -42,7 +42,7 @@ SEMICOLON   (;)
 COMMA       (,)
 CURLYB      [{}]
 PARENTHESIS [()]
-QUOTES      [\"\']
+STRING      (\".*\")|(\'.*\')
 
 %%
 
@@ -55,15 +55,9 @@ QUOTES      [\"\']
   current_line++;
 }
 
-{SLCOMMENT} {
+{STRING} {
   printf("%3d \t %4d \t ", current_line, current_column);
-  printf("Single line comment found\n");
-  current_column += yyleng;
-}
-
-{MLCOMMENT} {
-  printf("%3d \t %4d \t ", current_line, current_column);
-  printf("Multi line comment found\n");
+  printf("String: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
   current_column += yyleng;
 }
 
@@ -106,6 +100,12 @@ QUOTES      [\"\']
 {OP_LIST} {
   printf("%3d \t %4d \t ", current_line, current_column);
   printf("List Operator: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  current_column += yyleng;
+}
+
+{OP_EXCL} {
+  printf("%3d \t %4d \t ", current_line, current_column);
+  printf("Exclamation Operator: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
   current_column += yyleng;
 }
 
@@ -187,9 +187,9 @@ QUOTES      [\"\']
   current_column += yyleng;
 }
 
-{QUOTES} {
-  printf("%3d \t %4d \t ", current_line, current_column);
-  printf("Quotation mark: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+. {
+  printf(PRINT_RED "%3d \t %4d \t ", current_line, current_column);
+  printf("Error: %s\n" PRINT_RESET, yytext);
   current_column += yyleng;
 }
 
