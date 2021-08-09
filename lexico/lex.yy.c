@@ -2039,6 +2039,8 @@ int main (int argc, char *argv[]) {
     } else {
       printf("Invalid filename and/or path.\n");
     }
+
+    fclose(file);
   } else {
     printf("There isn't input files.\n");
   }
