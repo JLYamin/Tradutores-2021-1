@@ -514,7 +514,8 @@ int yy_flex_debug = 0;
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
 #line 1 "cipl_lex.l"
-#line 4 "cipl_lex.l"
+#define YY_NO_INPUT 1
+#line 5 "cipl_lex.l"
   #include <stdio.h>
   #include <stdlib.h>
 
@@ -524,8 +525,8 @@ char *yytext;
   
   int current_line = 1;
   int current_column = 1;
-#line 527 "lex.yy.c"
 #line 528 "lex.yy.c"
+#line 529 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -585,8 +586,6 @@ extern int yywrap ( void );
 #endif
 
 #ifndef YY_NO_UNPUT
-    
-    static void yyunput ( int c, char *buf_ptr  );
     
 #endif
 
@@ -742,10 +741,10 @@ YY_DECL
 		}
 
 	{
-#line 50 "cipl_lex.l"
+#line 51 "cipl_lex.l"
 
 
-#line 748 "lex.yy.c"
+#line 747 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -804,7 +803,7 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 52 "cipl_lex.l"
+#line 53 "cipl_lex.l"
 {
   current_column += yyleng;
 }
@@ -812,7 +811,7 @@ YY_RULE_SETUP
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 56 "cipl_lex.l"
+#line 57 "cipl_lex.l"
 {
   current_column = 1;
   current_line++;
@@ -820,7 +819,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 61 "cipl_lex.l"
+#line 62 "cipl_lex.l"
 {
   printf("%3d \t %4d \t ", current_line, current_column);
   printf("Single line comment found\n");
@@ -830,7 +829,7 @@ YY_RULE_SETUP
 case 4:
 /* rule 4 can match eol */
 YY_RULE_SETUP
-#line 67 "cipl_lex.l"
+#line 68 "cipl_lex.l"
 {
   printf("%3d \t %4d \t ", current_line, current_column);
   printf("Multi line comment found\n");
@@ -839,7 +838,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 73 "cipl_lex.l"
+#line 74 "cipl_lex.l"
 {
   printf("%3d \t %4d \t ", current_line, current_column);
   printf("String: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
@@ -848,7 +847,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 79 "cipl_lex.l"
+#line 80 "cipl_lex.l"
 {
   printf("%3d \t %4d \t ", current_line, current_column);
   printf("Float: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
@@ -857,7 +856,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 85 "cipl_lex.l"
+#line 86 "cipl_lex.l"
 {
   printf("%3d \t %4d \t ", current_line, current_column);
   printf("Int: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
@@ -866,7 +865,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 91 "cipl_lex.l"
+#line 92 "cipl_lex.l"
 {
   printf("%3d \t %4d \t ", current_line, current_column);
   printf("Arithmetic Operator: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
@@ -875,7 +874,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 97 "cipl_lex.l"
+#line 98 "cipl_lex.l"
 {
   printf("%3d \t %4d \t ", current_line, current_column);
   printf("Logic Operator: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
@@ -884,7 +883,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 103 "cipl_lex.l"
+#line 104 "cipl_lex.l"
 {
   printf("%3d \t %4d \t ", current_line, current_column);
   printf("Relational Operator: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
@@ -893,7 +892,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 109 "cipl_lex.l"
+#line 110 "cipl_lex.l"
 {
   printf("%3d \t %4d \t ", current_line, current_column);
   printf("Assignment: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
@@ -902,7 +901,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 115 "cipl_lex.l"
+#line 116 "cipl_lex.l"
 {
   printf("%3d \t %4d \t ", current_line, current_column);
   printf("List Operator: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
@@ -911,7 +910,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 121 "cipl_lex.l"
+#line 122 "cipl_lex.l"
 {
   printf("%3d \t %4d \t ", current_line, current_column);
   printf("Exclamation Operator: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
@@ -920,7 +919,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 127 "cipl_lex.l"
+#line 128 "cipl_lex.l"
 {
   printf("%3d \t %4d \t ", current_line, current_column);
   printf("List Destructor: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
@@ -929,7 +928,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 133 "cipl_lex.l"
+#line 134 "cipl_lex.l"
 {
   printf("%3d \t %4d \t ", current_line, current_column);
   printf("List Function: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
@@ -938,7 +937,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 139 "cipl_lex.l"
+#line 140 "cipl_lex.l"
 {
   printf("%3d \t %4d \t ", current_line, current_column);
   printf("List Constructor: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
@@ -947,7 +946,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 145 "cipl_lex.l"
+#line 146 "cipl_lex.l"
 {
   printf("%3d \t %4d \t ", current_line, current_column);
   printf("Type: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
@@ -956,7 +955,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 151 "cipl_lex.l"
+#line 152 "cipl_lex.l"
 {
   printf("%3d \t %4d \t ", current_line, current_column);
   printf("NIL const: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
@@ -965,7 +964,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 157 "cipl_lex.l"
+#line 158 "cipl_lex.l"
 {
   printf("%3d \t %4d \t ", current_line, current_column);
   printf("Keyword: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
@@ -974,7 +973,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 163 "cipl_lex.l"
+#line 164 "cipl_lex.l"
 {
   printf("%3d \t %4d \t ", current_line, current_column);
   printf("Input: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
@@ -983,7 +982,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 169 "cipl_lex.l"
+#line 170 "cipl_lex.l"
 {
   printf("%3d \t %4d \t ", current_line, current_column);
   printf("Output: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
@@ -992,7 +991,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 175 "cipl_lex.l"
+#line 176 "cipl_lex.l"
 {
   printf("%3d \t %4d \t ", current_line, current_column);
   printf("Identifier: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
@@ -1001,7 +1000,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 181 "cipl_lex.l"
+#line 182 "cipl_lex.l"
 {
   printf("%3d \t %4d \t ", current_line, current_column);
   printf("Semicolon: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
@@ -1010,7 +1009,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 187 "cipl_lex.l"
+#line 188 "cipl_lex.l"
 {
   printf("%3d \t %4d \t ", current_line, current_column);
   printf("Comma: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
@@ -1019,7 +1018,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 193 "cipl_lex.l"
+#line 194 "cipl_lex.l"
 {
   printf("%3d \t %4d \t ", current_line, current_column);
   printf("Curly bracket: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
@@ -1028,7 +1027,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 199 "cipl_lex.l"
+#line 200 "cipl_lex.l"
 {
   printf("%3d \t %4d \t ", current_line, current_column);
   printf("Parenthesis: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
@@ -1037,7 +1036,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 205 "cipl_lex.l"
+#line 206 "cipl_lex.l"
 {
   printf(PRINT_RED "%3d \t %4d \t ", current_line, current_column);
   printf("Error: %s\n" PRINT_RESET, yytext);
@@ -1046,7 +1045,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 211 "cipl_lex.l"
+#line 212 "cipl_lex.l"
 {
   printf(PRINT_RED "%3d \t %4d \t ", current_line, current_column);
   printf("Error: %s\n" PRINT_RESET, yytext);
@@ -1055,10 +1054,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 217 "cipl_lex.l"
+#line 218 "cipl_lex.l"
 ECHO;
 	YY_BREAK
-#line 1061 "lex.yy.c"
+#line 1060 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1393,43 +1392,6 @@ static int yy_get_next_buffer (void)
 }
 
 #ifndef YY_NO_UNPUT
-
-    static void yyunput (int c, char * yy_bp )
-{
-	char *yy_cp;
-    
-    yy_cp = (yy_c_buf_p);
-
-	/* undo effects of setting up yytext */
-	*yy_cp = (yy_hold_char);
-
-	if ( yy_cp < YY_CURRENT_BUFFER_LVALUE->yy_ch_buf + 2 )
-		{ /* need to shift things up to make room */
-		/* +2 for EOB chars. */
-		int number_to_move = (yy_n_chars) + 2;
-		char *dest = &YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[
-					YY_CURRENT_BUFFER_LVALUE->yy_buf_size + 2];
-		char *source =
-				&YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[number_to_move];
-
-		while ( source > YY_CURRENT_BUFFER_LVALUE->yy_ch_buf )
-			*--dest = *--source;
-
-		yy_cp += (int) (dest - source);
-		yy_bp += (int) (dest - source);
-		YY_CURRENT_BUFFER_LVALUE->yy_n_chars =
-			(yy_n_chars) = (int) YY_CURRENT_BUFFER_LVALUE->yy_buf_size;
-
-		if ( yy_cp < YY_CURRENT_BUFFER_LVALUE->yy_ch_buf + 2 )
-			YY_FATAL_ERROR( "flex scanner push-back overflow" );
-		}
-
-	*--yy_cp = (char) c;
-
-	(yytext_ptr) = yy_bp;
-	(yy_hold_char) = *yy_cp;
-	(yy_c_buf_p) = yy_cp;
-}
 
 #endif
 
@@ -2063,7 +2025,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 217 "cipl_lex.l"
+#line 218 "cipl_lex.l"
 
 
 int main (int argc, char *argv[]) {
