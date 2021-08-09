@@ -13,7 +13,10 @@
 %}
 
 WSPACE      [ \t]+
-NLINE       (\n)
+NLINE       [\n\r]
+
+SLCOMMENT   (\/\/).+
+MLCOMMENT   (\/\*)(\n|[^*][^/])*(\*\/)
 
 ID          [_a-zA-Z][_a-zA-Z0-9]*
 DIGIT       [0-9]
@@ -53,6 +56,18 @@ STRING      (\".*\")|(\'.*\')
 {NLINE} {
   current_column = 1;
   current_line++;
+}
+
+{SLCOMMENT} {
+  printf("%3d \t %4d \t ", current_line, current_column);
+  printf("Single line comment found\n");
+  current_column += yyleng;
+}
+
+{MLCOMMENT} {
+  printf("%3d \t %4d \t ", current_line, current_column);
+  printf("Multi line comment found\n");
+  current_column += yyleng;
 }
 
 {STRING} {
@@ -184,6 +199,12 @@ STRING      (\".*\")|(\'.*\')
 {PARENTHESIS} {
   printf("%3d \t %4d \t ", current_line, current_column);
   printf("Parenthesis: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  current_column += yyleng;
+}
+
+{INT}[^><|&=+\-*/\n\t ;,)] {
+  printf(PRINT_RED "%3d \t %4d \t ", current_line, current_column);
+  printf("Error: %s\n" PRINT_RESET, yytext);
   current_column += yyleng;
 }
 
