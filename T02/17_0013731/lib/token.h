@@ -15,6 +15,6 @@ typedef struct token {
   int line;
   int column;
   int scopeNum;
-} token;
+} tokenElem;
 
 #endif
