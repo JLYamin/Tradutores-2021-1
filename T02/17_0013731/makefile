@@ -16,7 +16,7 @@ compile: flex
 	gcc -o tradutor lex.yy.c -Wall
 
 scope:
-	gcc -o scope ./src/scope.c -Wall
+	gcc -o scope ./src/scope.c -Wall -g
 
 flex:
 	flex ./src/cipl_lex.l

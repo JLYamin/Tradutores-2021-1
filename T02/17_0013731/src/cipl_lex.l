@@ -20,8 +20,8 @@ SLCOMMENT   (\/\/).+
 
 ID          [_a-zA-Z][_a-zA-Z0-9]*
 DIGIT       [0-9]
-FLOAT       (-)?{DIGIT}*\.{DIGIT}+
-INT         (-)?{DIGIT}+
+FLOAT       {DIGIT}*\.{DIGIT}+
+INT         {DIGIT}+
 
 OP_ARITH    [+*/-]
 OP_LOGIC    (&&)|(\|\|)
@@ -35,9 +35,13 @@ DESTRUCTOR  (%)
 FUNC_LIST   (>>)|(<<)
 CONSTRUCTOR (:)
 
-TYPE        (int)|(float)|(list)
+TYPE        (int)|(float)
+LIST_TYPE   (list)
 NIL         (NIL)
-KEYWORD     (if)|(else)|(for)|(return)
+IF          (if)
+ELSE        (else)
+FOR         (for)
+RETURN      (return)
 INPUT       (read)
 OUTPUT      (write)|(writeln)
 
@@ -142,15 +146,39 @@ STRING      (\".*\")|(\'.*\')
   current_column += yyleng;
 }
 
+{LIST_TYPE} {
+  printf("%3d \t %4d \t ", current_line, current_column);
+  printf("List Type: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  current_column += yyleng;
+}
+
 {NIL} {
   printf("%3d \t %4d \t ", current_line, current_column);
   printf("NIL const: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
   current_column += yyleng;
 }
 
-{KEYWORD} {
+{IF} {
   printf("%3d \t %4d \t ", current_line, current_column);
-  printf("Keyword: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  printf("If: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  current_column += yyleng;
+}
+
+{ELSE} {
+  printf("%3d \t %4d \t ", current_line, current_column);
+  printf("Else: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  current_column += yyleng;
+}
+
+{FOR} {
+  printf("%3d \t %4d \t ", current_line, current_column);
+  printf("For: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  current_column += yyleng;
+}
+
+{RETURN} {
+  printf("%3d \t %4d \t ", current_line, current_column);
+  printf("Return: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
   current_column += yyleng;
 }
 
