@@ -1,0 +1,55 @@
+program → declarationList
+
+declarationList → declarationList declaration|declaration
+
+declaration → variableDeclaration | functionDeclaration
+
+variableDeclaration → TYPE ID ;
+
+functionDeclaration → TYPE ID (params) compoundStmt
+
+params → paramList | e
+
+paramList → paramList, param | param
+
+param → TYPE ID
+
+compoundStmt → { statementList }
+
+statmentList → statementList statement | e
+
+statement → expressionStmt | compoundStmt |conditionalStmt | loopStmt | returnStmt | variableDeclaration | inOutStmt
+
+expressionStmt → expression; | ;
+
+conditionalStmt → if (expression) statement | if (expression) statement else statement 
+
+loopStmt → for (expression ; logicExpression ; expression) statement
+
+returnStmt → return expression;
+
+inOutStmt → INPUT ( ID ) ; | OUTPUT ( outputArgs ) ;
+
+expression → ID = expression | logicExpression
+
+logicExpression → logicExpression OP_LOGIC relatExpression | relatExpression
+
+relatExpression → relatExpression OP_RELAT listExpression | listExpression
+
+listExpression → listExpression OP_LIST addExpression | addExpression
+
+addExpression → addExpression OP_ADD mulExpression | mulExpression
+
+mulExpression → mulExpression OP_MUL factor | factor
+
+factor → (expression) | unaryExpression | ID | call | FLOAT | INT | NIL
+
+unaryExpression → UN_OP factor
+
+call → ID (args)
+
+outputArgs → STRING | ID | FLOAT | INT
+
+args → argList | e
+
+argList → argList, expression | expression
