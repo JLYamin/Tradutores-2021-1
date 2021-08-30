@@ -4,6 +4,7 @@
 %{
   #include <stdio.h>
   #include <stdlib.h>
+  #include "cipl_sin.tab.h"
 
   #define PRINT_CYAN  "\x1b[36m"
   #define PRINT_RED   "\x1b[31m"
@@ -23,20 +24,17 @@ DIGIT       [0-9]
 FLOAT       {DIGIT}*\.{DIGIT}+
 INT         {DIGIT}+
 
-OP_ARITH    [+*/-]
+OP_ADD      [+-]
+OP_MUL      [*/]
 OP_LOGIC    (&&)|(\|\|)
 OP_RELAT    (<)|(<=)|(>)|(>=)|(==)|(!=)
 OP_ASSIG    (=)
+OP_LIST     (>>)|(<<)|(:)
 
-OP_EXCL     (!)
+UN_OP       (\?)|(!)|(%)
 
-OP_LIST     (\?)
-DESTRUCTOR  (%)
-FUNC_LIST   (>>)|(<<)
-CONSTRUCTOR (:)
+TYPE        (int)|(float)|"int list"|"float list"
 
-TYPE        (int)|(float)
-LIST_TYPE   (list)
 NIL         (NIL)
 IF          (if)
 ELSE        (else)
@@ -47,8 +45,10 @@ OUTPUT      (write)|(writeln)
 
 SEMICOLON   (;)
 COMMA       (,)
-CURLYB      [{}]
-PARENTHESIS [()]
+OPEN_CURLY  "{"
+OPEN_PAREN  "("
+CLOSE_CURLY "}"
+CLOSE_PAREN ")"
 STRING      (\".*\")|(\'.*\')
 
 %%
@@ -86,9 +86,15 @@ STRING      (\".*\")|(\'.*\')
   current_column += yyleng;
 }
 
-{OP_ARITH} {
+{OP_ADD} {
   printf("%3d \t %4d \t ", current_line, current_column);
-  printf("Arithmetic Operator: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  printf("Additive Operator: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  current_column += yyleng;
+}
+
+{OP_MUL} {
+  printf("%3d \t %4d \t ", current_line, current_column);
+  printf("Multiplicative Operator: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
   current_column += yyleng;
 }
 
@@ -116,39 +122,15 @@ STRING      (\".*\")|(\'.*\')
   current_column += yyleng;
 }
 
-{OP_EXCL} {
+{UN_OP} {
   printf("%3d \t %4d \t ", current_line, current_column);
-  printf("Exclamation Operator: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
-  current_column += yyleng;
-}
-
-{DESTRUCTOR} {
-  printf("%3d \t %4d \t ", current_line, current_column);
-  printf("List Destructor: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
-  current_column += yyleng;
-}
-
-{FUNC_LIST} {
-  printf("%3d \t %4d \t ", current_line, current_column);
-  printf("List Function: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
-  current_column += yyleng;
-}
-
-{CONSTRUCTOR} {
-  printf("%3d \t %4d \t ", current_line, current_column);
-  printf("List Constructor: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  printf("Unary Operator: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
   current_column += yyleng;
 }
 
 {TYPE} {
   printf("%3d \t %4d \t ", current_line, current_column);
   printf("Type: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
-  current_column += yyleng;
-}
-
-{LIST_TYPE} {
-  printf("%3d \t %4d \t ", current_line, current_column);
-  printf("List Type: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
   current_column += yyleng;
 }
 
@@ -212,42 +194,32 @@ STRING      (\".*\")|(\'.*\')
   current_column += yyleng;
 }
 
-{CURLYB} {
+{OPEN_CURLY} {
   printf("%3d \t %4d \t ", current_line, current_column);
-  printf("Curly bracket: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  printf("Open curly bracket: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
   current_column += yyleng;
 }
 
-{PARENTHESIS} {
+{CLOSE_CURLY} {
   printf("%3d \t %4d \t ", current_line, current_column);
-  printf("Parenthesis: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  printf("Close curly bracket: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
   current_column += yyleng;
 }
+
+{OPEN_PAREN} {
+  printf("%3d \t %4d \t ", current_line, current_column);
+  printf("Open parenthesis: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  current_column += yyleng;
+}
+
+{CLOSE_PAREN} {
+  printf("%3d \t %4d \t ", current_line, current_column);
+  printf("Close parenthesis: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  current_column += yyleng;
+}
+
 . {
   printf(PRINT_RED "%3d \t %4d \t ", current_line, current_column);
-  printf("Error: %s\n" PRINT_RESET, yytext);
+  printf("Lexical Error: %s\n" PRINT_RESET, yytext);
   current_column += yyleng;
-}
-
-%%
-
-int main (int argc, char *argv[]) {
-  if (argc > 1) {
-    FILE *file = fopen(argv[1], "r");
-
-    if (file) {
-      yyin = file;
-      printf("Line \t Column\n");
-      yylex();
-    } else {
-      printf("Invalid filename and/or path.\n");
-    }
-
-    fclose(file);
-  } else {
-    printf("There isn't input files.\n");
-  }
-
-  yylex_destroy();
-  return 0;
 }

@@ -12,7 +12,7 @@
 #include "token.h"
 typedef struct node {
   tokenElem value;
-  node* children[10];
+  struct node* children[10];
 } treeNode;
 
 treeNode* createLeaf(tokenElem value);

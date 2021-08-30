@@ -1,6 +1,6 @@
 program → declarationList
 
-declarationList → declarationList declaration|declaration
+declarationList → declarationList declaration | declaration
 
 declaration → variableDeclaration | functionDeclaration
 
@@ -16,7 +16,7 @@ param → TYPE ID
 
 compoundStmt → { statementList }
 
-statmentList → statementList statement | e
+statementList → statementList statement | e
 
 statement → expressionStmt | compoundStmt |conditionalStmt | loopStmt | returnStmt | variableDeclaration | inOutStmt
 
@@ -42,13 +42,13 @@ addExpression → addExpression OP_ADD mulExpression | mulExpression
 
 mulExpression → mulExpression OP_MUL factor | factor
 
-factor → (expression) | unaryExpression | ID | call | FLOAT | INT | NIL
+factor → (expression) | unaryExpression | call | ID | FLOAT | INT | NIL
 
-unaryExpression → UN_OP factor
+unaryExpression → UN_OP factor | - factor
 
 call → ID (args)
 
-outputArgs → STRING | ID | FLOAT | INT
+outputArgs →  ID | STRING | FLOAT | INT
 
 args → argList | e
 
