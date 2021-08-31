@@ -36,7 +36,7 @@ logicExpression → logicExpression OP_LOGIC relatExpression | relatExpression
 
 relatExpression → relatExpression OP_RELAT listExpression | listExpression
 
-listExpression → listExpression OP_LIST addExpression | addExpression
+listExpression →  addExpression OP_LIST listExpression | addExpression
 
 addExpression → addExpression OP_ADD mulExpression | mulExpression
 
