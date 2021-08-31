@@ -38,7 +38,9 @@ relatExpression → relatExpression OP_RELAT listExpression | listExpression
 
 listExpression →  addExpression OP_LIST listExpression | addExpression
 
-addExpression → addExpression OP_ADD mulExpression | mulExpression
+addExpression → addExpression opAdd mulExpression | mulExpression
+
+opAdd → OP_PLUS | OP_MINUS
 
 mulExpression → mulExpression OP_MUL factor | factor
 

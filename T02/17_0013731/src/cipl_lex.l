@@ -24,7 +24,8 @@ DIGIT       [0-9]
 FLOAT       {DIGIT}*\.{DIGIT}+
 INT         {DIGIT}+
 
-OP_ADD      [+-]
+OP_PLUS     "+"
+OP_MINUS    "-"
 OP_MUL      [*/]
 OP_LOGIC    (&&)|(\|\|)
 OP_RELAT    (<)|(<=)|(>)|(>=)|(==)|(!=)
@@ -86,9 +87,15 @@ STRING      (\".*\")|(\'.*\')
   current_column += yyleng;
 }
 
-{OP_ADD} {
+{OP_PLUS} {
   printf("%3d \t %4d \t ", current_line, current_column);
-  printf("Additive Operator: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  printf("Plus Operator: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  current_column += yyleng;
+}
+
+{OP_MINUS} {
+  printf("%3d \t %4d \t ", current_line, current_column);
+  printf("Minus Operator: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
   current_column += yyleng;
 }
 
