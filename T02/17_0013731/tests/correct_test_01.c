@@ -3,14 +3,12 @@ float list FL;
 
 // COMENTÁRIO
 
-int list read_list(int n)
-{
+int list read_list(int n) {
   int i;
   i = -435.7;
   int list new;
   new = NIL;
-  for (i = 0; i < n; i = i + 1)
-  {
+  for (i = 0; i < n; i = i + 1) {
     int elem;
     writeln("Digite o elemento da lista: ");
     read(elem);
@@ -19,19 +17,15 @@ int list read_list(int n)
   return new;
 }
 
-float succ(int i)
-{
+float succ(int i) {
   return i + 1;
 }
 
-int leq_10(float x)
-{
+int leq_10(float x) {
   return x <= 10;
 }
 
-int main()
-{
-
+int main() {
   writeln("Digite os número de elementos da lista: ");
 
   int n;
@@ -41,13 +35,11 @@ int main()
   IL = read_list(n);
   FL = succ >> IL;
   FL10 = leq_10 << FL;
-  if (FL10 != NIL)
-  {
+  if (FL10 != NIL) {
     float list AUXL;
     int n;
     n = 0;
-    for (AUXL = FL10; AUXL != NIL; AUXL = !AUXL)
-    {
+    for (AUXL = FL10; AUXL != NIL; AUXL = !AUXL) {
       n = n + 1;
       write(?AUXL);
       write(" ");
@@ -56,15 +48,8 @@ int main()
     write("A nova lista tem ");
     write(n);
     writeln(" elementos.");
-  }
-  else
+  } else
     writeln("A nova lista não possui elementos.");
 
   return 0;
 }
-
-/*
-
-Comentário multilinha
-
-*/

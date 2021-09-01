@@ -1,8 +1,6 @@
 %define lr.type canonical-lr;
 
 %{
-  #include <stdio.h>
-  #include "./lib/token.h"
   #include "./lib/tree.h"
   #include "./lib/symbol.h"
 
@@ -11,15 +9,17 @@
   extern int yylex();
   extern int yylex_destroy();
   void yyerror (char const *message);
+
+  extern int current_line;
+  extern int current_column;
 %}
 
 %union{
-  struct Token* token;
-  struct TreeNode* node;
+  tokenElem token;
+  treeNode node;
 }
 
 %token <token> ID;
-%token <token> DIGIT;
 %token <token> INT;
 %token <token> FLOAT;
 %token <token> OP_PLUS;
@@ -77,6 +77,9 @@
 
 %start program
 
+%precedence CLOSE_PAREN
+%precedence ELSE
+
 %%
 
 program:
@@ -94,113 +97,113 @@ variableDeclaration:
   TYPE ID SEMICOLON {}
 
 functionDeclaration:
-  TYPE ID OPEN_PAREN params CLOSE_PAREN compoundStmt
+  TYPE ID OPEN_PAREN params CLOSE_PAREN compoundStmt  {}
 
 params:
-  paramList
-  | %empty
+  paramList {}
+  | %empty  {}
 
 paramList:
-  paramList COMMA param
-  | param
+  paramList COMMA param {}
+  | param {}
 
 param:
-  TYPE ID
+  TYPE ID {}
 
 compoundStmt:
-  OPEN_CURLY statementList CLOSE_CURLY
+  OPEN_CURLY statementList CLOSE_CURLY  {}
 
 statementList:
-  statementList statement
-  | %empty
+  statementList statement {}
+  | %empty  {}
 
 statement:
-  expressionStmt
-  | compoundStmt
-  | conditionalStmt
-  | loopStmt
-  | returnStmt
-  | variableDeclaration
-  | inOutStmt
+  expressionStmt          {}
+  | compoundStmt          {}
+  | conditionalStmt       {}
+  | loopStmt              {}
+  | returnStmt            {}
+  | variableDeclaration   {}
+  | inOutStmt             {}
 
 expressionStmt:
-  expression SEMICOLON
-  | SEMICOLON
+  expression SEMICOLON    {}
+  | SEMICOLON             {}
 
 conditionalStmt:
-  IF OPEN_PAREN expression CLOSE_PAREN statement
-  | IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement 
+  IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement {}
+  | IF OPEN_PAREN expression CLOSE_PAREN statement              {}
 
 loopStmt:
-  FOR OPEN_PAREN expression SEMICOLON logicExpression SEMICOLON expression CLOSE_PAREN statement
+  FOR OPEN_PAREN expression SEMICOLON logicExpression SEMICOLON expression CLOSE_PAREN statement {}
 
 returnStmt:
-  RETURN expression SEMICOLON
+  RETURN expression SEMICOLON {}
 
 inOutStmt:
-  INPUT OPEN_PAREN ID CLOSE_PAREN SEMICOLON
-  | OUTPUT OPEN_PAREN outputArgs CLOSE_PAREN SEMICOLON
+  INPUT OPEN_PAREN ID CLOSE_PAREN SEMICOLON {}
+  | OUTPUT OPEN_PAREN outputArgs CLOSE_PAREN SEMICOLON  {printf("%s %s %s\n", $1.content, $2.content, $4.content);}
 
 expression:
-  ID OP_ASSIG expression
-  | logicExpression
+  ID OP_ASSIG expression  {}
+  | logicExpression       {}
 
 logicExpression:
-  logicExpression OP_LOGIC relatExpression
-  | relatExpression
+  logicExpression OP_LOGIC relatExpression  {}
+  | relatExpression                         {}
 
 relatExpression:
-  relatExpression OP_RELAT listExpression
-  | listExpression
+  relatExpression OP_RELAT listExpression   {}
+  | listExpression                          {}
 
 listExpression:
-  addExpression OP_LIST listExpression
-  | addExpression
+  addExpression OP_LIST listExpression      {}
+  | addExpression                           {}
 
 addExpression:
-  addExpression opAdd mulExpression
-  | mulExpression
+  addExpression opAdd mulExpression         {}
+  | mulExpression                           {}
 
 mulExpression:
-  mulExpression OP_MUL factor
-  | factor
+  mulExpression OP_MUL factor               {}
+  | factor                                  {}
 
 opAdd:
-  OP_PLUS
-  | OP_MINUS
+  OP_PLUS                                   {}
+  | OP_MINUS                                {}
 
 factor:
-  OPEN_PAREN expression CLOSE_PAREN
-  | unaryExpression
-  | call
-  | ID
-  | FLOAT
-  | INT
-  | NIL
+  OPEN_PAREN expression CLOSE_PAREN         {}
+  | unaryExpression                         {}
+  | call                                    {}
+  | ID                                      {printf("%s\n", $1.content);}
+  | FLOAT                                   {}
+  | INT                                     {}
+  | NIL                                     {}
 
-unaryExpression:
-  UN_OP factor
-  | OP_MINUS factor
+unaryExpression:  
+  UN_OP factor                              {}
+  | OP_MINUS factor               {}
 
 call:
-  ID OPEN_PAREN args CLOSE_PAREN
+  ID OPEN_PAREN args CLOSE_PAREN            {}
 
 outputArgs:
-  unaryExpression
-  | STRING
+  factor                           {}
+  | STRING                                  {printf("%s\n", $1.content);}
 
 args:
-  argList
-  | %empty
+  argList                                   {}
+  | %empty                                  {}
 
 argList:
-  argList COMMA expression
-  | expression
+  argList COMMA expression                  {}
+  | expression                              {}
 
 %%
 
 void yyerror (char const *message) {
-  fprintf(stderr, "%s\n", message);
+  fprintf(stderr, "%3d \t %4d \t %s\n", current_line, current_column, message);
 }
 
 int main (int argc, char *argv[]) {

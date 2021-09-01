@@ -55,32 +55,31 @@ extern int yydebug;
     YYerror = 256,                 /* error  */
     YYUNDEF = 257,                 /* "invalid token"  */
     ID = 258,                      /* ID  */
-    DIGIT = 259,                   /* DIGIT  */
-    INT = 260,                     /* INT  */
-    FLOAT = 261,                   /* FLOAT  */
-    OP_PLUS = 262,                 /* OP_PLUS  */
-    OP_MINUS = 263,                /* OP_MINUS  */
-    OP_MUL = 264,                  /* OP_MUL  */
-    OP_LOGIC = 265,                /* OP_LOGIC  */
-    OP_RELAT = 266,                /* OP_RELAT  */
-    OP_ASSIG = 267,                /* OP_ASSIG  */
-    OP_LIST = 268,                 /* OP_LIST  */
-    UN_OP = 269,                   /* UN_OP  */
-    TYPE = 270,                    /* TYPE  */
-    NIL = 271,                     /* NIL  */
-    IF = 272,                      /* IF  */
-    ELSE = 273,                    /* ELSE  */
-    FOR = 274,                     /* FOR  */
-    RETURN = 275,                  /* RETURN  */
-    INPUT = 276,                   /* INPUT  */
-    OUTPUT = 277,                  /* OUTPUT  */
-    SEMICOLON = 278,               /* SEMICOLON  */
-    COMMA = 279,                   /* COMMA  */
-    OPEN_CURLY = 280,              /* OPEN_CURLY  */
-    OPEN_PAREN = 281,              /* OPEN_PAREN  */
-    CLOSE_CURLY = 282,             /* CLOSE_CURLY  */
-    CLOSE_PAREN = 283,             /* CLOSE_PAREN  */
-    STRING = 284                   /* STRING  */
+    INT = 259,                     /* INT  */
+    FLOAT = 260,                   /* FLOAT  */
+    OP_PLUS = 261,                 /* OP_PLUS  */
+    OP_MINUS = 262,                /* OP_MINUS  */
+    OP_MUL = 263,                  /* OP_MUL  */
+    OP_LOGIC = 264,                /* OP_LOGIC  */
+    OP_RELAT = 265,                /* OP_RELAT  */
+    OP_ASSIG = 266,                /* OP_ASSIG  */
+    OP_LIST = 267,                 /* OP_LIST  */
+    UN_OP = 268,                   /* UN_OP  */
+    TYPE = 269,                    /* TYPE  */
+    NIL = 270,                     /* NIL  */
+    IF = 271,                      /* IF  */
+    ELSE = 272,                    /* ELSE  */
+    FOR = 273,                     /* FOR  */
+    RETURN = 274,                  /* RETURN  */
+    INPUT = 275,                   /* INPUT  */
+    OUTPUT = 276,                  /* OUTPUT  */
+    SEMICOLON = 277,               /* SEMICOLON  */
+    COMMA = 278,                   /* COMMA  */
+    OPEN_CURLY = 279,              /* OPEN_CURLY  */
+    OPEN_PAREN = 280,              /* OPEN_PAREN  */
+    CLOSE_CURLY = 281,             /* CLOSE_CURLY  */
+    CLOSE_PAREN = 282,             /* CLOSE_PAREN  */
+    STRING = 283                   /* STRING  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -89,12 +88,12 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 16 "./src/cipl_sin.y"
+#line 17 "./src/cipl_sin.y"
 
-  struct Token* token;
-  struct TreeNode* node;
+  tokenElem token;
+  treeNode node;
 
-#line 98 "cipl_sin.tab.h"
+#line 97 "cipl_sin.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

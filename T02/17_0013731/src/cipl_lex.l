@@ -4,6 +4,9 @@
 %{
   #include <stdio.h>
   #include <stdlib.h>
+  #include "./lib/tree.h"
+  #include "./lib/token.h"
+  #include "./lib/symbol.h"
   #include "cipl_sin.tab.h"
 
   #define PRINT_CYAN  "\x1b[36m"
@@ -64,165 +67,215 @@ STRING      (\".*\")|(\'.*\')
 }
 
 {SLCOMMENT} {
-  printf("%3d \t %4d \t ", current_line, current_column);
-  printf("Single line comment found\n");
   current_column += yyleng;
 }
 
 {STRING} {
-  printf("%3d \t %4d \t ", current_line, current_column);
-  printf("String: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  yylval.token.line = current_line;
+  yylval.token.column = current_column;
+  strcpy(yylval.token.content, yytext);
   current_column += yyleng;
+  return STRING;
 }
 
 {FLOAT} {
-  printf("%3d \t %4d \t ", current_line, current_column);
-  printf("Float: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  yylval.token.line = current_line;
+  yylval.token.column = current_column;
+  strcpy(yylval.token.content, yytext);
   current_column += yyleng;
+  return FLOAT;
 }
 
 {INT} {
-  printf("%3d \t %4d \t ", current_line, current_column);
-  printf("Int: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  yylval.token.line = current_line;
+  yylval.token.column = current_column;
+  strcpy(yylval.token.content, yytext);
   current_column += yyleng;
+  return INT;
 }
 
 {OP_PLUS} {
-  printf("%3d \t %4d \t ", current_line, current_column);
-  printf("Plus Operator: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  yylval.token.line = current_line;
+  yylval.token.column = current_column;
+  strcpy(yylval.token.content, yytext);
   current_column += yyleng;
+  return OP_PLUS;
 }
 
 {OP_MINUS} {
-  printf("%3d \t %4d \t ", current_line, current_column);
-  printf("Minus Operator: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  yylval.token.line = current_line;
+  yylval.token.column = current_column;
+  strcpy(yylval.token.content, yytext);
   current_column += yyleng;
+  return OP_MINUS;
 }
 
 {OP_MUL} {
-  printf("%3d \t %4d \t ", current_line, current_column);
-  printf("Multiplicative Operator: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  yylval.token.line = current_line;
+  yylval.token.column = current_column;
+  strcpy(yylval.token.content, yytext);
   current_column += yyleng;
+  return OP_MUL;
 }
 
 {OP_LOGIC} {
-  printf("%3d \t %4d \t ", current_line, current_column);
-  printf("Logic Operator: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  yylval.token.line = current_line;
+  yylval.token.column = current_column;
+  strcpy(yylval.token.content, yytext);
   current_column += yyleng;
+  return OP_LOGIC;
 }
 
 {OP_RELAT} {
-  printf("%3d \t %4d \t ", current_line, current_column);
-  printf("Relational Operator: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  yylval.token.line = current_line;
+  yylval.token.column = current_column;
+  strcpy(yylval.token.content, yytext);
   current_column += yyleng;
+  return OP_RELAT;
 }
 
 {OP_ASSIG} {
-  printf("%3d \t %4d \t ", current_line, current_column);
-  printf("Assignment: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  yylval.token.line = current_line;
+  yylval.token.column = current_column;
+  strcpy(yylval.token.content, yytext);
   current_column += yyleng;
+  return OP_ASSIG;
 }
 
 {OP_LIST} {
-  printf("%3d \t %4d \t ", current_line, current_column);
-  printf("List Operator: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  yylval.token.line = current_line;
+  yylval.token.column = current_column;
+  strcpy(yylval.token.content, yytext);
   current_column += yyleng;
+  return OP_LIST;
 }
 
 {UN_OP} {
-  printf("%3d \t %4d \t ", current_line, current_column);
-  printf("Unary Operator: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  yylval.token.line = current_line;
+  yylval.token.column = current_column;
+  strcpy(yylval.token.content, yytext);
   current_column += yyleng;
+  return UN_OP;
 }
 
 {TYPE} {
-  printf("%3d \t %4d \t ", current_line, current_column);
-  printf("Type: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  yylval.token.line = current_line;
+  yylval.token.column = current_column;
+  strcpy(yylval.token.content, yytext);
   current_column += yyleng;
+  return TYPE;
 }
 
 {NIL} {
-  printf("%3d \t %4d \t ", current_line, current_column);
-  printf("NIL const: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  yylval.token.line = current_line;
+  yylval.token.column = current_column;
+  strcpy(yylval.token.content, yytext);
   current_column += yyleng;
+  return NIL;
 }
 
 {IF} {
-  printf("%3d \t %4d \t ", current_line, current_column);
-  printf("If: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  yylval.token.line = current_line;
+  yylval.token.column = current_column;
+  strcpy(yylval.token.content, yytext);
   current_column += yyleng;
+  return IF;
 }
 
 {ELSE} {
-  printf("%3d \t %4d \t ", current_line, current_column);
-  printf("Else: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  yylval.token.line = current_line;
+  yylval.token.column = current_column;
+  strcpy(yylval.token.content, yytext);
   current_column += yyleng;
+  return ELSE;
 }
 
 {FOR} {
-  printf("%3d \t %4d \t ", current_line, current_column);
-  printf("For: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  yylval.token.line = current_line;
+  yylval.token.column = current_column;
+  strcpy(yylval.token.content, yytext);
   current_column += yyleng;
+  return FOR;
 }
 
 {RETURN} {
-  printf("%3d \t %4d \t ", current_line, current_column);
-  printf("Return: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  yylval.token.line = current_line;
+  yylval.token.column = current_column;
+  strcpy(yylval.token.content, yytext);
   current_column += yyleng;
+  return RETURN;
 }
 
 {INPUT} {
-  printf("%3d \t %4d \t ", current_line, current_column);
-  printf("Input: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  yylval.token.line = current_line;
+  yylval.token.column = current_column;
+  strcpy(yylval.token.content, yytext);
   current_column += yyleng;
+  return INPUT;
 }
 
 {OUTPUT} {
-  printf("%3d \t %4d \t ", current_line, current_column);
-  printf("Output: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  yylval.token.line = current_line;
+  yylval.token.column = current_column;
+  strcpy(yylval.token.content, yytext);
   current_column += yyleng;
+  return OUTPUT;
 }
 
 {ID} {
-  printf("%3d \t %4d \t ", current_line, current_column);
-  printf("Identifier: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  yylval.token.line = current_line;
+  yylval.token.column = current_column;
+  strcpy(yylval.token.content, yytext);
   current_column += yyleng;
+  return ID;
 }
 
 {SEMICOLON} {
-  printf("%3d \t %4d \t ", current_line, current_column);
-  printf("Semicolon: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  yylval.token.line = current_line;
+  yylval.token.column = current_column;
+  strcpy(yylval.token.content, yytext);
   current_column += yyleng;
+  return SEMICOLON;
 }
 
 {COMMA} {
-  printf("%3d \t %4d \t ", current_line, current_column);
-  printf("Comma: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  yylval.token.line = current_line;
+  yylval.token.column = current_column;
+  strcpy(yylval.token.content, yytext);
   current_column += yyleng;
+  return COMMA;
 }
 
 {OPEN_CURLY} {
-  printf("%3d \t %4d \t ", current_line, current_column);
-  printf("Open curly bracket: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  yylval.token.line = current_line;
+  yylval.token.column = current_column;
+  strcpy(yylval.token.content, yytext);
   current_column += yyleng;
+  return OPEN_CURLY;
 }
 
 {CLOSE_CURLY} {
-  printf("%3d \t %4d \t ", current_line, current_column);
-  printf("Close curly bracket: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  yylval.token.line = current_line;
+  yylval.token.column = current_column;
+  strcpy(yylval.token.content, yytext);
   current_column += yyleng;
+  return CLOSE_CURLY;
 }
 
 {OPEN_PAREN} {
-  printf("%3d \t %4d \t ", current_line, current_column);
-  printf("Open parenthesis: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  yylval.token.line = current_line;
+  yylval.token.column = current_column;
+  strcpy(yylval.token.content, yytext);
   current_column += yyleng;
+  return OPEN_PAREN;
 }
 
 {CLOSE_PAREN} {
-  printf("%3d \t %4d \t ", current_line, current_column);
-  printf("Close parenthesis: " PRINT_CYAN "%s\n" PRINT_RESET, yytext);
+  yylval.token.line = current_line;
+  yylval.token.column = current_column;
+  strcpy(yylval.token.content, yytext);
   current_column += yyleng;
+  return CLOSE_PAREN;
 }
 
 . {
@@ -230,3 +283,5 @@ STRING      (\".*\")|(\'.*\')
   printf("Lexical Error: %s\n" PRINT_RESET, yytext);
   current_column += yyleng;
 }
+
+%%
