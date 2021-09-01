@@ -17,8 +17,10 @@
 
   extern int current_line;
   extern int current_column;
-  extern int current_scope;
+  extern int scope_counting;
   extern int total_errors;
+
+  tableNode table;
 %}
 
 %union{

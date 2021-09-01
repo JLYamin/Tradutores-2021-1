@@ -16,10 +16,10 @@ onlyflex:
 	flex ./src/cipl_lex.l && gcc -o tradutor lex.yy.c -Wall -Wextra
 
 compile: flex
-	gcc -o tradutor cipl_sin.tab.c lex.yy.c -g -Wall -Wextra
+	gcc -o tradutor cipl_syn.tab.c lex.yy.c -g -Wall -Wextra
 
 flex: bison
 	flex ./src/cipl_lex.l
 
 bison:
-	bison -d ./src/cipl_sin.y -Wcounterexamples
+	bison -d ./src/cipl_syn.y -Wcounterexamples

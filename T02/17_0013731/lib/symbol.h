@@ -17,8 +17,12 @@ typedef struct symbol {
   // 0 is variable, 1 is function
   char params[127][35];
   int scopeNum;
+  struct symbol* next;
 } symbolElem;
 
-// TODO: add symbol table functions
+typedef struct table {
+  int id;
+  symbolElem* symbols;
+} tableNode;
 
 #endif

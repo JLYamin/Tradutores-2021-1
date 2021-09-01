@@ -7,7 +7,7 @@
   #include "./lib/tree.h"
   #include "./lib/token.h"
   #include "./lib/symbol.h"
-  #include "cipl_sin.tab.h"
+  #include "cipl_syn.tab.h"
 
   #define PRINT_CYAN  "\x1b[36m"
   #define PRINT_RED   "\x1b[31m"
@@ -16,7 +16,7 @@
   int current_line = 1;
   int current_column = 1;
   int total_errors = 0;
-  int current_scope = 0;
+  int scope_counting = 0;
 %}
 
 WSPACE      [ \t]+
@@ -244,6 +244,7 @@ STRING      (\".*\")|(\'.*\')
   yylval.token.column = current_column;
   strcpy(yylval.token.content, yytext);
   current_column += yyleng;
+  scope_counting++;
   return OPEN_CURLY;
 }
 

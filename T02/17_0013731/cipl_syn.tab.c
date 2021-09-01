@@ -67,7 +67,7 @@
 
 
 /* First part of user prologue.  */
-#line 4 "./src/cipl_sin.y"
+#line 4 "./src/cipl_syn.y"
 
   #include "./lib/tree.h"
   #include "./lib/symbol.h"
@@ -84,10 +84,12 @@
 
   extern int current_line;
   extern int current_column;
-  extern int current_scope;
+  extern int scope_counting;
   extern int total_errors;
 
-#line 91 "cipl_sin.tab.c"
+  tableNode table;
+
+#line 93 "cipl_syn.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -110,7 +112,7 @@
 #  endif
 # endif
 
-#include "cipl_sin.tab.h"
+#include "cipl_syn.tab.h"
 /* Symbol kind.  */
 enum yysymbol_kind_t
 {
@@ -555,13 +557,13 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    92,    92,    95,    96,    99,   100,   103,   104,   108,
-     109,   112,   113,   116,   117,   120,   123,   124,   127,   128,
-     131,   132,   133,   134,   135,   136,   137,   140,   141,   144,
-     145,   146,   149,   152,   155,   156,   157,   158,   161,   162,
-     165,   166,   169,   170,   173,   174,   177,   178,   181,   182,
-     185,   186,   187,   188,   189,   190,   191,   194,   195,   198,
-     201,   202,   205,   206,   209,   210
+       0,    94,    94,    97,    98,   101,   102,   105,   106,   110,
+     111,   114,   115,   118,   119,   122,   125,   126,   129,   130,
+     133,   134,   135,   136,   137,   138,   139,   142,   143,   146,
+     147,   148,   151,   154,   157,   158,   159,   160,   163,   164,
+     167,   168,   171,   172,   175,   176,   179,   180,   183,   184,
+     187,   188,   189,   190,   191,   192,   193,   196,   197,   200,
+     203,   204,   207,   208,   211,   212
 };
 #endif
 
@@ -1904,391 +1906,391 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* program: declarationList  */
-#line 92 "./src/cipl_sin.y"
+#line 94 "./src/cipl_syn.y"
                   {}
-#line 1910 "cipl_sin.tab.c"
+#line 1912 "cipl_syn.tab.c"
     break;
 
   case 3: /* declarationList: declarationList declaration  */
-#line 95 "./src/cipl_sin.y"
+#line 97 "./src/cipl_syn.y"
                               {}
-#line 1916 "cipl_sin.tab.c"
+#line 1918 "cipl_syn.tab.c"
     break;
 
   case 4: /* declarationList: declaration  */
-#line 96 "./src/cipl_sin.y"
+#line 98 "./src/cipl_syn.y"
                               {}
-#line 1922 "cipl_sin.tab.c"
+#line 1924 "cipl_syn.tab.c"
     break;
 
   case 5: /* declaration: variableDeclaration  */
-#line 99 "./src/cipl_sin.y"
+#line 101 "./src/cipl_syn.y"
                       {}
-#line 1928 "cipl_sin.tab.c"
+#line 1930 "cipl_syn.tab.c"
     break;
 
   case 6: /* declaration: functionDeclaration  */
-#line 100 "./src/cipl_sin.y"
+#line 102 "./src/cipl_syn.y"
                         {}
-#line 1934 "cipl_sin.tab.c"
+#line 1936 "cipl_syn.tab.c"
     break;
 
   case 7: /* variableDeclaration: TYPE ID SEMICOLON  */
-#line 103 "./src/cipl_sin.y"
+#line 105 "./src/cipl_syn.y"
                     {}
-#line 1940 "cipl_sin.tab.c"
+#line 1942 "cipl_syn.tab.c"
     break;
 
   case 8: /* variableDeclaration: error ';'  */
-#line 104 "./src/cipl_sin.y"
+#line 106 "./src/cipl_syn.y"
               {yyerrok;}
-#line 1946 "cipl_sin.tab.c"
+#line 1948 "cipl_syn.tab.c"
     break;
 
   case 9: /* functionDeclaration: TYPE ID OPEN_PAREN params CLOSE_PAREN compoundStmt  */
-#line 108 "./src/cipl_sin.y"
+#line 110 "./src/cipl_syn.y"
                                                       {}
-#line 1952 "cipl_sin.tab.c"
+#line 1954 "cipl_syn.tab.c"
     break;
 
   case 10: /* functionDeclaration: error  */
-#line 109 "./src/cipl_sin.y"
+#line 111 "./src/cipl_syn.y"
           {yyerrok;}
-#line 1958 "cipl_sin.tab.c"
+#line 1960 "cipl_syn.tab.c"
     break;
 
   case 11: /* params: paramList  */
-#line 112 "./src/cipl_sin.y"
+#line 114 "./src/cipl_syn.y"
             {}
-#line 1964 "cipl_sin.tab.c"
+#line 1966 "cipl_syn.tab.c"
     break;
 
   case 12: /* params: %empty  */
-#line 113 "./src/cipl_sin.y"
+#line 115 "./src/cipl_syn.y"
             {}
-#line 1970 "cipl_sin.tab.c"
+#line 1972 "cipl_syn.tab.c"
     break;
 
   case 13: /* paramList: paramList COMMA param  */
-#line 116 "./src/cipl_sin.y"
+#line 118 "./src/cipl_syn.y"
                         {}
-#line 1976 "cipl_sin.tab.c"
+#line 1978 "cipl_syn.tab.c"
     break;
 
   case 14: /* paramList: param  */
-#line 117 "./src/cipl_sin.y"
+#line 119 "./src/cipl_syn.y"
           {}
-#line 1982 "cipl_sin.tab.c"
+#line 1984 "cipl_syn.tab.c"
     break;
 
   case 15: /* param: TYPE ID  */
-#line 120 "./src/cipl_sin.y"
+#line 122 "./src/cipl_syn.y"
           {}
-#line 1988 "cipl_sin.tab.c"
+#line 1990 "cipl_syn.tab.c"
     break;
 
   case 16: /* compoundStmt: OPEN_CURLY statementList CLOSE_CURLY  */
-#line 123 "./src/cipl_sin.y"
+#line 125 "./src/cipl_syn.y"
                                         {}
-#line 1994 "cipl_sin.tab.c"
+#line 1996 "cipl_syn.tab.c"
     break;
 
   case 17: /* compoundStmt: error  */
-#line 124 "./src/cipl_sin.y"
+#line 126 "./src/cipl_syn.y"
           {yyerrok;}
-#line 2000 "cipl_sin.tab.c"
+#line 2002 "cipl_syn.tab.c"
     break;
 
   case 18: /* statementList: statementList statement  */
-#line 127 "./src/cipl_sin.y"
+#line 129 "./src/cipl_syn.y"
                           {}
-#line 2006 "cipl_sin.tab.c"
+#line 2008 "cipl_syn.tab.c"
     break;
 
   case 19: /* statementList: %empty  */
-#line 128 "./src/cipl_sin.y"
+#line 130 "./src/cipl_syn.y"
             {}
-#line 2012 "cipl_sin.tab.c"
+#line 2014 "cipl_syn.tab.c"
     break;
 
   case 20: /* statement: expressionStmt  */
-#line 131 "./src/cipl_sin.y"
+#line 133 "./src/cipl_syn.y"
                           {}
-#line 2018 "cipl_sin.tab.c"
+#line 2020 "cipl_syn.tab.c"
     break;
 
   case 21: /* statement: compoundStmt  */
-#line 132 "./src/cipl_sin.y"
+#line 134 "./src/cipl_syn.y"
                           {}
-#line 2024 "cipl_sin.tab.c"
+#line 2026 "cipl_syn.tab.c"
     break;
 
   case 22: /* statement: conditionalStmt  */
-#line 133 "./src/cipl_sin.y"
+#line 135 "./src/cipl_syn.y"
                           {}
-#line 2030 "cipl_sin.tab.c"
+#line 2032 "cipl_syn.tab.c"
     break;
 
   case 23: /* statement: loopStmt  */
-#line 134 "./src/cipl_sin.y"
+#line 136 "./src/cipl_syn.y"
                           {}
-#line 2036 "cipl_sin.tab.c"
+#line 2038 "cipl_syn.tab.c"
     break;
 
   case 24: /* statement: returnStmt  */
-#line 135 "./src/cipl_sin.y"
+#line 137 "./src/cipl_syn.y"
                           {}
-#line 2042 "cipl_sin.tab.c"
+#line 2044 "cipl_syn.tab.c"
     break;
 
   case 25: /* statement: variableDeclaration  */
-#line 136 "./src/cipl_sin.y"
+#line 138 "./src/cipl_syn.y"
                           {}
-#line 2048 "cipl_sin.tab.c"
+#line 2050 "cipl_syn.tab.c"
     break;
 
   case 26: /* statement: inOutStmt  */
-#line 137 "./src/cipl_sin.y"
+#line 139 "./src/cipl_syn.y"
                           {}
-#line 2054 "cipl_sin.tab.c"
+#line 2056 "cipl_syn.tab.c"
     break;
 
   case 27: /* expressionStmt: expression SEMICOLON  */
-#line 140 "./src/cipl_sin.y"
+#line 142 "./src/cipl_syn.y"
                           {}
-#line 2060 "cipl_sin.tab.c"
+#line 2062 "cipl_syn.tab.c"
     break;
 
   case 28: /* expressionStmt: SEMICOLON  */
-#line 141 "./src/cipl_sin.y"
+#line 143 "./src/cipl_syn.y"
                           {}
-#line 2066 "cipl_sin.tab.c"
+#line 2068 "cipl_syn.tab.c"
     break;
 
   case 29: /* conditionalStmt: IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement  */
-#line 144 "./src/cipl_sin.y"
+#line 146 "./src/cipl_syn.y"
                                                                 {}
-#line 2072 "cipl_sin.tab.c"
+#line 2074 "cipl_syn.tab.c"
     break;
 
   case 30: /* conditionalStmt: IF OPEN_PAREN expression CLOSE_PAREN statement  */
-#line 145 "./src/cipl_sin.y"
+#line 147 "./src/cipl_syn.y"
                                                                 {}
-#line 2078 "cipl_sin.tab.c"
+#line 2080 "cipl_syn.tab.c"
     break;
 
   case 31: /* conditionalStmt: IF error CLOSE_PAREN  */
-#line 146 "./src/cipl_sin.y"
+#line 148 "./src/cipl_syn.y"
                          {yyerrok;}
-#line 2084 "cipl_sin.tab.c"
+#line 2086 "cipl_syn.tab.c"
     break;
 
   case 32: /* loopStmt: FOR OPEN_PAREN expression SEMICOLON logicExpression SEMICOLON expression CLOSE_PAREN statement  */
-#line 149 "./src/cipl_sin.y"
+#line 151 "./src/cipl_syn.y"
                                                                                                  {}
-#line 2090 "cipl_sin.tab.c"
+#line 2092 "cipl_syn.tab.c"
     break;
 
   case 33: /* returnStmt: RETURN expression SEMICOLON  */
-#line 152 "./src/cipl_sin.y"
+#line 154 "./src/cipl_syn.y"
                               {}
-#line 2096 "cipl_sin.tab.c"
+#line 2098 "cipl_syn.tab.c"
     break;
 
   case 34: /* inOutStmt: INPUT OPEN_PAREN ID CLOSE_PAREN SEMICOLON  */
-#line 155 "./src/cipl_sin.y"
+#line 157 "./src/cipl_syn.y"
                                             {}
-#line 2102 "cipl_sin.tab.c"
+#line 2104 "cipl_syn.tab.c"
     break;
 
   case 35: /* inOutStmt: OUTPUT OPEN_PAREN outputArgs CLOSE_PAREN SEMICOLON  */
-#line 156 "./src/cipl_sin.y"
+#line 158 "./src/cipl_syn.y"
                                                         {}
-#line 2108 "cipl_sin.tab.c"
+#line 2110 "cipl_syn.tab.c"
     break;
 
   case 36: /* inOutStmt: INPUT error SEMICOLON  */
-#line 157 "./src/cipl_sin.y"
+#line 159 "./src/cipl_syn.y"
                           {yyerrok;}
-#line 2114 "cipl_sin.tab.c"
+#line 2116 "cipl_syn.tab.c"
     break;
 
   case 37: /* inOutStmt: OUTPUT error SEMICOLON  */
-#line 158 "./src/cipl_sin.y"
+#line 160 "./src/cipl_syn.y"
                            {yyerrok;}
-#line 2120 "cipl_sin.tab.c"
+#line 2122 "cipl_syn.tab.c"
     break;
 
   case 38: /* expression: ID OP_ASSIG expression  */
-#line 161 "./src/cipl_sin.y"
+#line 163 "./src/cipl_syn.y"
                           {}
-#line 2126 "cipl_sin.tab.c"
+#line 2128 "cipl_syn.tab.c"
     break;
 
   case 39: /* expression: logicExpression  */
-#line 162 "./src/cipl_sin.y"
+#line 164 "./src/cipl_syn.y"
                           {}
-#line 2132 "cipl_sin.tab.c"
+#line 2134 "cipl_syn.tab.c"
     break;
 
   case 40: /* logicExpression: logicExpression OP_LOGIC relatExpression  */
-#line 165 "./src/cipl_sin.y"
+#line 167 "./src/cipl_syn.y"
                                             {}
-#line 2138 "cipl_sin.tab.c"
+#line 2140 "cipl_syn.tab.c"
     break;
 
   case 41: /* logicExpression: relatExpression  */
-#line 166 "./src/cipl_sin.y"
+#line 168 "./src/cipl_syn.y"
                                             {}
-#line 2144 "cipl_sin.tab.c"
+#line 2146 "cipl_syn.tab.c"
     break;
 
   case 42: /* relatExpression: relatExpression OP_RELAT listExpression  */
-#line 169 "./src/cipl_sin.y"
+#line 171 "./src/cipl_syn.y"
                                             {}
-#line 2150 "cipl_sin.tab.c"
+#line 2152 "cipl_syn.tab.c"
     break;
 
   case 43: /* relatExpression: listExpression  */
-#line 170 "./src/cipl_sin.y"
+#line 172 "./src/cipl_syn.y"
                                             {}
-#line 2156 "cipl_sin.tab.c"
+#line 2158 "cipl_syn.tab.c"
     break;
 
   case 44: /* listExpression: addExpression OP_LIST listExpression  */
-#line 173 "./src/cipl_sin.y"
+#line 175 "./src/cipl_syn.y"
                                             {}
-#line 2162 "cipl_sin.tab.c"
+#line 2164 "cipl_syn.tab.c"
     break;
 
   case 45: /* listExpression: addExpression  */
-#line 174 "./src/cipl_sin.y"
+#line 176 "./src/cipl_syn.y"
                                             {}
-#line 2168 "cipl_sin.tab.c"
+#line 2170 "cipl_syn.tab.c"
     break;
 
   case 46: /* addExpression: addExpression OP_ADD mulExpression  */
-#line 177 "./src/cipl_sin.y"
+#line 179 "./src/cipl_syn.y"
                                              {}
-#line 2174 "cipl_sin.tab.c"
+#line 2176 "cipl_syn.tab.c"
     break;
 
   case 47: /* addExpression: mulExpression  */
-#line 178 "./src/cipl_sin.y"
+#line 180 "./src/cipl_syn.y"
                                             {}
-#line 2180 "cipl_sin.tab.c"
+#line 2182 "cipl_syn.tab.c"
     break;
 
   case 48: /* mulExpression: mulExpression OP_MUL factor  */
-#line 181 "./src/cipl_sin.y"
+#line 183 "./src/cipl_syn.y"
                                             {}
-#line 2186 "cipl_sin.tab.c"
+#line 2188 "cipl_syn.tab.c"
     break;
 
   case 49: /* mulExpression: factor  */
-#line 182 "./src/cipl_sin.y"
+#line 184 "./src/cipl_syn.y"
                                             {}
-#line 2192 "cipl_sin.tab.c"
+#line 2194 "cipl_syn.tab.c"
     break;
 
   case 50: /* factor: OPEN_PAREN expression CLOSE_PAREN  */
-#line 185 "./src/cipl_sin.y"
+#line 187 "./src/cipl_syn.y"
                                             {}
-#line 2198 "cipl_sin.tab.c"
+#line 2200 "cipl_syn.tab.c"
     break;
 
   case 51: /* factor: unaryExpression  */
-#line 186 "./src/cipl_sin.y"
+#line 188 "./src/cipl_syn.y"
                                             {}
-#line 2204 "cipl_sin.tab.c"
+#line 2206 "cipl_syn.tab.c"
     break;
 
   case 52: /* factor: call  */
-#line 187 "./src/cipl_sin.y"
+#line 189 "./src/cipl_syn.y"
                                             {}
-#line 2210 "cipl_sin.tab.c"
+#line 2212 "cipl_syn.tab.c"
     break;
 
   case 53: /* factor: ID  */
-#line 188 "./src/cipl_sin.y"
+#line 190 "./src/cipl_syn.y"
                                             {}
-#line 2216 "cipl_sin.tab.c"
+#line 2218 "cipl_syn.tab.c"
     break;
 
   case 54: /* factor: FLOAT  */
-#line 189 "./src/cipl_sin.y"
+#line 191 "./src/cipl_syn.y"
                                             {}
-#line 2222 "cipl_sin.tab.c"
+#line 2224 "cipl_syn.tab.c"
     break;
 
   case 55: /* factor: INT  */
-#line 190 "./src/cipl_sin.y"
+#line 192 "./src/cipl_syn.y"
                                             {}
-#line 2228 "cipl_sin.tab.c"
+#line 2230 "cipl_syn.tab.c"
     break;
 
   case 56: /* factor: NIL  */
-#line 191 "./src/cipl_sin.y"
+#line 193 "./src/cipl_syn.y"
                                             {}
-#line 2234 "cipl_sin.tab.c"
+#line 2236 "cipl_syn.tab.c"
     break;
 
   case 57: /* unaryExpression: UN_OP factor  */
-#line 194 "./src/cipl_sin.y"
+#line 196 "./src/cipl_syn.y"
                                             {}
-#line 2240 "cipl_sin.tab.c"
+#line 2242 "cipl_syn.tab.c"
     break;
 
   case 58: /* unaryExpression: OP_ADD factor  */
-#line 195 "./src/cipl_sin.y"
+#line 197 "./src/cipl_syn.y"
                                           {}
-#line 2246 "cipl_sin.tab.c"
+#line 2248 "cipl_syn.tab.c"
     break;
 
   case 59: /* call: ID OPEN_PAREN args CLOSE_PAREN  */
-#line 198 "./src/cipl_sin.y"
+#line 200 "./src/cipl_syn.y"
                                             {}
-#line 2252 "cipl_sin.tab.c"
+#line 2254 "cipl_syn.tab.c"
     break;
 
   case 60: /* outputArgs: factor  */
-#line 201 "./src/cipl_sin.y"
+#line 203 "./src/cipl_syn.y"
                                             {}
-#line 2258 "cipl_sin.tab.c"
+#line 2260 "cipl_syn.tab.c"
     break;
 
   case 61: /* outputArgs: STRING  */
-#line 202 "./src/cipl_sin.y"
+#line 204 "./src/cipl_syn.y"
                                             {}
-#line 2264 "cipl_sin.tab.c"
+#line 2266 "cipl_syn.tab.c"
     break;
 
   case 62: /* args: argList  */
-#line 205 "./src/cipl_sin.y"
+#line 207 "./src/cipl_syn.y"
                                             {}
-#line 2270 "cipl_sin.tab.c"
+#line 2272 "cipl_syn.tab.c"
     break;
 
   case 63: /* args: %empty  */
-#line 206 "./src/cipl_sin.y"
+#line 208 "./src/cipl_syn.y"
                                             {}
-#line 2276 "cipl_sin.tab.c"
+#line 2278 "cipl_syn.tab.c"
     break;
 
   case 64: /* argList: argList COMMA expression  */
-#line 209 "./src/cipl_sin.y"
+#line 211 "./src/cipl_syn.y"
                                             {}
-#line 2282 "cipl_sin.tab.c"
+#line 2284 "cipl_syn.tab.c"
     break;
 
   case 65: /* argList: expression  */
-#line 210 "./src/cipl_sin.y"
+#line 212 "./src/cipl_syn.y"
                                             {}
-#line 2288 "cipl_sin.tab.c"
+#line 2290 "cipl_syn.tab.c"
     break;
 
 
-#line 2292 "cipl_sin.tab.c"
+#line 2294 "cipl_syn.tab.c"
 
       default: break;
     }
@@ -2513,7 +2515,7 @@ yyreturn:
   return yyresult;
 }
 
-#line 212 "./src/cipl_sin.y"
+#line 214 "./src/cipl_syn.y"
 
 
 void yyerror (char const *message) {
