@@ -17,6 +17,8 @@
 
   extern int current_line;
   extern int current_column;
+  extern int current_scope;
+  extern int total_errors;
 %}
 
 %union{
@@ -183,7 +185,7 @@ factor:
   OPEN_PAREN expression CLOSE_PAREN         {}
   | unaryExpression                         {}
   | call                                    {}
-  | ID                                      {printf("oi\n");}
+  | ID                                      {}
   | FLOAT                                   {}
   | INT                                     {}
   | NIL                                     {}
@@ -210,7 +212,8 @@ argList:
 %%
 
 void yyerror (char const *message) {
-  printf("%3d \t %4d \t" PRINT_RED "Syntactic Error: %s \n" PRINT_RESET, current_line, current_column, message);
+  printf("%3d \t %4d \t " PRINT_RED "Syntactic Error: %s \n" PRINT_RESET, current_line, current_column, message);
+  total_errors++;
 }
 
 int main (int argc, char *argv[]) {
@@ -220,8 +223,11 @@ if (argc > 1) {
     if (file) {
       yyin = file;
 
-      printf("Line \t Column\n");
+      printf("Line \t Column\t Error\n");
       yyparse();
+      if (total_errors == 0) {
+        printf(PRINT_CYAN "There's no errors.\n" PRINT_RESET);
+      }
     } else {
       printf("Invalid filename and/or path.\n");
     }

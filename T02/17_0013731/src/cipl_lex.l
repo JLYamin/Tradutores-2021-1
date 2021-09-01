@@ -15,6 +15,8 @@
   
   int current_line = 1;
   int current_column = 1;
+  int total_errors = 0;
+  int current_scope = 0;
 %}
 
 WSPACE      [ \t]+
@@ -271,7 +273,8 @@ STRING      (\".*\")|(\'.*\')
 
 . {
   printf("%3d \t %4d \t", current_line, current_column);
-  printf(PRINT_RED "Lexical Error: %s\n" PRINT_RESET, yytext);
+  printf(PRINT_RED " Lexical Error: %s\n" PRINT_RESET, yytext);
+  total_errors++;
   current_column += yyleng;
 }
 
