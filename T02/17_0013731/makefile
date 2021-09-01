@@ -15,8 +15,11 @@ tradutor: flex compile
 onlyflex:
 	flex ./src/cipl_lex.l && gcc -o tradutor lex.yy.c -Wall -Wextra
 
-compile: flex
-	gcc -o tradutor cipl_syn.tab.c lex.yy.c -g -Wall -Wextra
+compile: flex symbol
+	gcc -o tradutor cipl_syn.tab.c lex.yy.c symbol.o -g -Wall -Wextra
+
+symbol:
+	gcc -c ./src/symbol.c
 
 flex: bison
 	flex ./src/cipl_lex.l

@@ -5,22 +5,18 @@
   #include "./lib/tree.h"
   #include "./lib/symbol.h"
 
-  #define PRINT_CYAN  "\x1b[36m"
-  #define PRINT_RED   "\x1b[31m"
-  #define PRINT_RESET "\x1b[0m"
-
   extern FILE *yyin;
 
   extern int yylex();
   extern int yylex_destroy();
   void yyerror (char const *message);
 
-  extern int current_line;
-  extern int current_column;
-  extern int scope_counting;
-  extern int total_errors;
+  extern int currentLine;
+  extern int currentColumn;
+  extern int scopeCounting;
+  extern int totalErrors;
 
-  tableNode table;
+  tableNode* table;
 %}
 
 %union{
@@ -102,12 +98,16 @@ declaration:
   | functionDeclaration {}
 
 variableDeclaration:
-  TYPE ID SEMICOLON {}
+  TYPE ID SEMICOLON {
+    newSymbol($2.content, $1.content, 0, scopeCounting, table);
+  }
   | error ';' {yyerrok;}
 
 
 functionDeclaration:
-  TYPE ID OPEN_PAREN params CLOSE_PAREN compoundStmt  {}
+  TYPE ID OPEN_PAREN params CLOSE_PAREN compoundStmt  {
+    newSymbol($2.content,  $1.content, 1, scopeCounting, table);
+  }
   | error {yyerrok;}
 
 params:
@@ -214,8 +214,8 @@ argList:
 %%
 
 void yyerror (char const *message) {
-  printf("%3d \t %4d \t " PRINT_RED "Syntactic Error: %s \n" PRINT_RESET, current_line, current_column, message);
-  total_errors++;
+  printf("%3d \t %4d \t " PRINT_RED "Syntactic Error: %s \n" PRINT_RESET, currentLine, currentColumn, message);
+  totalErrors++;
 }
 
 int main (int argc, char *argv[]) {
@@ -226,10 +226,13 @@ if (argc > 1) {
       yyin = file;
 
       printf("Line \t Column\t Error\n");
+      table = initTable(scopeCounting);
+
       yyparse();
-      if (total_errors == 0) {
+      if (totalErrors == 0) {
         printf(PRINT_CYAN "There's no errors.\n" PRINT_RESET);
       }
+      printTable(table);
     } else {
       printf("Invalid filename and/or path.\n");
     }

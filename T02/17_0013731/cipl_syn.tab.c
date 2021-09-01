@@ -72,24 +72,20 @@
   #include "./lib/tree.h"
   #include "./lib/symbol.h"
 
-  #define PRINT_CYAN  "\x1b[36m"
-  #define PRINT_RED   "\x1b[31m"
-  #define PRINT_RESET "\x1b[0m"
-
   extern FILE *yyin;
 
   extern int yylex();
   extern int yylex_destroy();
   void yyerror (char const *message);
 
-  extern int current_line;
-  extern int current_column;
-  extern int scope_counting;
-  extern int total_errors;
+  extern int currentLine;
+  extern int currentColumn;
+  extern int scopeCounting;
+  extern int totalErrors;
 
-  tableNode table;
+  tableNode* table;
 
-#line 93 "cipl_syn.tab.c"
+#line 89 "cipl_syn.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -557,7 +553,7 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    94,    94,    97,    98,   101,   102,   105,   106,   110,
+       0,    90,    90,    93,    94,    97,    98,   101,   104,   108,
      111,   114,   115,   118,   119,   122,   125,   126,   129,   130,
      133,   134,   135,   136,   137,   138,   139,   142,   143,   146,
      147,   148,   151,   154,   157,   158,   159,   160,   163,   164,
@@ -1906,50 +1902,54 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* program: declarationList  */
-#line 94 "./src/cipl_syn.y"
+#line 90 "./src/cipl_syn.y"
                   {}
-#line 1912 "cipl_syn.tab.c"
+#line 1908 "cipl_syn.tab.c"
     break;
 
   case 3: /* declarationList: declarationList declaration  */
-#line 97 "./src/cipl_syn.y"
+#line 93 "./src/cipl_syn.y"
                               {}
-#line 1918 "cipl_syn.tab.c"
+#line 1914 "cipl_syn.tab.c"
     break;
 
   case 4: /* declarationList: declaration  */
-#line 98 "./src/cipl_syn.y"
+#line 94 "./src/cipl_syn.y"
                               {}
-#line 1924 "cipl_syn.tab.c"
+#line 1920 "cipl_syn.tab.c"
     break;
 
   case 5: /* declaration: variableDeclaration  */
-#line 101 "./src/cipl_syn.y"
+#line 97 "./src/cipl_syn.y"
                       {}
-#line 1930 "cipl_syn.tab.c"
+#line 1926 "cipl_syn.tab.c"
     break;
 
   case 6: /* declaration: functionDeclaration  */
-#line 102 "./src/cipl_syn.y"
+#line 98 "./src/cipl_syn.y"
                         {}
-#line 1936 "cipl_syn.tab.c"
+#line 1932 "cipl_syn.tab.c"
     break;
 
   case 7: /* variableDeclaration: TYPE ID SEMICOLON  */
-#line 105 "./src/cipl_syn.y"
-                    {}
-#line 1942 "cipl_syn.tab.c"
+#line 101 "./src/cipl_syn.y"
+                    {
+    newSymbol((yyvsp[-1].token).content, (yyvsp[-2].token).content, 0, scopeCounting, table);
+  }
+#line 1940 "cipl_syn.tab.c"
     break;
 
   case 8: /* variableDeclaration: error ';'  */
-#line 106 "./src/cipl_syn.y"
+#line 104 "./src/cipl_syn.y"
               {yyerrok;}
-#line 1948 "cipl_syn.tab.c"
+#line 1946 "cipl_syn.tab.c"
     break;
 
   case 9: /* functionDeclaration: TYPE ID OPEN_PAREN params CLOSE_PAREN compoundStmt  */
-#line 110 "./src/cipl_syn.y"
-                                                      {}
+#line 108 "./src/cipl_syn.y"
+                                                      {
+    newSymbol((yyvsp[-4].token).content,  (yyvsp[-5].token).content, 1, scopeCounting, table);
+  }
 #line 1954 "cipl_syn.tab.c"
     break;
 
@@ -2519,8 +2519,8 @@ yyreturn:
 
 
 void yyerror (char const *message) {
-  printf("%3d \t %4d \t " PRINT_RED "Syntactic Error: %s \n" PRINT_RESET, current_line, current_column, message);
-  total_errors++;
+  printf("%3d \t %4d \t " PRINT_RED "Syntactic Error: %s \n" PRINT_RESET, currentLine, currentColumn, message);
+  totalErrors++;
 }
 
 int main (int argc, char *argv[]) {
@@ -2531,10 +2531,13 @@ if (argc > 1) {
       yyin = file;
 
       printf("Line \t Column\t Error\n");
+      table = initTable(scopeCounting);
+
       yyparse();
-      if (total_errors == 0) {
+      if (totalErrors == 0) {
         printf(PRINT_CYAN "There's no errors.\n" PRINT_RESET);
       }
+      printTable(table);
     } else {
       printf("Invalid filename and/or path.\n");
     }
