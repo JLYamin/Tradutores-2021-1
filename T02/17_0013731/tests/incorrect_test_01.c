@@ -1,3 +1,3 @@
-int a @80 = 10;
+int a @ = 10;
 
-\ float list AL;
+float list AL

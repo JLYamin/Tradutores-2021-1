@@ -38,19 +38,17 @@ relatExpression → relatExpression OP_RELAT listExpression | listExpression
 
 listExpression →  addExpression OP_LIST listExpression | addExpression
 
-addExpression → addExpression opAdd mulExpression | mulExpression
-
-opAdd → OP_PLUS | OP_MINUS
+addExpression → addExpression OP_ADD mulExpression | mulExpression
 
 mulExpression → mulExpression OP_MUL factor | factor
 
 factor → (expression) | unaryExpression | call | ID | FLOAT | INT | NIL
 
-unaryExpression → UN_OP factor | - factor
+unaryExpression → UN_OP factor | OP_ADD factor
 
 call → ID (args)
 
-outputArgs →  ID | STRING | FLOAT | INT
+outputArgs →  factor | STRING
 
 args → argList | e
 

@@ -1,8 +1,13 @@
 %define lr.type canonical-lr;
+%define parse.error detailed;
 
 %{
   #include "./lib/tree.h"
   #include "./lib/symbol.h"
+
+  #define PRINT_CYAN  "\x1b[36m"
+  #define PRINT_RED   "\x1b[31m"
+  #define PRINT_RESET "\x1b[0m"
 
   extern FILE *yyin;
 
@@ -22,8 +27,7 @@
 %token <token> ID;
 %token <token> INT;
 %token <token> FLOAT;
-%token <token> OP_PLUS;
-%token <token> OP_MINUS;
+%token <token> OP_ADD;
 %token <token> OP_MUL;
 %token <token> OP_LOGIC;
 %token <token> OP_RELAT;
@@ -95,9 +99,12 @@ declaration:
 
 variableDeclaration:
   TYPE ID SEMICOLON {}
+  | error ';' {yyerrok;}
+
 
 functionDeclaration:
   TYPE ID OPEN_PAREN params CLOSE_PAREN compoundStmt  {}
+  | error {yyerrok;}
 
 params:
   paramList {}
@@ -112,6 +119,7 @@ param:
 
 compoundStmt:
   OPEN_CURLY statementList CLOSE_CURLY  {}
+  | error {yyerrok;}
 
 statementList:
   statementList statement {}
@@ -133,6 +141,7 @@ expressionStmt:
 conditionalStmt:
   IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement {}
   | IF OPEN_PAREN expression CLOSE_PAREN statement              {}
+  | IF error CLOSE_PAREN {yyerrok;}
 
 loopStmt:
   FOR OPEN_PAREN expression SEMICOLON logicExpression SEMICOLON expression CLOSE_PAREN statement {}
@@ -142,7 +151,9 @@ returnStmt:
 
 inOutStmt:
   INPUT OPEN_PAREN ID CLOSE_PAREN SEMICOLON {}
-  | OUTPUT OPEN_PAREN outputArgs CLOSE_PAREN SEMICOLON  {printf("%s %s %s\n", $1.content, $2.content, $4.content);}
+  | OUTPUT OPEN_PAREN outputArgs CLOSE_PAREN SEMICOLON  {}
+  | INPUT error SEMICOLON {yyerrok;}
+  | OUTPUT error SEMICOLON {yyerrok;}
 
 expression:
   ID OP_ASSIG expression  {}
@@ -161,36 +172,32 @@ listExpression:
   | addExpression                           {}
 
 addExpression:
-  addExpression opAdd mulExpression         {}
+  addExpression OP_ADD mulExpression         {}
   | mulExpression                           {}
 
 mulExpression:
   mulExpression OP_MUL factor               {}
   | factor                                  {}
 
-opAdd:
-  OP_PLUS                                   {}
-  | OP_MINUS                                {}
-
 factor:
   OPEN_PAREN expression CLOSE_PAREN         {}
   | unaryExpression                         {}
   | call                                    {}
-  | ID                                      {printf("%s\n", $1.content);}
+  | ID                                      {printf("oi\n");}
   | FLOAT                                   {}
   | INT                                     {}
   | NIL                                     {}
 
 unaryExpression:  
   UN_OP factor                              {}
-  | OP_MINUS factor               {}
+  | OP_ADD factor                         {}
 
 call:
   ID OPEN_PAREN args CLOSE_PAREN            {}
 
 outputArgs:
-  factor                           {}
-  | STRING                                  {printf("%s\n", $1.content);}
+  factor                                    {}
+  | STRING                                  {}
 
 args:
   argList                                   {}
@@ -203,7 +210,7 @@ argList:
 %%
 
 void yyerror (char const *message) {
-  fprintf(stderr, "%3d \t %4d \t %s\n", current_line, current_column, message);
+  printf("%3d \t %4d \t" PRINT_RED "Syntactic Error: %s \n" PRINT_RESET, current_line, current_column, message);
 }
 
 int main (int argc, char *argv[]) {
@@ -213,6 +220,7 @@ if (argc > 1) {
     if (file) {
       yyin = file;
 
+      printf("Line \t Column\n");
       yyparse();
     } else {
       printf("Invalid filename and/or path.\n");

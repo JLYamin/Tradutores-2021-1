@@ -27,8 +27,7 @@ DIGIT       [0-9]
 FLOAT       {DIGIT}*\.{DIGIT}+
 INT         {DIGIT}+
 
-OP_PLUS     "+"
-OP_MINUS    "-"
+OP_ADD     [+-]
 OP_MUL      [*/]
 OP_LOGIC    (&&)|(\|\|)
 OP_RELAT    (<)|(<=)|(>)|(>=)|(==)|(!=)
@@ -94,20 +93,12 @@ STRING      (\".*\")|(\'.*\')
   return INT;
 }
 
-{OP_PLUS} {
+{OP_ADD} {
   yylval.token.line = current_line;
   yylval.token.column = current_column;
   strcpy(yylval.token.content, yytext);
   current_column += yyleng;
-  return OP_PLUS;
-}
-
-{OP_MINUS} {
-  yylval.token.line = current_line;
-  yylval.token.column = current_column;
-  strcpy(yylval.token.content, yytext);
-  current_column += yyleng;
-  return OP_MINUS;
+  return OP_ADD;
 }
 
 {OP_MUL} {
@@ -279,8 +270,8 @@ STRING      (\".*\")|(\'.*\')
 }
 
 . {
-  printf(PRINT_RED "%3d \t %4d \t ", current_line, current_column);
-  printf("Lexical Error: %s\n" PRINT_RESET, yytext);
+  printf("%3d \t %4d \t", current_line, current_column);
+  printf(PRINT_RED "Lexical Error: %s\n" PRINT_RESET, yytext);
   current_column += yyleng;
 }
 
