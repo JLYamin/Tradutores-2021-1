@@ -2530,6 +2530,7 @@ if (argc > 1) {
     if (file) {
       yyin = file;
 
+      printf("\nErrors detected:\n");
       printf("Line \t Column\t Error\n");
       table = initTable(scopeCounting);
 
