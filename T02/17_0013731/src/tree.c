@@ -57,16 +57,14 @@ void printTree(treeNode* node, int tabNum) {
 }
 
 void freeTree(treeNode* node) {
-  if (node->nonTerminal == NULL) {
-    free(node);
-    return;
-  } else {
-    for (int i = 0; i < 5; i++) {
-      if (node->children[i] != NULL) {
-        freeTree(node->children[i]);
-      }
-    }
+  if (node->nonTerminal != NULL) {
     free(node->nonTerminal);
-    free(node);
+    return;
   }
+  for (int i = 0; i < 5; i++) {
+    if (node->children[i] != NULL) {
+      freeTree(node->children[i]);
+    }
+  }
+  free(node);
 }

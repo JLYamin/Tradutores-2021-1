@@ -2651,7 +2651,7 @@ void yyerror (char const *message) {
 }
 
 int main (int argc, char *argv[]) {
-if (argc > 1) {
+  if (argc > 1) {
     FILE *file = fopen(argv[1], "r");
 
     if (file) {
@@ -2671,16 +2671,16 @@ if (argc > 1) {
 
       printTable(table);
       freeTable(table);
+
+      yylex_destroy();
+      fclose(file);
     } else {
       printf("Invalid filename and/or path.\n");
     }
-
-    fclose(file);
   } else {
     printf("There isn't input files.\n");
   }
 
-  yylex_destroy();
 
   return 0;
 }
