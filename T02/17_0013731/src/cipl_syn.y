@@ -17,11 +17,12 @@
   extern int totalErrors;
 
   tableNode* table;
+  treeNode* root;
 %}
 
 %union{
   tokenElem token;
-  treeNode node;
+  treeNode* node;
 }
 
 %token <token> ID;
@@ -87,18 +88,28 @@
 %%
 
 program:
-  declarationList {}
+  declarationList {
+    $$ = $1;
+    root = $$;
+  }
 
 declarationList:
-  declarationList declaration {}
-  | declaration               {}
+  declarationList declaration {
+    $$ = createNode("declarationList");
+    $$->children[0] = $1;
+    $$->children[1] = $2;
+  }
+  | declaration               { $$ = $1; }
 
 declaration:
-  variableDeclaration {}
-  | functionDeclaration {}
+  variableDeclaration { $$ = $1; }
+  | functionDeclaration { $$ = $1; }
 
 variableDeclaration:
   TYPE ID SEMICOLON {
+    $$ = createNode("variableDeclaration");
+    $$->children[0] = addLeaf($1);
+    $$->children[1] = addLeaf($2);
     newSymbol($2.content, $1.content, 0, scopeCounting, table);
   }
   | error ';' {yyerrok;}
@@ -106,110 +117,238 @@ variableDeclaration:
 
 functionDeclaration:
   TYPE ID OPEN_PAREN params CLOSE_PAREN compoundStmt  {
+    $$ = createNode("functionDeclaration");
+    $$->children[0] = addLeaf($1);
+    $$->children[1] = addLeaf($2);
+    $$->children[2] = addLeaf($3);
+    $$->children[3] = $4;
+    $$->children[4] = addLeaf($5);
+    $$->children[5] = $6;
     newSymbol($2.content,  $1.content, 1, scopeCounting, table);
   }
   | error {yyerrok;}
 
 params:
-  paramList {}
-  | %empty  {}
+  paramList { $$ = $1; }
+  | %empty  { }
 
 paramList:
-  paramList COMMA param {}
-  | param {}
+  paramList COMMA param {
+    $$ = createNode("paramList");
+    $$->children[0] = $1;
+    $$->children[1] = $3;
+  }
+  | param { $$ = $1; }
 
 param:
-  TYPE ID {}
+  TYPE ID {
+    $$ = createNode("param");
+    $$->children[0] = addLeaf($1);
+    $$->children[1] = addLeaf($2);
+  }
 
 compoundStmt:
-  OPEN_CURLY statementList CLOSE_CURLY  {}
+  OPEN_CURLY statementList CLOSE_CURLY  {
+    $$ = createNode("compoundStmt");
+    $$->children[0] = addLeaf($1);
+    $$->children[1] = $2;
+    $$->children[2] = addLeaf($3);
+  }
   | error {yyerrok;}
 
 statementList:
-  statementList statement {}
+  statementList statement {
+    $$ = createNode("statementList");
+    $$->children[0] = $1;
+    $$->children[1] = $2;
+  }
   | %empty  {}
 
 statement:
-  expressionStmt          {}
-  | compoundStmt          {}
-  | conditionalStmt       {}
-  | loopStmt              {}
-  | returnStmt            {}
-  | variableDeclaration   {}
-  | inOutStmt             {}
+  expressionStmt          { $$ = $1; }
+  | compoundStmt          { $$ = $1; }
+  | conditionalStmt       { $$ = $1; }
+  | loopStmt              { $$ = $1; }
+  | returnStmt            { $$ = $1; }
+  | variableDeclaration   { $$ = $1; }
+  | inOutStmt             { $$ = $1; }
 
 expressionStmt:
-  expression SEMICOLON    {}
-  | SEMICOLON             {}
+  expression SEMICOLON    { $$ = $1; }
+  | SEMICOLON             { $$ = addLeaf($1); }
 
 conditionalStmt:
-  IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement {}
-  | IF OPEN_PAREN expression CLOSE_PAREN statement              {}
+  IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement {
+    $$ = createNode("conditionalStmt");
+    $$->children[0] = addLeaf($1);
+    $$->children[1] = addLeaf($2);
+    $$->children[2] = $3;
+    $$->children[3] = addLeaf($4);
+    $$->children[4] = $5;
+    $$->children[5] = addLeaf($6);
+    $$->children[6] = $7;
+  }
+  | IF OPEN_PAREN expression CLOSE_PAREN statement {
+    $$ = createNode("conditionalStmt");
+    $$->children[0] = addLeaf($1);
+    $$->children[1] = addLeaf($2);
+    $$->children[2] = $3;
+    $$->children[3] = addLeaf($4);
+    $$->children[4] = $5;
+  }
   | IF error CLOSE_PAREN {yyerrok;}
 
 loopStmt:
-  FOR OPEN_PAREN expression SEMICOLON logicExpression SEMICOLON expression CLOSE_PAREN statement {}
+  FOR OPEN_PAREN expression SEMICOLON logicExpression SEMICOLON expression CLOSE_PAREN statement {
+    $$ = createNode("loopStmt");
+    $$->children[0] = addLeaf($1);
+    $$->children[1] = addLeaf($2);
+    $$->children[2] = $3;
+    $$->children[3] = $5;
+    $$->children[4] = $7;
+    $$->children[5] = addLeaf($8);
+    $$->children[6] = $9;
+  }
 
 returnStmt:
-  RETURN expression SEMICOLON {}
+  RETURN expression SEMICOLON {
+    $$ = createNode("returnStmt");
+    $$->children[0] = addLeaf($1);
+    $$->children[1] = $2;
+  }
 
 inOutStmt:
-  INPUT OPEN_PAREN ID CLOSE_PAREN SEMICOLON {}
-  | OUTPUT OPEN_PAREN outputArgs CLOSE_PAREN SEMICOLON  {}
+  INPUT OPEN_PAREN ID CLOSE_PAREN SEMICOLON {
+    $$ = createNode("inStmt");
+    $$->children[0] = addLeaf($1);
+    $$->children[1] = addLeaf($2);
+    $$->children[2] = addLeaf($3);
+    $$->children[3] = addLeaf($4);
+  }
+  | OUTPUT OPEN_PAREN outputArgs CLOSE_PAREN SEMICOLON  {
+    $$ = createNode("outStmt");
+    $$->children[0] = addLeaf($1);
+    $$->children[1] = addLeaf($2);
+    $$->children[2] = $3;
+    $$->children[3] = addLeaf($4);
+  }
   | INPUT error SEMICOLON {yyerrok;}
   | OUTPUT error SEMICOLON {yyerrok;}
 
 expression:
-  ID OP_ASSIG expression  {}
-  | logicExpression       {}
+  ID OP_ASSIG expression  {
+    $$ = createNode("expression");
+    $$->children[0] = addLeaf($1);
+    $$->children[1] = addLeaf($2);
+    $$->children[2] = $3;
+  }
+  | logicExpression { $$ = $1; }
 
 logicExpression:
-  logicExpression OP_LOGIC relatExpression  {}
-  | relatExpression                         {}
+  logicExpression OP_LOGIC relatExpression  {
+    $$ = createNode("logicExpression");
+    $$->children[0] = $1;
+    $$->children[1] = addLeaf($2);
+    $$->children[2] = $3;
+  }
+  | relatExpression { $$ = $1; }
 
 relatExpression:
-  relatExpression OP_RELAT listExpression   {}
-  | listExpression                          {}
+  relatExpression OP_RELAT listExpression   {
+    $$ = createNode("relatExpression");
+    $$->children[0] = $1;
+    $$->children[1] = addLeaf($2);
+    $$->children[2] = $3;
+  }
+  | listExpression  { $$ = $1; }
 
 listExpression:
-  addExpression OP_LIST listExpression      {}
-  | addExpression                           {}
+  addExpression OP_LIST listExpression      {
+    $$ = createNode("listExpression");
+    $$->children[0] = $1;
+    $$->children[1] = addLeaf($2);
+    $$->children[2] = $3;
+  }
+  | addExpression   { $$ = $1; }
 
 addExpression:
-  addExpression OP_ADD mulExpression         {}
-  | mulExpression                           {}
+  addExpression OP_ADD mulExpression {
+    $$ = createNode("addExpression");
+    $$->children[0] = $1;
+    $$->children[1] = addLeaf($2);
+    $$->children[2] = $3;
+  }
+  | mulExpression   { $$ = $1; }
 
 mulExpression:
-  mulExpression OP_MUL factor               {}
-  | factor                                  {}
+  mulExpression OP_MUL factor {
+    $$ = createNode("mulExpression");
+    $$->children[0] = $1;
+    $$->children[1] = addLeaf($2);
+    $$->children[2] = $3;
+  }
+  | factor { $$ = $1; }
 
 factor:
-  OPEN_PAREN expression CLOSE_PAREN         {}
-  | unaryExpression                         {}
-  | call                                    {}
-  | ID                                      {}
-  | FLOAT                                   {}
-  | INT                                     {}
-  | NIL                                     {}
+  OPEN_PAREN expression CLOSE_PAREN {
+    $$ = createNode("factor");
+    $$->children[0] = addLeaf($1);
+    $$->children[1] = $2;
+    $$->children[2] = addLeaf($3);
+  }
+  | unaryExpression { $$ = $1; }
+  | call { $$ = $1; }
+  | ID {
+    $$ = addLeaf($1);
+  }
+  | FLOAT {
+    $$ = addLeaf($1);
+  }
+  | INT {
+    $$ = addLeaf($1);
+  }
+  | NIL {
+    $$ = addLeaf($1);
+  }
 
 unaryExpression:  
-  UN_OP factor                              {}
-  | OP_ADD factor                         {}
+  UN_OP factor {
+    $$ = createNode("unaryExpression");
+    $$->children[0] = addLeaf($1);
+    $$->children[1] = $2;
+  }
+  | OP_ADD factor {
+    $$ = createNode("unaryExpression");
+    $$->children[0] = addLeaf($1);
+    $$->children[1] = $2;
+  }
 
 call:
-  ID OPEN_PAREN args CLOSE_PAREN            {}
+  ID OPEN_PAREN args CLOSE_PAREN {
+    $$ = createNode("call");
+    $$->children[0] = addLeaf($1);
+    $$->children[1] = addLeaf($2);
+    $$->children[2] = $3;
+    $$->children[3] = addLeaf($4);
+  }
 
 outputArgs:
-  factor                                    {}
-  | STRING                                  {}
+  factor { $$ = $1; }
+  | STRING {
+    $$ = addLeaf($1);
+  }
 
 args:
-  argList                                   {}
-  | %empty                                  {}
+  argList { $$ = $1; }
+  | %empty  {}
 
 argList:
-  argList COMMA expression                  {}
-  | expression                              {}
+  argList COMMA expression {
+    $$ = createNode("argList");
+    $$->children[0] = $1;
+    $$->children[1] = $3;
+  }
+  | expression { $$ = $1; }
 
 %%
 
@@ -233,7 +372,11 @@ if (argc > 1) {
       if (totalErrors == 0) {
         printf(PRINT_CYAN "There's no errors.\n" PRINT_RESET);
       }
+      printf("\nAbstract Syntax Tree:\n");
+      printTree(root, 0);
+
       printTable(table);
+      freeTable(table);
     } else {
       printf("Invalid filename and/or path.\n");
     }

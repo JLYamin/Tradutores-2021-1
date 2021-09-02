@@ -19,8 +19,7 @@ void addSymbol(symbolElem* symbol, tableNode* table) {
 
 void newSymbol(char* identifier, char* type, int isFunction, int scopeNum, tableNode* table) {
   symbolElem* symbol = (symbolElem*)malloc(sizeof(symbolElem));
-  symbol->identifier = (char*)malloc(sizeof(strlen(identifier)));
-  strcpy(symbol->identifier, identifier);
+  symbol->identifier = strdup(identifier);
 
   if (strcmp(type, "float") == 0) {
     symbol->type = 1;
@@ -41,12 +40,24 @@ void printTable(tableNode* table) {
   symbolElem* currentNode = table->symbols;
 
   printf("\nSymbol Table:\n");
-  printf(PRINT_CYAN "===================================================\n" PRINT_RESET);
+  printf(PRINT_CYAN "=================================================== \n" PRINT_RESET);
   printf("Identifier\tType\tisFunction\tScopeNum\n");
-  printf(PRINT_CYAN "===================================================\n" PRINT_RESET);
+  printf(PRINT_CYAN "=================================================== \n" PRINT_RESET);
   while (currentNode != NULL) {
-    printf("%-10.10s\t%2d\t%5d\t\t%5d\n", currentNode->identifier, currentNode->type, currentNode->isFunction, currentNode->scopeNum);
-    printf(PRINT_CYAN "---------------------------------------------------\n" PRINT_RESET);
+    printf("%-10.10s\t%2d\t%5d\t\t%5d \n", currentNode->identifier, currentNode->type, currentNode->isFunction, currentNode->scopeNum);
+    printf(PRINT_CYAN "--------------------------------------------------- \n" PRINT_RESET);
     currentNode = currentNode->next;
+  }
+}
+
+void freeTable(tableNode* table) {
+  symbolElem* currentNode = table->symbols;
+  symbolElem* aux;
+  free(table);
+  while (currentNode != NULL) {
+    aux = currentNode;
+    currentNode = currentNode->next;
+    free(aux->identifier);
+    free(aux);
   }
 }

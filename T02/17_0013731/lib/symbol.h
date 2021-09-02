@@ -33,5 +33,6 @@ tableNode* initTable(int counting);
 void addSymbol(symbolElem* symbol, tableNode* table);
 void newSymbol(char* identifier, char* type, int isFunction, int scopeNum, tableNode* table);
 void printTable(tableNode* table);
+void freeTable(tableNode* table);
 
 #endif

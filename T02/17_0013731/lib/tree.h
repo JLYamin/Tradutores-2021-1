@@ -11,13 +11,19 @@
 #include <string.h>
 
 #include "token.h"
+
+#define PRINT_CYAN "\x1b[36m"
+#define PRINT_RED "\x1b[31m"
+#define PRINT_RESET "\x1b[0m"
 typedef struct node {
   tokenElem value;
-  struct node* children[10];
+  char* nonTerminal;
+  struct node* children[7];
 } treeNode;
 
-treeNode* createLeaf(tokenElem value);
-void addLeaf(tokenElem value, treeNode** parent);
-void printTree(treeNode** root);
+treeNode* createNode(char* name);
+treeNode* addLeaf(tokenElem value);
+void printTree(treeNode* node, int tabNum);
+int nextIndex(treeNode* node);
 
 #endif
