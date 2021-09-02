@@ -9,7 +9,7 @@ treeNode* createNode(char* name) {
   treeNode* new = (treeNode*)malloc(sizeof(treeNode));
   new->nonTerminal = strdup(name);
 
-  for (int i = 0; i < 7; i++) {
+  for (int i = 0; i < 5; i++) {
     new->children[i] = NULL;
   }
 
@@ -20,12 +20,16 @@ treeNode* addLeaf(tokenElem value) {
   leaf->nonTerminal = NULL;
   leaf->value = value;
 
+  for (int i = 0; i < 5; i++) {
+    leaf->children[i] = NULL;
+  }
+
   return leaf;
 }
 
 int nextIndex(treeNode* node) {
   if (node->nonTerminal != NULL) {
-    for (int i = 0; i < 7; i++) {
+    for (int i = 0; i < 5; i++) {
       if (node->children[i] == NULL) {
         return i;
       } else {
@@ -44,10 +48,25 @@ void printTree(treeNode* node, int tabNum) {
     return;
   } else {
     printf(PRINT_CYAN "%s:\n" PRINT_RESET, node->nonTerminal);
-    for (int i = 0; i < 7; i++) {
+    for (int i = 0; i < 5; i++) {
       if (node->children[i] != NULL) {
         printTree(node->children[i], tabNum + 1);
       }
     }
+  }
+}
+
+void freeTree(treeNode* node) {
+  if (node->nonTerminal == NULL) {
+    free(node);
+    return;
+  } else {
+    for (int i = 0; i < 5; i++) {
+      if (node->children[i] != NULL) {
+        freeTree(node->children[i]);
+      }
+    }
+    free(node->nonTerminal);
+    free(node);
   }
 }

@@ -362,6 +362,7 @@ if (argc > 1) {
       }
       printf("\nAbstract Syntax Tree:\n");
       printTree(root, 0);
+      freeTree(root);
 
       printTable(table);
       freeTable(table);

@@ -18,12 +18,13 @@
 typedef struct node {
   tokenElem value;
   char* nonTerminal;
-  struct node* children[7];
+  struct node* children[5];
 } treeNode;
 
 treeNode* createNode(char* name);
 treeNode* addLeaf(tokenElem value);
 void printTree(treeNode* node, int tabNum);
 int nextIndex(treeNode* node);
+void freeTree(treeNode* node);
 
 #endif
