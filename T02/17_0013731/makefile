@@ -16,7 +16,7 @@ onlyflex:
 	flex ./src/cipl_lex.l && gcc -o tradutor lex.yy.c -Wall -Wextra
 
 compile: flex symbol tree
-	gcc -o tradutor cipl_syn.tab.c lex.yy.c symbol.o tree.o -g -Wall -Wextra
+	gcc -o tradutor cipl_syn.tab.c lex.yy.c symbol.o tree.o -g -Wall -Wextra -Wpedantic
 
 tree:
 	gcc -c ./src/tree.c
