@@ -176,11 +176,11 @@ statement:
 
 expressionStmt:
   expression SEMICOLON    { $$ = $1; }
-  | SEMICOLON             { }
+  | SEMICOLON             { $$ = addLeaf($1); }
 
 conditionalStmt:
   IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement {
-    $$ = createNode("if statment");
+    $$ = createNode("if else statment");
     $$->children[0] = addLeaf($1);
     $$->children[1] = $3;
     $$->children[2] = $5;
@@ -188,12 +188,10 @@ conditionalStmt:
     $$->children[4] = $7;
   }
   | IF OPEN_PAREN expression CLOSE_PAREN statement {
-    $$ = createNode("if else statment");
+    $$ = createNode("if statment");
     $$->children[0] = addLeaf($1);
-    $$->children[1] = addLeaf($2);
-    $$->children[2] = $3;
-    $$->children[3] = addLeaf($4);
-    $$->children[4] = $5;
+    $$->children[1] = $3;
+    $$->children[2] = $5;
   }
   | IF error CLOSE_PAREN {yyerrok;}
 
@@ -230,7 +228,7 @@ inOutStmt:
 
 expression:
   ID OP_ASSIG expression  {
-    $$ = createNode("expression");
+    $$ = createNode("assign expression");
     $$->children[0] = addLeaf($1);
     $$->children[1] = addLeaf($2);
     $$->children[2] = $3;
