@@ -95,13 +95,11 @@ program:
 
 declarationList:
   declarationList declaration {
-    $$ = createNode("declarations");
+    $$ = createNode("invisible node");
     $$->children[0] = $1;
     $$->children[1] = $2;
-    printf("%s %s\n", $1->nonTerminal, $2->nonTerminal);
   }
   | declaration { $$ = $1; 
-    printf("%s\n", $1->nonTerminal);
   }
 
 declaration:
@@ -135,7 +133,7 @@ params:
 
 paramList:
   paramList COMMA param {
-    $$ = createNode("params list");
+    $$ = createNode("invisible node");
     $$->children[0] = $1;
     $$->children[1] = $3;
   }
@@ -150,7 +148,7 @@ param:
 
 compoundStmt:
   OPEN_CURLY statementList CLOSE_CURLY  {
-    $$ = createNode("statment scope");
+    $$ = createNode("invisible node");
     $$->children[0] = addLeaf($1);
     $$->children[1] = $2;
     $$->children[2] = addLeaf($3);
@@ -159,7 +157,7 @@ compoundStmt:
 
 statementList:
   statementList statement {
-    $$ = createNode("statments");
+    $$ = createNode("invisible node");
     $$->children[0] = $1;
     $$->children[1] = $2;
   }
@@ -358,13 +356,12 @@ int main (int argc, char *argv[]) {
       printf("Line \t Column\t Error\n");
       table = initTable(scopeCounting);
 
-      printf("oi\n");
       yyparse();
       if (totalErrors == 0) {
         printf(PRINT_CYAN "There's no errors.\n" PRINT_RESET);
       }
       printf("\nAbstract Syntax Tree:\n");
-      printTree(root, 0);
+      printTree(root, 1);
       freeTree(root);
 
       printTable(table);
