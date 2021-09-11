@@ -24,7 +24,6 @@ typedef struct node {
 treeNode* createNode(char* name);
 treeNode* addLeaf(tokenElem value);
 void printTree(treeNode* node, int tabNum);
-int nextIndex(treeNode* node);
 void freeTree(treeNode* node);
 
 #endif

@@ -98,8 +98,11 @@ declarationList:
     $$ = createNode("declarations");
     $$->children[0] = $1;
     $$->children[1] = $2;
+    printf("%s %s\n", $1->nonTerminal, $2->nonTerminal);
   }
-  | declaration               { $$ = $1; }
+  | declaration { $$ = $1; 
+    printf("%s\n", $1->nonTerminal);
+  }
 
 declaration:
   variableDeclaration { $$ = $1; }
@@ -128,7 +131,7 @@ functionDeclaration:
 
 params:
   paramList { $$ = $1; }
-  | %empty  { }
+  | %empty  { $$ = NULL; }
 
 paramList:
   paramList COMMA param {
@@ -160,7 +163,7 @@ statementList:
     $$->children[0] = $1;
     $$->children[1] = $2;
   }
-  | %empty  {}
+  | %empty  { $$ = NULL; }
 
 statement:
   expressionStmt          { $$ = $1; }
@@ -173,7 +176,7 @@ statement:
 
 expressionStmt:
   expression SEMICOLON    { $$ = $1; }
-  | SEMICOLON             { $$ = addLeaf($1); }
+  | SEMICOLON             { }
 
 conditionalStmt:
   IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement {
@@ -328,7 +331,7 @@ outputArgs:
 
 args:
   argList { $$ = $1; }
-  | %empty  {}
+  | %empty  { $$ = NULL; }
 
 argList:
   argList COMMA expression {
@@ -346,6 +349,7 @@ void yyerror (char const *message) {
 }
 
 int main (int argc, char *argv[]) {
+
   if (argc > 1) {
     FILE *file = fopen(argv[1], "r");
 
@@ -356,6 +360,7 @@ int main (int argc, char *argv[]) {
       printf("Line \t Column\t Error\n");
       table = initTable(scopeCounting);
 
+      printf("oi\n");
       yyparse();
       if (totalErrors == 0) {
         printf(PRINT_CYAN "There's no errors.\n" PRINT_RESET);

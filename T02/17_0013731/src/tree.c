@@ -15,6 +15,7 @@ treeNode* createNode(char* name) {
 
   return new;
 }
+
 treeNode* addLeaf(tokenElem value) {
   treeNode* leaf = (treeNode*)malloc(sizeof(treeNode));
   leaf->nonTerminal = NULL;
@@ -27,22 +28,15 @@ treeNode* addLeaf(tokenElem value) {
   return leaf;
 }
 
-int nextIndex(treeNode* node) {
-  if (node->nonTerminal != NULL) {
-    for (int i = 0; i < 5; i++) {
-      if (node->children[i] == NULL) {
-        return i;
-      } else {
-        return -1;
-      }
-    }
-  }
-}
-
 void printTree(treeNode* node, int tabNum) {
   for (int i = 0; i < tabNum; i++) {
     printf(" ");
   }
+
+  if (node == NULL) {
+    return;
+  }
+
   if (node->nonTerminal == NULL) {
     printf("↳ %s\n", node->value.content);
     return;
@@ -57,14 +51,20 @@ void printTree(treeNode* node, int tabNum) {
 }
 
 void freeTree(treeNode* node) {
-  if (node->nonTerminal != NULL) {
-    free(node->nonTerminal);
+  if (node == NULL) {
     return;
   }
+
+  if (node->nonTerminal != NULL) {
+    free(node->nonTerminal);
+  }
+
   for (int i = 0; i < 5; i++) {
-    if (node->children[i] != NULL) {
-      freeTree(node->children[i]);
+    treeNode* aux = node->children[i];
+    if (aux != NULL) {
+      freeTree(aux);
     }
   }
+
   free(node);
 }

@@ -1,9 +1,15 @@
-int a;
-
-int list func2(int i80) {
-  return i80 * 80 + 1;
-  i - 2;
-  10 - 20;
+int halfByElem(int a) {
+  return 10 / a;
 }
 
-//  int func (int i) {
+int notZero(int b) {
+  return b;
+}
+
+int list execList(int list list1) {
+  return halfByElem >> notZero << ? % !list1 : NIL;
+}
+
+int operators(int a, int b) {
+  return (12 - 10) / 20 + 3 * a || b;
+}
