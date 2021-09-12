@@ -4,6 +4,7 @@
 %{
   #include "./lib/tree.h"
   #include "./lib/symbol.h"
+  #include "./lib/scope.h"
 
   extern FILE *yyin;
 
@@ -15,6 +16,7 @@
   extern int currentColumn;
   extern int scopeCounting;
   extern int totalErrors;
+  extern scopeNode* currentScope;
 
   tableNode* table;
   treeNode* root;
@@ -111,7 +113,7 @@ variableDeclaration:
     $$ = createNode("variable declaration");
     $$->children[0] = addLeaf($1);
     $$->children[1] = addLeaf($2);
-    newSymbol($2.content, $1.content, 0, scopeCounting, table);
+    newSymbol($2.content, $1.content, 0, currentScope->id, table);
   }
   | error ';' {yyerrok;}
 
@@ -123,7 +125,7 @@ functionDeclaration:
     $$->children[1] = addLeaf($2);
     $$->children[2] = $4;
     $$->children[3] = $6;
-    newSymbol($2.content,  $1.content, 1, scopeCounting, table);
+    newSymbol($2.content,  $1.content, 1, currentScope->id, table);
   }
   | error {yyerrok;}
 
@@ -352,9 +354,14 @@ int main (int argc, char *argv[]) {
     if (file) {
       yyin = file;
 
+      // Create table
+      table = initTable(scopeCounting);
+      // Create global scope
+      currentScope = newScope(scopeCounting, NULL, 0);
+      scopeNode* global = currentScope;
+
       printf("\nErrors detected:\n");
       printf("Line \t Column\t Error\n");
-      table = initTable(scopeCounting);
 
       yyparse();
       if (totalErrors == 0) {
@@ -366,6 +373,10 @@ int main (int argc, char *argv[]) {
 
       printTable(table);
       freeTable(table);
+
+      printf("\nScope Hierarchy:\n");
+      printScope(global);
+      freeScope(global);
 
       yylex_destroy();
       fclose(file);

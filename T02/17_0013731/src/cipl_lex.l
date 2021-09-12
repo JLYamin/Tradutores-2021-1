@@ -7,6 +7,7 @@
   #include "./lib/tree.h"
   #include "./lib/token.h"
   #include "./lib/symbol.h"
+  #include "./lib/scope.h"
   #include "cipl_syn.tab.h"
 
   #define PRINT_CYAN  "\x1b[36m"
@@ -17,6 +18,8 @@
   int currentColumn = 1;
   int totalErrors = 0;
   int scopeCounting = 0;
+
+  scopeNode* currentScope;
 %}
 
 WSPACE      [ \t]+
@@ -244,7 +247,11 @@ STRING      (\".*\")|(\'.*\')
   yylval.token.column = currentColumn;
   strcpy(yylval.token.content, yytext);
   currentColumn += yyleng;
+
+  // Add scope
   scopeCounting++;
+  currentScope = newScope(scopeCounting, currentScope, currentScope->depth + 1);
+  
   return OPEN_CURLY;
 }
 
@@ -253,6 +260,10 @@ STRING      (\".*\")|(\'.*\')
   yylval.token.column = currentColumn;
   strcpy(yylval.token.content, yytext);
   currentColumn += yyleng;
+
+  // Return scope
+  currentScope = currentScope->parent;
+
   return CLOSE_CURLY;
 }
 
