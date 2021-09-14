@@ -10,7 +10,7 @@
 
 Conforme indicado pela especificação do trabalho:
 
-- `/`: No diretório raiz, encontram-se o makefile, o executável e este arquivo README;
+- `/`: No diretório raiz, encontram-se o makefile, o executável e este arquivo README, além dos arquivos gerados pela compilação;
 - `/doc`: contém o documento escrito;
 - `/src`: contém os arquivo `cipl_lex.l` e `cipl_syn.y` correspondentes ao léxico e sintático e os arquivos `.c` auxiliares;
 - `/lib`: contém os arquivos `.h`;
@@ -18,7 +18,7 @@ Conforme indicado pela especificação do trabalho:
 
 ## Compilar/Executar
 
-Para executar o analisador léxico, faça uso do make file por meio do comando
+Para executar o analisador sintático e léxico, faça uso do make file por meio do comando
 
 `make compile`
 
