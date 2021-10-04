@@ -160,6 +160,7 @@ param:
     $$ = createNode("param");
     $$->children[0] = addLeaf($1);
     $$->children[1] = addLeaf($2);
+    newSymbol($2.content,  $1.content, 2, currentScope->id+1, table);
   }
 
 compoundStmt:

@@ -52,7 +52,15 @@ void printTable(tableNode* table) {
     } else if (currentNode->type == 3) {
       type = "float list";
     }
-    printf("%-10.10s\t%-10.10s\t%5d\t\t%5d \n", currentNode->identifier, type, currentNode->isFunction, currentNode->scopeNum);
+
+    char* isFunction = "var";
+    if (currentNode->isFunction == 1) {
+      isFunction = "function";
+    } else if (currentNode->isFunction == 2) {
+      isFunction = "param";
+    }
+
+    printf("%-10.10s\t%-10.10s\t%-8.8s\t%1d \n", currentNode->identifier, type, isFunction, currentNode->scopeNum);
     printf(PRINT_CYAN "--------------------------------------------------------- \n" PRINT_RESET);
     currentNode = currentNode->next;
   }
