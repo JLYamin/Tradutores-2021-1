@@ -1,0 +1,6 @@
+{
+  "files.associations": {
+    "*.l": "lex",
+    "cipl_syn.tab.h": "c"
+  }
+}

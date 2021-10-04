@@ -21,7 +21,7 @@ compile: flex symbol tree scope
 tree:
 	gcc -c ./src/tree.c -g
 
-symbol:
+symbol: bison
 	gcc -c ./src/symbol.c -g
 
 scope:

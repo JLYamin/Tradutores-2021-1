@@ -90,8 +90,8 @@
 %%
 
 /* To do:
-  [ ] Adicionar parâmetros das funções na tabela de símbolos junto do escopo dessa função;
-  [ ] Verificar se declaração consta na tabela de símbolos no escopo correto;
+  [X] Adicionar parâmetros das funções na tabela de símbolos junto do escopo dessa função;
+  [X] Verificar se declaração consta na tabela de símbolos no escopo correto;
   [ ] Verificar se tem main ();
   [ ] Fazer verificação de tipo para cada statment:
     [ ] expressionStmt       
@@ -160,7 +160,7 @@ param:
     $$ = createNode("param");
     $$->children[0] = addLeaf($1);
     $$->children[1] = addLeaf($2);
-    newSymbol($2.content,  $1.content, 2, currentScope->id+1, table);
+    newSymbol($2.content,  $1.content, 2, scopeCounting+1, table);
   }
 
 compoundStmt:
@@ -379,6 +379,7 @@ int main (int argc, char *argv[]) {
       printf("Line \t Column\t Error\n");
 
       yyparse();
+      mainWasDeclared(table);
       if (totalErrors == 0) {
         printf(PRINT_CYAN "There's no errors.\n" PRINT_RESET);
       }
@@ -392,6 +393,7 @@ int main (int argc, char *argv[]) {
       printf("\nScope Hierarchy:\n");
       printScope(global);
       freeScope(global);
+
 
       yylex_destroy();
       fclose(file);

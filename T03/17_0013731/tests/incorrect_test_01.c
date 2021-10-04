@@ -1,8 +1,8 @@
-float list AL;
-int  oi;
-int list abc;
-float      list aaa;
+float list a;
 
-int main () {
+int min () {
+  int list a;
+  float a;
+
   writeln('');
 }

@@ -2012,7 +2012,7 @@ yyreduce:
     (yyval.node) = createNode("param");
     (yyval.node)->children[0] = addLeaf((yyvsp[-1].token));
     (yyval.node)->children[1] = addLeaf((yyvsp[0].token));
-    newSymbol((yyvsp[0].token).content,  (yyvsp[-1].token).content, 2, currentScope->id+1, table);
+    newSymbol((yyvsp[0].token).content,  (yyvsp[-1].token).content, 2, scopeCounting+1, table);
   }
 #line 2018 "cipl_syn.tab.c"
     break;
@@ -2670,6 +2670,7 @@ int main (int argc, char *argv[]) {
       printf("Line \t Column\t Error\n");
 
       yyparse();
+      mainWasDeclared(table);
       if (totalErrors == 0) {
         printf(PRINT_CYAN "There's no errors.\n" PRINT_RESET);
       }
@@ -2683,6 +2684,7 @@ int main (int argc, char *argv[]) {
       printf("\nScope Hierarchy:\n");
       printScope(global);
       freeScope(global);
+
 
       yylex_destroy();
       fclose(file);

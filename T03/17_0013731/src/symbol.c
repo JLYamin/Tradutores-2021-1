@@ -4,6 +4,13 @@
 */
 
 #include "../lib/symbol.h"
+#include "../lib/tree.h"
+#include "../lib/token.h"
+#include "../cipl_syn.tab.h"
+
+extern int totalErrors;
+extern int currentLine;
+extern int currentColumn;
 
 tableNode* initTable(int counting) {
   tableNode* table = (tableNode*)malloc(sizeof(tableNode));
@@ -33,7 +40,9 @@ void newSymbol(char* identifier, char* type, int isFunction, int scopeNum, table
   symbol->isFunction = isFunction;
   symbol->scopeNum = scopeNum;
 
-  addSymbol(symbol, table);
+  if (wasItDeclared(table, identifier, scopeNum)) {
+    addSymbol(symbol, table);
+  }
 }
 
 void printTable(tableNode* table) {
@@ -76,4 +85,31 @@ void freeTable(tableNode* table) {
     free(aux->identifier);
     free(aux);
   }
+}
+
+int wasItDeclared (tableNode* table, char* identifier, int currentScope) {
+  symbolElem* currentNode = table->symbols;
+
+  while (currentNode != NULL) {
+    if (strcmp(currentNode->identifier, identifier) == 0 && currentScope == currentNode->scopeNum) {
+      printf("%3d \t %4d \t " PRINT_RED "Semantic Error: redefinition of %s\n" PRINT_RESET, currentLine, currentColumn, currentNode->identifier);
+      totalErrors++;
+      return 0;
+    }
+    currentNode = currentNode->next;
+  }
+  return 1;
+}
+
+void mainWasDeclared(tableNode* table) {
+  symbolElem* currentNode = table->symbols;
+
+  while (currentNode != NULL) {
+    if (strcmp(currentNode->identifier, "main") == 0 && currentNode->scopeNum == 0) {
+      return;
+    }
+    currentNode = currentNode->next;
+  }
+  printf("%3d \t %4d \t " PRINT_RED "Semantic Error: missing main function\n" PRINT_RESET, currentLine, currentColumn);
+  totalErrors++;
 }
