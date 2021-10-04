@@ -40,12 +40,20 @@ void printTable(tableNode* table) {
   symbolElem* currentNode = table->symbols;
 
   printf("\nSymbol Table:\n");
-  printf(PRINT_CYAN "=================================================== \n" PRINT_RESET);
-  printf("Identifier\tType\tisFunction\tScopeNum\n");
-  printf(PRINT_CYAN "=================================================== \n" PRINT_RESET);
+  printf(PRINT_CYAN "========================================================== \n" PRINT_RESET);
+  printf("Identifier\tType\t\tisFunction\tScopeNum\n");
+  printf(PRINT_CYAN "========================================================== \n" PRINT_RESET);
   while (currentNode != NULL) {
-    printf("%-10.10s\t%2d\t%5d\t\t%5d \n", currentNode->identifier, currentNode->type, currentNode->isFunction, currentNode->scopeNum);
-    printf(PRINT_CYAN "--------------------------------------------------- \n" PRINT_RESET);
+    char* type = "int";
+    if (currentNode->type == 1) {
+      type = "float";
+    } else if (currentNode->type == 2) {
+      type = "int list";
+    } else if (currentNode->type == 3) {
+      type = "float list";
+    }
+    printf("%-10.10s\t%-10.10s\t%5d\t\t%5d \n", currentNode->identifier, type, currentNode->isFunction, currentNode->scopeNum);
+    printf(PRINT_CYAN "--------------------------------------------------------- \n" PRINT_RESET);
     currentNode = currentNode->next;
   }
 }

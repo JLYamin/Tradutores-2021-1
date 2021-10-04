@@ -89,6 +89,20 @@
 
 %%
 
+/* To do:
+  [ ] Adicionar parâmetros das funções na tabela de símbolos junto do escopo dessa função;
+  [ ] Verificar se declaração consta na tabela de símbolos no escopo correto;
+  [ ] Verificar se tem main ();
+  [ ] Fazer verificação de tipo para cada statment:
+    [ ] expressionStmt       
+    [ ] compoundStmt       
+    [ ] conditionalStmt    
+    [ ] loopStmt           
+    [ ] returnStmt         
+    [ ] variableDeclaration
+    [ ] inOutStmt          
+*/
+
 program:
   declarationList {
     $$ = $1;
