@@ -41,7 +41,7 @@ OP_LIST     (>>)|(<<)|(:)
 
 UN_OP       (\?)|(!)|(%)
 
-TYPE        (int)|(float)|"int list"|"float list"
+TYPE        (int)|(float)|(int{WSPACE}+list)|(float{WSPACE}+list)
 
 NIL         (NIL)
 IF          (if)
@@ -57,7 +57,7 @@ OPEN_CURLY  "{"
 OPEN_PAREN  "("
 CLOSE_CURLY "}"
 CLOSE_PAREN ")"
-STRING      (\".*\")|(\'.*\')
+STRING      (\".*\")|(\'.+\')
 
 %%
 

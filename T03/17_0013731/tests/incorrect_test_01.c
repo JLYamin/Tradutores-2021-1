@@ -1,3 +1,8 @@
-int a @ = 10;
+float list AL;
+int  oi;
+int list abc;
+float      list aaa;
 
-float list AL
+int main () {
+  writeln('');
+}
