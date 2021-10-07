@@ -337,7 +337,7 @@ call:
   }
 
 outputArgs:
-  factor { $$ = $1; }
+  expression { $$ = $1; }
   | STRING {
     $$ = addLeaf($1);
   }

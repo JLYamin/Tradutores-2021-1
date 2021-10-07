@@ -1,4 +1,4 @@
-# Analisador Sintático - Trabalho Prático
+# Analisador Semântico - Trabalho Prático
 
 **Aluno:** João Lucas Azevedo Yamin Rodrigues da Cunha
 

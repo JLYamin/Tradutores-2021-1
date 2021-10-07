@@ -1,10 +1,9 @@
 int 40e;
 int main(int e) {
+  float e;
   if (10 == 10) {
     if (21 > 10) {
-      if (22 ^) {
-        writeln("60a" + 20);
-      }
+      writeln("60a" + 20);
     }
   }
 }

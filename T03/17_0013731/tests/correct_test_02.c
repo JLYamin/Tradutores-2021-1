@@ -3,6 +3,8 @@ int halfByElem(int a) {
 }
 
 int notZero(int b) {
+  int c;
+  c = 4/-3;
   return b;
 }
 
