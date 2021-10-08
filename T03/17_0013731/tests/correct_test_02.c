@@ -15,3 +15,14 @@ int list execList(int list list1) {
 int operators(int a, int b) {
   return (12 - 10) / 20 + 3 * a || b;
 }
+
+int main () {
+  int a;
+  float b;
+  a = 20;
+  b = 10.1;
+
+  writeln(operators(a, b));
+
+  return 0;
+}

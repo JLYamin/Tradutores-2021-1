@@ -1,8 +1,0 @@
-{
-  "files.associations": {
-    "*.l": "lex",
-    "symbol.h": "c",
-    "stdio.h": "c",
-    "typeinfo": "c"
-  }
-}

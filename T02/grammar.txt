@@ -18,7 +18,7 @@ compoundStmt → { statementList }
 
 statementList → statementList statement | e
 
-statement → expressionStmt | compoundStmt |conditionalStmt | loopStmt | returnStmt | variableDeclaration | inOutStmt
+statement → expressionStmt | compoundStmt | conditionalStmt | loopStmt | returnStmt | variableDeclaration | inOutStmt
 
 expressionStmt → expression; | ;
 

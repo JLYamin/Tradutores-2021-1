@@ -66,6 +66,7 @@
 %type <node> statement;
 %type <node> expressionStmt;
 %type <node> conditionalStmt;
+%type <node> conditionalBody;
 %type <node> loopStmt;
 %type <node> returnStmt;
 %type <node> inOutStmt;
@@ -194,7 +195,7 @@ expressionStmt:
   | SEMICOLON             { $$ = addLeaf($1); }
 
 conditionalStmt:
-  IF OPEN_PAREN expression CLOSE_PAREN statement ELSE statement {
+  IF OPEN_PAREN expression CLOSE_PAREN conditionalBody ELSE conditionalBody {
     $$ = createNode("if else statment");
     $$->children[0] = addLeaf($1);
     $$->children[1] = $3;
@@ -202,13 +203,21 @@ conditionalStmt:
     $$->children[3] = addLeaf($6);
     $$->children[4] = $7;
   }
-  | IF OPEN_PAREN expression CLOSE_PAREN statement {
+  | IF OPEN_PAREN expression CLOSE_PAREN conditionalBody {
     $$ = createNode("if statment");
     $$->children[0] = addLeaf($1);
     $$->children[1] = $3;
     $$->children[2] = $5;
   }
   | IF error CLOSE_PAREN {yyerrok;}
+
+conditionalBody:
+    expressionStmt        { $$ = $1; }
+  | compoundStmt          { $$ = $1; }
+  | conditionalStmt       { $$ = $1; }
+  | loopStmt              { $$ = $1; }
+  | returnStmt            { $$ = $1; }
+  | inOutStmt             { $$ = $1; }
 
 loopStmt:
   FOR OPEN_PAREN expression SEMICOLON logicExpression SEMICOLON expression CLOSE_PAREN statement {
