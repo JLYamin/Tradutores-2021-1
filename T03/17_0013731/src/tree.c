@@ -16,10 +16,11 @@ treeNode* createNode(char* name) {
   return new;
 }
 
-treeNode* addLeaf(tokenElem value) {
+treeNode* addLeaf(tokenElem value, int type) {
   treeNode* leaf = (treeNode*)malloc(sizeof(treeNode));
   leaf->nonTerminal = NULL;
   leaf->value = value;
+  leaf->nodeType = type;
 
   for (int i = 0; i < 5; i++) {
     leaf->children[i] = NULL;
@@ -37,7 +38,9 @@ void printTree(treeNode* node, int tabNum) {
     for (int i = 0; i < tabNum; i++) {
       printf(" ");
     }
-    printf("↳ %s\n", node->value.content);
+    
+    printf("↳ %s " PRINT_PURPLE "%s\n" PRINT_RESET, node->value.content, getTypeString(node->nodeType));
+
     return;
   } else {
     if (strcmp(node->nonTerminal, "invisible node") != 0) {
@@ -77,4 +80,27 @@ void freeTree(treeNode* node) {
   }
 
   free(node);
+}
+
+char* getTypeString (int value) {
+  if (value >= 0) {
+    switch (value) {
+    case 0:
+      return "(int)";
+    case 1:
+      return "(float)";
+    case 2:
+      return "(int list)";
+    case 3:
+      return "(float list)";
+    case 4:
+      return "(nil)";
+    case 5:
+      return "(string)";
+    default:
+      return "(undefined)";
+    }
+  } else {
+    return "";
+  }
 }

@@ -10,9 +10,10 @@
   #include "./lib/scope.h"
   #include "cipl_syn.tab.h"
 
-  #define PRINT_CYAN  "\x1b[36m"
-  #define PRINT_RED   "\x1b[31m"
-  #define PRINT_RESET "\x1b[0m"
+  #define PRINT_CYAN   "\x1b[36m"
+  #define PRINT_PURPLE "\x1b[35m"
+  #define PRINT_RED    "\x1b[31m"
+  #define PRINT_RESET  "\x1b[0m"
   
   int currentLine = 1;
   int currentColumn = 1;

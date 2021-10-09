@@ -126,8 +126,8 @@ declaration:
 variableDeclaration:
   TYPE ID SEMICOLON {
     $$ = createNode("variable declaration");
-    $$->children[0] = addLeaf($1);
-    $$->children[1] = addLeaf($2);
+    $$->children[0] = addLeaf($1, -88);
+    $$->children[1] = addLeaf($2, -88);
     newSymbol($2.content, $1.content, 0, currentScope->id, table);
   }
   | error ';' {yyerrok;}
@@ -136,8 +136,8 @@ variableDeclaration:
 functionDeclaration:
   TYPE ID OPEN_PAREN params CLOSE_PAREN compoundStmt  {
     $$ = createNode("function declaration");
-    $$->children[0] = addLeaf($1);
-    $$->children[1] = addLeaf($2);
+    $$->children[0] = addLeaf($1, -88);
+    $$->children[1] = addLeaf($2, -88);
     $$->children[2] = $4;
     $$->children[3] = $6;
     newSymbol($2.content,  $1.content, 1, currentScope->id, table);
@@ -159,17 +159,17 @@ paramList:
 param:
   TYPE ID {
     $$ = createNode("param");
-    $$->children[0] = addLeaf($1);
-    $$->children[1] = addLeaf($2);
+    $$->children[0] = addLeaf($1, -88);
+    $$->children[1] = addLeaf($2, -88);
     newSymbol($2.content,  $1.content, 2, scopeCounting+1, table);
   }
 
 compoundStmt:
   OPEN_CURLY statementList CLOSE_CURLY  {
     $$ = createNode("invisible node");
-    $$->children[0] = addLeaf($1);
+    $$->children[0] = addLeaf($1, -1);
     $$->children[1] = $2;
-    $$->children[2] = addLeaf($3);
+    $$->children[2] = addLeaf($3, -1);
   }
   | error {yyerrok;}
 
@@ -192,20 +192,20 @@ statement:
 
 expressionStmt:
   expression SEMICOLON    { $$ = $1; }
-  | SEMICOLON             { $$ = addLeaf($1); }
+  | SEMICOLON             { $$ = NULL; }
 
 conditionalStmt:
   IF OPEN_PAREN expression CLOSE_PAREN conditionalBody ELSE conditionalBody {
     $$ = createNode("if else statment");
-    $$->children[0] = addLeaf($1);
+    $$->children[0] = addLeaf($1, -1);
     $$->children[1] = $3;
     $$->children[2] = $5;
-    $$->children[3] = addLeaf($6);
+    $$->children[3] = addLeaf($6, -1);
     $$->children[4] = $7;
   }
   | IF OPEN_PAREN expression CLOSE_PAREN conditionalBody {
     $$ = createNode("if statment");
-    $$->children[0] = addLeaf($1);
+    $$->children[0] = addLeaf($1, -1);
     $$->children[1] = $3;
     $$->children[2] = $5;
   }
@@ -222,7 +222,7 @@ conditionalBody:
 loopStmt:
   FOR OPEN_PAREN expression SEMICOLON logicExpression SEMICOLON expression CLOSE_PAREN statement {
     $$ = createNode("for statment");
-    $$->children[0] = addLeaf($1);
+    $$->children[0] = addLeaf($1, -1);
     $$->children[1] = $3;
     $$->children[2] = $5;
     $$->children[3] = $7;
@@ -232,19 +232,19 @@ loopStmt:
 returnStmt:
   RETURN expression SEMICOLON {
     $$ = createNode("return statment");
-    $$->children[0] = addLeaf($1);
+    $$->children[0] = addLeaf($1, -1);
     $$->children[1] = $2;
   }
 
 inOutStmt:
   INPUT OPEN_PAREN ID CLOSE_PAREN SEMICOLON {
     $$ = createNode("input");
-    $$->children[0] = addLeaf($1);
-    $$->children[1] = addLeaf($3);
+    $$->children[0] = addLeaf($1, -88);
+    $$->children[1] = addLeaf($3, -1);
   }
   | OUTPUT OPEN_PAREN outputArgs CLOSE_PAREN SEMICOLON  {
     $$ = createNode("output");
-    $$->children[1] = addLeaf($1);
+    $$->children[1] = addLeaf($1, -1);
     $$->children[2] = $3;
   }
   | INPUT error SEMICOLON {yyerrok;}
@@ -253,8 +253,8 @@ inOutStmt:
 expression:
   ID OP_ASSIG expression  {
     $$ = createNode("assign expression");
-    $$->children[0] = addLeaf($1);
-    $$->children[1] = addLeaf($2);
+    $$->children[0] = addLeaf($1, -88);
+    $$->children[1] = addLeaf($2, -1);
     $$->children[2] = $3;
   }
   | logicExpression { $$ = $1; }
@@ -263,7 +263,7 @@ logicExpression:
   logicExpression OP_LOGIC relatExpression  {
     $$ = createNode("logic expression");
     $$->children[0] = $1;
-    $$->children[1] = addLeaf($2);
+    $$->children[1] = addLeaf($2, -1);
     $$->children[2] = $3;
   }
   | relatExpression { $$ = $1; }
@@ -272,7 +272,7 @@ relatExpression:
   relatExpression OP_RELAT listExpression   {
     $$ = createNode("relational expression");
     $$->children[0] = $1;
-    $$->children[1] = addLeaf($2);
+    $$->children[1] = addLeaf($2, -1);
     $$->children[2] = $3;
   }
   | listExpression  { $$ = $1; }
@@ -281,7 +281,7 @@ listExpression:
   addExpression OP_LIST listExpression      {
     $$ = createNode("list expression");
     $$->children[0] = $1;
-    $$->children[1] = addLeaf($2);
+    $$->children[1] = addLeaf($2, -1);
     $$->children[2] = $3;
   }
   | addExpression   { $$ = $1; }
@@ -290,7 +290,7 @@ addExpression:
   addExpression OP_ADD mulExpression {
     $$ = createNode("additive expression");
     $$->children[0] = $1;
-    $$->children[1] = addLeaf($2);
+    $$->children[1] = addLeaf($2, -1);
     $$->children[2] = $3;
   }
   | mulExpression   { $$ = $1; }
@@ -299,7 +299,7 @@ mulExpression:
   mulExpression OP_MUL factor {
     $$ = createNode("multiplicative expression");
     $$->children[0] = $1;
-    $$->children[1] = addLeaf($2);
+    $$->children[1] = addLeaf($2, -1);
     $$->children[2] = $3;
   }
   | factor { $$ = $1; }
@@ -307,48 +307,48 @@ mulExpression:
 factor:
   OPEN_PAREN expression CLOSE_PAREN {
     $$ = createNode("parenthesis expression");
-    $$->children[0] = addLeaf($1);
+    $$->children[0] = addLeaf($1, -1);
     $$->children[1] = $2;
-    $$->children[2] = addLeaf($3);
+    $$->children[2] = addLeaf($3, -1);
   }
   | unaryExpression { $$ = $1; }
   | call { $$ = $1; }
   | ID {
-    $$ = addLeaf($1);
+    $$ = addLeaf($1, -88); // getSymbolType(func)
   }
   | FLOAT {
-    $$ = addLeaf($1);
+    $$ = addLeaf($1, 1);
   }
   | INT {
-    $$ = addLeaf($1);
+    $$ = addLeaf($1, 0);
   }
   | NIL {
-    $$ = addLeaf($1);
+    $$ = addLeaf($1, 4);
   }
 
 unaryExpression:  
   UN_OP factor {
     $$ = createNode("unary expression");
-    $$->children[0] = addLeaf($1);
+    $$->children[0] = addLeaf($1, -1);
     $$->children[1] = $2;
   }
   | OP_ADD factor {
     $$ = createNode("signed expression");
-    $$->children[0] = addLeaf($1);
+    $$->children[0] = addLeaf($1, -1);
     $$->children[1] = $2;
   }
 
 call:
   ID OPEN_PAREN args CLOSE_PAREN {
     $$ = createNode("function call");
-    $$->children[0] = addLeaf($1);
+    $$->children[0] = addLeaf($1, -88);
     $$->children[1] = $3;
   }
 
 outputArgs:
   expression { $$ = $1; }
   | STRING {
-    $$ = addLeaf($1);
+    $$ = addLeaf($1, 5);
   }
 
 args:
