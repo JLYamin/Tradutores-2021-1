@@ -125,22 +125,22 @@ declaration:
 
 variableDeclaration:
   TYPE ID SEMICOLON {
-    $$ = createNode("variable declaration");
-    $$->children[0] = addLeaf($1, -88);
-    $$->children[1] = addLeaf($2, -88);
     newSymbol($2.content, $1.content, 0, currentScope->id, table);
+    $$ = createNode("variable declaration");
+    $$->children[0] = addLeaf($1, -1);
+    $$->children[1] = addLeaf($2, getSymbolType(table, $2.content, currentScope->id));
   }
   | error ';' {yyerrok;}
 
 
 functionDeclaration:
   TYPE ID OPEN_PAREN params CLOSE_PAREN compoundStmt  {
+    newSymbol($2.content,  $1.content, 1, currentScope->id, table);
     $$ = createNode("function declaration");
-    $$->children[0] = addLeaf($1, -88);
-    $$->children[1] = addLeaf($2, -88);
+    $$->children[0] = addLeaf($1, -1);
+    $$->children[1] = addLeaf($2, getSymbolType(table, $2.content, currentScope->id));
     $$->children[2] = $4;
     $$->children[3] = $6;
-    newSymbol($2.content,  $1.content, 1, currentScope->id, table);
   }
   | error {yyerrok;}
 
@@ -158,10 +158,10 @@ paramList:
 
 param:
   TYPE ID {
-    $$ = createNode("param");
-    $$->children[0] = addLeaf($1, -88);
-    $$->children[1] = addLeaf($2, -88);
     newSymbol($2.content,  $1.content, 2, scopeCounting+1, table);
+    $$ = createNode("param");
+    $$->children[0] = addLeaf($1, -1);
+    $$->children[1] = addLeaf($2, getSymbolType(table, $2.content, currentScope->id));
   }
 
 compoundStmt:
@@ -239,8 +239,8 @@ returnStmt:
 inOutStmt:
   INPUT OPEN_PAREN ID CLOSE_PAREN SEMICOLON {
     $$ = createNode("input");
-    $$->children[0] = addLeaf($1, -88);
-    $$->children[1] = addLeaf($3, -1);
+    $$->children[0] = addLeaf($1, -1);
+    $$->children[1] = addLeaf($3, getSymbolType(table, $3.content, currentScope->id));
   }
   | OUTPUT OPEN_PAREN outputArgs CLOSE_PAREN SEMICOLON  {
     $$ = createNode("output");
@@ -253,7 +253,7 @@ inOutStmt:
 expression:
   ID OP_ASSIG expression  {
     $$ = createNode("assign expression");
-    $$->children[0] = addLeaf($1, -88);
+    $$->children[0] = addLeaf($1, getSymbolType(table, $1.content, currentScope->id));
     $$->children[1] = addLeaf($2, -1);
     $$->children[2] = $3;
   }
@@ -314,7 +314,7 @@ factor:
   | unaryExpression { $$ = $1; }
   | call { $$ = $1; }
   | ID {
-    $$ = addLeaf($1, -88); // getSymbolType(func)
+    $$ = addLeaf($1, getSymbolType(table, $1.content, currentScope->id));
   }
   | FLOAT {
     $$ = addLeaf($1, 1);
@@ -341,7 +341,7 @@ unaryExpression:
 call:
   ID OPEN_PAREN args CLOSE_PAREN {
     $$ = createNode("function call");
-    $$->children[0] = addLeaf($1, -88);
+    $$->children[0] = addLeaf($1, getSymbolType(table, $1.content, currentScope->id));
     $$->children[1] = $3;
   }
 

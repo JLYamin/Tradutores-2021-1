@@ -36,5 +36,6 @@ void printTable(tableNode* table);
 void freeTable(tableNode* table);
 int wasItDeclared(tableNode* table, char* identifier, int currentScope);
 void mainWasDeclared(tableNode* table);
+int getSymbolType(tableNode* table, char* identifier, int currentScope);
 
 #endif

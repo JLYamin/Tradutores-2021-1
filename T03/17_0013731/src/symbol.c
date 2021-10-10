@@ -113,3 +113,15 @@ void mainWasDeclared(tableNode* table) {
   printf("%3d \t %4d \t " PRINT_RED "Semantic Error: missing main function\n" PRINT_RESET, currentLine, currentColumn);
   totalErrors++;
 }
+
+int getSymbolType(tableNode* table, char* identifier, int currentScope) {
+  symbolElem* currentNode = table->symbols;
+
+  while (currentNode != NULL) {
+    if (strcmp(currentNode->identifier, identifier) == 0 && currentScope == currentNode->scopeNum) {
+      return currentNode->type;
+    }
+    currentNode = currentNode->next;
+  }
+  return -1;
+}
