@@ -8,12 +8,16 @@ int notZero(int b) {
   return b;
 }
 
+float relationalExpress(float list a) {
+  return NIL == a;
+}
+
 int list execList(int list list1) {
   return halfByElem >> notZero << ? % !list1 : NIL;
 }
 
 int operators(int a, int b) {
-  return (12 - 10) / 20 + 3 * a || b;
+  return (12 - 10) / 20.0 + 3 * a || b;
 }
 
 int main () {

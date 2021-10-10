@@ -5,6 +5,7 @@
   #include "./lib/tree.h"
   #include "./lib/symbol.h"
   #include "./lib/scope.h"
+  #include "./lib/type.h"
 
   extern FILE *yyin;
 
@@ -93,15 +94,11 @@
 /* To do:
   [X] Adicionar parâmetros das funções na tabela de símbolos junto do escopo dessa função;
   [X] Verificar se declaração consta na tabela de símbolos no escopo correto;
-  [ ] Verificar se tem main ();
-  [ ] Fazer verificação de tipo para cada statment:
-    [ ] expressionStmt       
-    [ ] compoundStmt       
-    [ ] conditionalStmt    
-    [ ] loopStmt           
-    [ ] returnStmt         
-    [ ] variableDeclaration
-    [ ] inOutStmt          
+  [X] Verificar se tem main ();
+  [ ] Fazer verificação de tipo para cada expressão binária;
+  [ ] Fazer verificação de tipo para cada expressão unária;
+  [ ] Fazer verificação de tipo para atribuição;
+  [ ] Fazer verificação de tipo para return;
 */
 
 program:
@@ -234,6 +231,7 @@ returnStmt:
     $$ = createNode("return statment");
     $$->children[0] = addLeaf($1, -1);
     $$->children[1] = $2;
+    // TODO: check return type
   }
 
 inOutStmt:
@@ -241,11 +239,13 @@ inOutStmt:
     $$ = createNode("input");
     $$->children[0] = addLeaf($1, -1);
     $$->children[1] = addLeaf($3, getSymbolType(table, $3.content, currentScope->id));
+    // TODO: check io args
   }
   | OUTPUT OPEN_PAREN outputArgs CLOSE_PAREN SEMICOLON  {
     $$ = createNode("output");
     $$->children[1] = addLeaf($1, -1);
     $$->children[2] = $3;
+    // TODO: check io args
   }
   | INPUT error SEMICOLON {yyerrok;}
   | OUTPUT error SEMICOLON {yyerrok;}
@@ -256,6 +256,7 @@ expression:
     $$->children[0] = addLeaf($1, getSymbolType(table, $1.content, currentScope->id));
     $$->children[1] = addLeaf($2, -1);
     $$->children[2] = $3;
+    // TODO: check type assign
   }
   | logicExpression { $$ = $1; }
 
@@ -265,6 +266,7 @@ logicExpression:
     $$->children[0] = $1;
     $$->children[1] = addLeaf($2, -1);
     $$->children[2] = $3;
+    $$->nodeType = 0; // always integer
   }
   | relatExpression { $$ = $1; }
 
@@ -274,6 +276,8 @@ relatExpression:
     $$->children[0] = $1;
     $$->children[1] = addLeaf($2, -1);
     $$->children[2] = $3;
+    $$->nodeType = solveType("relational", $1, $3);
+    // TODO: verify type with operator
   }
   | listExpression  { $$ = $1; }
 
@@ -283,6 +287,7 @@ listExpression:
     $$->children[0] = $1;
     $$->children[1] = addLeaf($2, -1);
     $$->children[2] = $3;
+    $$->nodeType = solveType("list", $1, $3);
   }
   | addExpression   { $$ = $1; }
 
@@ -292,6 +297,7 @@ addExpression:
     $$->children[0] = $1;
     $$->children[1] = addLeaf($2, -1);
     $$->children[2] = $3;
+    $$->nodeType = solveType("arithmetic", $1, $3);
   }
   | mulExpression   { $$ = $1; }
 
@@ -301,6 +307,7 @@ mulExpression:
     $$->children[0] = $1;
     $$->children[1] = addLeaf($2, -1);
     $$->children[2] = $3;
+    $$->nodeType = solveType("arithmetic", $1, $3);
   }
   | factor { $$ = $1; }
 
@@ -310,6 +317,7 @@ factor:
     $$->children[0] = addLeaf($1, -1);
     $$->children[1] = $2;
     $$->children[2] = addLeaf($3, -1);
+    $$->nodeType = $2->nodeType;
   }
   | unaryExpression { $$ = $1; }
   | call { $$ = $1; }
@@ -331,18 +339,22 @@ unaryExpression:
     $$ = createNode("unary expression");
     $$->children[0] = addLeaf($1, -1);
     $$->children[1] = $2;
+    $$->nodeType = $2->nodeType; // TODO: solveUnaryType
   }
   | OP_ADD factor {
     $$ = createNode("signed expression");
     $$->children[0] = addLeaf($1, -1);
     $$->children[1] = $2;
+    $$->nodeType = $2->nodeType; // TODO: solveUnaryType
   }
 
 call:
   ID OPEN_PAREN args CLOSE_PAREN {
     $$ = createNode("function call");
-    $$->children[0] = addLeaf($1, getSymbolType(table, $1.content, currentScope->id));
+    int type = getSymbolType(table, $1.content, currentScope->id);
+    $$->children[0] = addLeaf($1, type);
     $$->children[1] = $3;
+    $$->nodeType = type;
   }
 
 outputArgs:

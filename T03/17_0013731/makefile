@@ -15,8 +15,11 @@ tradutor: flex compile
 onlyflex:
 	flex ./src/cipl_lex.l && gcc -o tradutor lex.yy.c -Wall -Wextra
 
-compile: flex symbol tree scope
-	gcc -o tradutor cipl_syn.tab.c lex.yy.c symbol.o scope.o tree.o -g -Wall -Wextra -Wpedantic
+compile: flex symbol tree scope type
+	gcc -o tradutor cipl_syn.tab.c lex.yy.c symbol.o scope.o tree.o type.o -g -Wall -Wextra -Wpedantic
+
+type:
+	gcc -c ./src/type.c -g
 
 tree:
 	gcc -c ./src/tree.c -g
