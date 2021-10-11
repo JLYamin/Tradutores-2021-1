@@ -1,6 +1,8 @@
 {
   "files.associations": {
     "*.l": "lex",
-    "cipl_syn.tab.h": "c"
+    "cipl_syn.tab.h": "c",
+    "list": "c",
+    "random": "c"
   }
 }

@@ -28,6 +28,5 @@ treeNode* addLeaf(tokenElem value, int type);
 void printTree(treeNode* node, int tabNum);
 void freeTree(treeNode* node);
 char* getTypeString (int value);
-int solveType(char* operatorType, treeNode* nodeA, treeNode* nodeB);
 
 #endif

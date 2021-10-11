@@ -7,8 +7,9 @@
 #define _TYPE_H_
 
 #include "tree.h"
+#include "symbol.h"
 
-int solveType(char* operatorType, treeNode* nodeA, treeNode* nodeB);
+int solveType(tokenElem operator, treeNode* nodeA, treeNode* nodeB);
 int solveUnaryType(tokenElem operator, treeNode* node);
 
 #endif

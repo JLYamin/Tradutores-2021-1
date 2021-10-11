@@ -158,7 +158,7 @@ param:
     newSymbol($2.content,  $1.content, 2, scopeCounting+1, table);
     $$ = createNode("param");
     $$->children[0] = addLeaf($1, -1);
-    $$->children[1] = addLeaf($2, getSymbolType(table, $2.content, currentScope->id));
+    $$->children[1] = addLeaf($2, getSymbolType(table, $2.content, currentScope->id+1));
   }
 
 compoundStmt:
@@ -256,7 +256,7 @@ expression:
     $$->children[0] = addLeaf($1, getSymbolType(table, $1.content, currentScope->id));
     $$->children[1] = addLeaf($2, -1);
     $$->children[2] = $3;
-    // TODO: check type assign
+    $$->nodeType = solveType($2, $$->children[0], $3);
   }
   | logicExpression { $$ = $1; }
 
@@ -276,8 +276,7 @@ relatExpression:
     $$->children[0] = $1;
     $$->children[1] = addLeaf($2, -1);
     $$->children[2] = $3;
-    $$->nodeType = solveType("relational", $1, $3);
-    // TODO: verify type with operator
+    $$->nodeType = solveType($2, $1, $3);
   }
   | listExpression  { $$ = $1; }
 
@@ -287,7 +286,7 @@ listExpression:
     $$->children[0] = $1;
     $$->children[1] = addLeaf($2, -1);
     $$->children[2] = $3;
-    $$->nodeType = solveType("list", $1, $3);
+    $$->nodeType = solveType($2, $1, $3);
   }
   | addExpression   { $$ = $1; }
 
@@ -297,7 +296,7 @@ addExpression:
     $$->children[0] = $1;
     $$->children[1] = addLeaf($2, -1);
     $$->children[2] = $3;
-    $$->nodeType = solveType("arithmetic", $1, $3);
+    $$->nodeType = solveType($2, $1, $3);
   }
   | mulExpression   { $$ = $1; }
 
@@ -307,7 +306,7 @@ mulExpression:
     $$->children[0] = $1;
     $$->children[1] = addLeaf($2, -1);
     $$->children[2] = $3;
-    $$->nodeType = solveType("arithmetic", $1, $3);
+    $$->nodeType = solveType($2, $1, $3);
   }
   | factor { $$ = $1; }
 
@@ -339,13 +338,13 @@ unaryExpression:
     $$ = createNode("unary expression");
     $$->children[0] = addLeaf($1, -1);
     $$->children[1] = $2;
-    $$->nodeType = $2->nodeType; // TODO: solveUnaryType
+    $$->nodeType = solveUnaryType($1, $2);
   }
   | OP_ADD factor {
     $$ = createNode("signed expression");
     $$->children[0] = addLeaf($1, -1);
     $$->children[1] = $2;
-    $$->nodeType = $2->nodeType; // TODO: solveUnaryType
+    $$->nodeType = solveUnaryType($1, $2);
   }
 
 call:

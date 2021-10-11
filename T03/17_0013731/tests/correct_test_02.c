@@ -25,6 +25,7 @@ int main () {
   float b;
   a = 20;
   b = 10.1;
+  b = a;
 
   writeln(operators(a, b));
 
