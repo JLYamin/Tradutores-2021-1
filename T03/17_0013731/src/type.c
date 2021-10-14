@@ -105,3 +105,12 @@ int solveUnaryType(tokenElem operator, treeNode* node) {
   totalErrors++;
   return -1; // undefined
 }
+
+void checkIOArgs(treeNode* node) {
+  if (strcmp(node->nonTerminal, "input") == 0
+  && (node->children[1]->nodeType != 0 && node->children[1]->nodeType != 1)) {
+    printf("%d\n", node->children[1]->nodeType);
+    printf("%3d \t %4d \t " PRINT_RED "Semantic Error: invalid output argument %s type \n" PRINT_RESET, currentLine, currentColumn, getTypeString(node->children[1]->nodeType));
+    totalErrors++;
+  }
+}

@@ -16,6 +16,8 @@ typedef struct scope {
   struct scope* next;
 } scopeNode;
 
+extern scopeNode* currentScope;
+
 scopeNode* newScope(int id, scopeNode* parent, int parentDepth);
 void printScope(scopeNode* node);
 void freeScope(scopeNode* node);

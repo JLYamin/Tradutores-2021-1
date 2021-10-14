@@ -7,6 +7,8 @@
 
 #include "../lib/tree.h"
 
+scopeNode* currentScope;
+
 scopeNode* newScope(int id, scopeNode* parent, int depth) {
   scopeNode* new = (scopeNode*)malloc(sizeof(scopeNode));
   new->id = id;

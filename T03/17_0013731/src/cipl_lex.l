@@ -20,7 +20,6 @@
   int totalErrors = 0;
   int scopeCounting = 0;
 
-  scopeNode* currentScope;
 %}
 
 WSPACE      [ \t]+
@@ -262,9 +261,6 @@ STRING      (\".*\")|(\'.+\')
   strcpy(yylval.token.content, yytext);
   currentColumn += yyleng;
 
-  // Return scope
-  currentScope = currentScope->parent;
-
   return CLOSE_CURLY;
 }
 
@@ -273,6 +269,7 @@ STRING      (\".*\")|(\'.+\')
   yylval.token.column = currentColumn;
   strcpy(yylval.token.content, yytext);
   currentColumn += yyleng;
+
   return OPEN_PAREN;
 }
 

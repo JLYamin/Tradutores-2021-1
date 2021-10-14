@@ -17,7 +17,6 @@
   extern int currentColumn;
   extern int scopeCounting;
   extern int totalErrors;
-  extern scopeNode* currentScope;
 
   tableNode* table;
   treeNode* root;
@@ -158,15 +157,19 @@ param:
     newSymbol($2.content,  $1.content, 2, scopeCounting+1, table);
     $$ = createNode("param");
     $$->children[0] = addLeaf($1, -1);
-    $$->children[1] = addLeaf($2, getSymbolType(table, $2.content, currentScope->id+1));
+    $$->children[1] = addLeaf($2, getSymbolType(table, $2.content, (currentScope->id)+1));
   }
 
 compoundStmt:
-  OPEN_CURLY statementList CLOSE_CURLY  {
+  OPEN_CURLY statementList <node>{
     $$ = createNode("invisible node");
     $$->children[0] = addLeaf($1, -1);
-    $$->children[1] = $2;
-    $$->children[2] = addLeaf($3, -1);
+    $$->children[1] = $2;    
+  } CLOSE_CURLY { 
+    $$ = $3;
+    $$->children[2] = addLeaf($4, -1);
+    // Return scope
+    currentScope = currentScope->parent;
   }
   | error {yyerrok;}
 
@@ -239,13 +242,13 @@ inOutStmt:
     $$ = createNode("input");
     $$->children[0] = addLeaf($1, -1);
     $$->children[1] = addLeaf($3, getSymbolType(table, $3.content, currentScope->id));
-    // TODO: check io args
+    checkIOArgs($$);
   }
   | OUTPUT OPEN_PAREN outputArgs CLOSE_PAREN SEMICOLON  {
     $$ = createNode("output");
-    $$->children[1] = addLeaf($1, -1);
-    $$->children[2] = $3;
-    // TODO: check io args
+    $$->children[0] = addLeaf($1, -1);
+    $$->children[1] = $3;
+    checkIOArgs($$);
   }
   | INPUT error SEMICOLON {yyerrok;}
   | OUTPUT error SEMICOLON {yyerrok;}

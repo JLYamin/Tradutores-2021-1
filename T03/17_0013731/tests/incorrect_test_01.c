@@ -1,8 +1,4 @@
-float list a;
-
-int min () {
-  int list a;
-  float a;
-
-  writeln('');
+int main () {
+  float b;
+  read(b);
 }
