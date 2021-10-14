@@ -1,4 +1,5 @@
 int main () {
-  float b;
+  int b;
   read(b);
+  write(10.0 - b);
 }
