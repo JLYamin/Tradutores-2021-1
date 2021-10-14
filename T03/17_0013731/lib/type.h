@@ -12,6 +12,6 @@
 int solveType(tokenElem operator, treeNode* nodeA, treeNode* nodeB);
 int solveUnaryType(tokenElem operator, treeNode* node);
 void checkIOArgs(treeNode* node);
-void checkReturn(int returnType, int functionType);
+void checkReturn(treeNode* returnNode, int functionType);
 
 #endif

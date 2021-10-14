@@ -241,7 +241,7 @@ returnStmt:
     $$ = createNode("return statment");
     $$->children[0] = addLeaf($1, -1);
     $$->children[1] = $2;
-    checkReturn($2->nodeType, lastFunctionType);
+    checkReturn($2, lastFunctionType);
   }
 
 inOutStmt:

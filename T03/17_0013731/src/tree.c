@@ -10,6 +10,7 @@ treeNode* createNode(char* name) {
   treeNode* new = (treeNode*)malloc(sizeof(treeNode));
   new->nonTerminal = strdup(name);
   new->nodeType = -1;
+  new->nodeConversion = -1;
 
   for (int i = 0; i < 5; i++) {
     new->children[i] = NULL;
@@ -23,6 +24,7 @@ treeNode* addLeaf(tokenElem value, int type) {
   leaf->nonTerminal = NULL;
   leaf->value = value;
   leaf->nodeType = type;
+  leaf->nodeConversion = -1;
 
   for (int i = 0; i < 5; i++) {
     leaf->children[i] = NULL;
@@ -41,11 +43,17 @@ void printTree(treeNode* node, int tabNum) {
       printf(" ");
     }
 
-    if (strcmp(node->value.token_type, "ID") == 0) {
-      printf("↳ %s " PRINT_PURPLE "%s " PRINT_GREEN "(scope %d)\n" PRINT_RESET, node->value.content, getTypeString(node->nodeType), node->value.scopeNum);
-    } else {
-      printf("↳ %s " PRINT_PURPLE "%s\n" PRINT_RESET, node->value.content, getTypeString(node->nodeType));
+    printf("↳ %s " PRINT_PURPLE "%s" PRINT_RESET, node->value.content, getTypeString(node->nodeType));
+
+    if (node->nodeConversion > -1) {
+      printf(PRINT_YELLOW " ← %s" PRINT_RESET, getConversionType(node->nodeConversion));
     }
+
+    if (strcmp(node->value.token_type, "ID") == 0) {
+      printf(PRINT_GREEN " (scope %d)" PRINT_RESET, node->value.scopeNum);
+    }
+
+    printf("\n");
 
     return;
   } else {
@@ -53,7 +61,14 @@ void printTree(treeNode* node, int tabNum) {
       for (int i = 0; i < tabNum; i++) {
         printf(" ");
       }
-      printf(PRINT_CYAN "%s:" PRINT_PURPLE "%s\n" PRINT_RESET, node->nonTerminal, getTypeString(node->nodeType));
+
+      printf(PRINT_CYAN "%s: " PRINT_PURPLE "%s" PRINT_RESET, node->nonTerminal, getTypeString(node->nodeType));
+      
+      if (node->nodeConversion > -1) {
+        printf(PRINT_YELLOW " ← %s" PRINT_RESET, getConversionType(node->nodeConversion));
+      }
+
+      printf("\n");
       for (int i = 0; i < 5; i++) {
         if (node->children[i] != NULL) {
           printTree(node->children[i], tabNum + 1);
@@ -111,3 +126,13 @@ char* getTypeString (int value) {
   }
 }
 
+char* getConversionType (int value) {
+  switch (value) {
+  case 0:
+    return "[intToFloat]";
+  case 1:
+    return "[floatToInt]";
+  default:
+    return "";
+  }
+}

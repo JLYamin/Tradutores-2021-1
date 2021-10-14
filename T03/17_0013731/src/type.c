@@ -21,8 +21,13 @@ int solveType(tokenElem operator, treeNode* nodeA, treeNode* nodeB) {
       || strcmp(operator.content, "*") == 0 || strcmp(operator.content, "/") == 0) {
     if (nodeA->nodeType == 1 && nodeB->nodeType == 1) {
       return 1; // float
-    } else if ((nodeA->nodeType == 0 && nodeB->nodeType == 1) || (nodeA->nodeType == 1 && nodeB->nodeType == 0)) {
-      // TODO: add implicit conversion node
+    } else if (nodeA->nodeType == 0 && nodeB->nodeType == 1) {
+      // intToFloat is 0, floatToInt is 1
+      nodeA->nodeConversion = 0;
+      return 1; // float
+    } else if (nodeA->nodeType == 1 && nodeB->nodeType == 0) {
+      // intToFloat is 0, floatToInt is 1
+      nodeB->nodeConversion = 0;
       return 1; // float
     } else if (nodeA->nodeType == 0 && nodeB->nodeType == 0) {
       return 0; // int
@@ -45,9 +50,13 @@ int solveType(tokenElem operator, treeNode* nodeA, treeNode* nodeB) {
       return 3; // float list
     }
   } else if (strcmp(operator.content, ":") == 0) { // Constructor
-    if (((nodeA->nodeType == 0) && nodeB->nodeType == 2)
+    if (((nodeA->nodeType == 0) && nodeB->nodeType == 3)
+        || ((nodeA->nodeType == 1) && nodeB->nodeType == 2)) {
+      // intToFloat is 0, floatToInt is 1
+      nodeA->nodeConversion = nodeA->nodeType;
+      return nodeB->nodeType;
+    } else if (((nodeA->nodeType == 0) && nodeB->nodeType == 2)
         || ((nodeA->nodeType == 1) && nodeB->nodeType == 3)) {
-      // TODO: add implicit conversion node
       return nodeB->nodeType;
     } else if (nodeB->nodeType == 4 && (nodeA->nodeType == 0 || nodeA->nodeType == 1)) {
       return nodeA->nodeType+2; // int list or float list
@@ -68,7 +77,8 @@ int solveType(tokenElem operator, treeNode* nodeA, treeNode* nodeB) {
         || ((nodeA->nodeType == 2 || nodeA->nodeType == 3) && nodeB->nodeType == 4)) {
       return nodeA->nodeType;
     } else if ((nodeA->nodeType == 1 && nodeB->nodeType == 0) || (nodeA->nodeType == 0 && nodeB->nodeType == 1)) {
-      // TODO: add implicit conversion node
+      // intToFloat is 0, floatToInt is 1
+      nodeB->nodeConversion = nodeB->nodeType;
       return nodeA->nodeType;
     } else {
       printf("%3d \t %4d \t " PRINT_RED "Semantic Error: can't assign %s to %s\n" PRINT_RESET, currentLine, currentColumn, getTypeString(nodeB->nodeType), getTypeString(nodeA->nodeType));
@@ -118,13 +128,14 @@ void checkIOArgs(treeNode* node) {
   }
 }
 
-void checkReturn(int returnType, int functionType) {
+void checkReturn(treeNode* returnNode, int functionType) {
+  int returnType = returnNode->nodeType;
   if (functionType == returnType
       || ((functionType == 2 || functionType == 3) && returnType == 4)) {
     return;
   } else if ((functionType == 1 && returnType == 0) || (functionType == 0 && returnType == 1)) {
-    // TODO: add implicit conversion node
-    return;
+    // intToFloat is 0, floatToInt is 1
+    returnNode->nodeConversion = returnType;
   } else {
     printf("%3d \t %4d \t " PRINT_RED "Semantic Error: %s return doesn't match function type %s \n" PRINT_RESET, currentLine, currentColumn, getTypeString(returnType), getTypeString(functionType));
     totalErrors++;

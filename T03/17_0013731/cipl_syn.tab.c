@@ -2284,7 +2284,7 @@ yyreduce:
     (yyval.node) = createNode("return statment");
     (yyval.node)->children[0] = addLeaf((yyvsp[-2].token), -1);
     (yyval.node)->children[1] = (yyvsp[-1].node);
-    checkReturn((yyvsp[-1].node)->nodeType, lastFunctionType);
+    checkReturn((yyvsp[-1].node), lastFunctionType);
   }
 #line 2290 "cipl_syn.tab.c"
     break;
