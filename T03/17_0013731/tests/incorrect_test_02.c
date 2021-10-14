@@ -5,4 +5,5 @@ int main() {
       read(e);
     }
   }
+  return e;
 }

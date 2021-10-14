@@ -78,6 +78,7 @@ STRING      (\".*\")|(\'.+\')
   yylval.token.line = currentLine;
   yylval.token.column = currentColumn;
   strcpy(yylval.token.content, yytext);
+  strcpy(yylval.token.token_type, "STRING");
   currentColumn += yyleng;
   return STRING;
 }
@@ -86,6 +87,7 @@ STRING      (\".*\")|(\'.+\')
   yylval.token.line = currentLine;
   yylval.token.column = currentColumn;
   strcpy(yylval.token.content, yytext);
+  strcpy(yylval.token.token_type, "FLOAT");
   currentColumn += yyleng;
   return FLOAT;
 }
@@ -94,6 +96,7 @@ STRING      (\".*\")|(\'.+\')
   yylval.token.line = currentLine;
   yylval.token.column = currentColumn;
   strcpy(yylval.token.content, yytext);
+  strcpy(yylval.token.token_type, "INT");
   currentColumn += yyleng;
   return INT;
 }
@@ -102,6 +105,7 @@ STRING      (\".*\")|(\'.+\')
   yylval.token.line = currentLine;
   yylval.token.column = currentColumn;
   strcpy(yylval.token.content, yytext);
+  strcpy(yylval.token.token_type, "OP_ADD");
   currentColumn += yyleng;
   return OP_ADD;
 }
@@ -110,6 +114,7 @@ STRING      (\".*\")|(\'.+\')
   yylval.token.line = currentLine;
   yylval.token.column = currentColumn;
   strcpy(yylval.token.content, yytext);
+  strcpy(yylval.token.token_type, "OP_MUL");
   currentColumn += yyleng;
   return OP_MUL;
 }
@@ -118,6 +123,7 @@ STRING      (\".*\")|(\'.+\')
   yylval.token.line = currentLine;
   yylval.token.column = currentColumn;
   strcpy(yylval.token.content, yytext);
+  strcpy(yylval.token.token_type, "OP_LOGIC");
   currentColumn += yyleng;
   return OP_LOGIC;
 }
@@ -126,6 +132,7 @@ STRING      (\".*\")|(\'.+\')
   yylval.token.line = currentLine;
   yylval.token.column = currentColumn;
   strcpy(yylval.token.content, yytext);
+  strcpy(yylval.token.token_type, "OP_RELAT");
   currentColumn += yyleng;
   return OP_RELAT;
 }
@@ -134,6 +141,7 @@ STRING      (\".*\")|(\'.+\')
   yylval.token.line = currentLine;
   yylval.token.column = currentColumn;
   strcpy(yylval.token.content, yytext);
+  strcpy(yylval.token.token_type, "OP_ASSIG");
   currentColumn += yyleng;
   return OP_ASSIG;
 }
@@ -142,6 +150,7 @@ STRING      (\".*\")|(\'.+\')
   yylval.token.line = currentLine;
   yylval.token.column = currentColumn;
   strcpy(yylval.token.content, yytext);
+  strcpy(yylval.token.token_type, "OP_LIST");
   currentColumn += yyleng;
   return OP_LIST;
 }
@@ -150,6 +159,7 @@ STRING      (\".*\")|(\'.+\')
   yylval.token.line = currentLine;
   yylval.token.column = currentColumn;
   strcpy(yylval.token.content, yytext);
+  strcpy(yylval.token.token_type, "UN_OP");
   currentColumn += yyleng;
   return UN_OP;
 }
@@ -158,6 +168,7 @@ STRING      (\".*\")|(\'.+\')
   yylval.token.line = currentLine;
   yylval.token.column = currentColumn;
   strcpy(yylval.token.content, yytext);
+  strcpy(yylval.token.token_type, "TYPE");
   currentColumn += yyleng;
   return TYPE;
 }
@@ -166,6 +177,7 @@ STRING      (\".*\")|(\'.+\')
   yylval.token.line = currentLine;
   yylval.token.column = currentColumn;
   strcpy(yylval.token.content, yytext);
+  strcpy(yylval.token.token_type, "NIL");
   currentColumn += yyleng;
   return NIL;
 }
@@ -174,6 +186,7 @@ STRING      (\".*\")|(\'.+\')
   yylval.token.line = currentLine;
   yylval.token.column = currentColumn;
   strcpy(yylval.token.content, yytext);
+  strcpy(yylval.token.token_type, "IF");
   currentColumn += yyleng;
   return IF;
 }
@@ -182,6 +195,7 @@ STRING      (\".*\")|(\'.+\')
   yylval.token.line = currentLine;
   yylval.token.column = currentColumn;
   strcpy(yylval.token.content, yytext);
+  strcpy(yylval.token.token_type, "ELSE");
   currentColumn += yyleng;
   return ELSE;
 }
@@ -190,6 +204,7 @@ STRING      (\".*\")|(\'.+\')
   yylval.token.line = currentLine;
   yylval.token.column = currentColumn;
   strcpy(yylval.token.content, yytext);
+  strcpy(yylval.token.token_type, "FOR");
   currentColumn += yyleng;
   return FOR;
 }
@@ -198,6 +213,7 @@ STRING      (\".*\")|(\'.+\')
   yylval.token.line = currentLine;
   yylval.token.column = currentColumn;
   strcpy(yylval.token.content, yytext);
+  strcpy(yylval.token.token_type, "RETURN");
   currentColumn += yyleng;
   return RETURN;
 }
@@ -206,6 +222,7 @@ STRING      (\".*\")|(\'.+\')
   yylval.token.line = currentLine;
   yylval.token.column = currentColumn;
   strcpy(yylval.token.content, yytext);
+  strcpy(yylval.token.token_type, "INPUT");
   currentColumn += yyleng;
   return INPUT;
 }
@@ -214,6 +231,7 @@ STRING      (\".*\")|(\'.+\')
   yylval.token.line = currentLine;
   yylval.token.column = currentColumn;
   strcpy(yylval.token.content, yytext);
+  strcpy(yylval.token.token_type, "OUTPUT");
   currentColumn += yyleng;
   return OUTPUT;
 }
@@ -222,6 +240,8 @@ STRING      (\".*\")|(\'.+\')
   yylval.token.line = currentLine;
   yylval.token.column = currentColumn;
   strcpy(yylval.token.content, yytext);
+  strcpy(yylval.token.token_type, "ID");
+  yylval.token.scopeNum = currentScope->id;
   currentColumn += yyleng;
   return ID;
 }
@@ -230,6 +250,7 @@ STRING      (\".*\")|(\'.+\')
   yylval.token.line = currentLine;
   yylval.token.column = currentColumn;
   strcpy(yylval.token.content, yytext);
+  strcpy(yylval.token.token_type, "SEMICOLON");
   currentColumn += yyleng;
   return SEMICOLON;
 }
@@ -238,6 +259,7 @@ STRING      (\".*\")|(\'.+\')
   yylval.token.line = currentLine;
   yylval.token.column = currentColumn;
   strcpy(yylval.token.content, yytext);
+  strcpy(yylval.token.token_type, "COMMA");
   currentColumn += yyleng;
   return COMMA;
 }
@@ -246,6 +268,7 @@ STRING      (\".*\")|(\'.+\')
   yylval.token.line = currentLine;
   yylval.token.column = currentColumn;
   strcpy(yylval.token.content, yytext);
+  strcpy(yylval.token.token_type, "OPEN_CURLY");
   currentColumn += yyleng;
 
   // Add scope
@@ -259,6 +282,7 @@ STRING      (\".*\")|(\'.+\')
   yylval.token.line = currentLine;
   yylval.token.column = currentColumn;
   strcpy(yylval.token.content, yytext);
+  strcpy(yylval.token.token_type, "CLOSE_CURLY");
   currentColumn += yyleng;
 
   return CLOSE_CURLY;
@@ -268,6 +292,7 @@ STRING      (\".*\")|(\'.+\')
   yylval.token.line = currentLine;
   yylval.token.column = currentColumn;
   strcpy(yylval.token.content, yytext);
+  strcpy(yylval.token.token_type, "OPEN_PAREN");
   currentColumn += yyleng;
 
   return OPEN_PAREN;
@@ -277,6 +302,7 @@ STRING      (\".*\")|(\'.+\')
   yylval.token.line = currentLine;
   yylval.token.column = currentColumn;
   strcpy(yylval.token.content, yytext);
+  strcpy(yylval.token.token_type, "CLOSE_PAREN");
   currentColumn += yyleng;
   return CLOSE_PAREN;
 }

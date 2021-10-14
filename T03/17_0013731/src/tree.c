@@ -40,8 +40,12 @@ void printTree(treeNode* node, int tabNum) {
     for (int i = 0; i < tabNum; i++) {
       printf(" ");
     }
-    
-    printf("↳ %s " PRINT_PURPLE "%s\n" PRINT_RESET, node->value.content, getTypeString(node->nodeType));
+
+    if (strcmp(node->value.token_type, "ID") == 0) {
+      printf("↳ %s " PRINT_PURPLE "%s " PRINT_GREEN "(scope %d)\n" PRINT_RESET, node->value.content, getTypeString(node->nodeType), node->value.scopeNum);
+    } else {
+      printf("↳ %s " PRINT_PURPLE "%s\n" PRINT_RESET, node->value.content, getTypeString(node->nodeType));
+    }
 
     return;
   } else {
@@ -88,19 +92,19 @@ char* getTypeString (int value) {
   if (value >= 0) {
     switch (value) {
     case 0:
-      return "(int)";
+      return "<int>";
     case 1:
-      return "(float)";
+      return "<float>";
     case 2:
-      return "(int list)";
+      return "<int list>";
     case 3:
-      return "(float list)";
+      return "<float list>";
     case 4:
-      return "(nil)";
+      return "<nil>";
     case 5:
-      return "(string)";
+      return "<string>";
     default:
-      return "(undefined)";
+      return "<undefined>";
     }
   } else {
     return "";

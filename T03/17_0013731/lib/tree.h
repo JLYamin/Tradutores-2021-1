@@ -15,6 +15,7 @@
 #define PRINT_CYAN "\x1b[36m"
 #define PRINT_RED "\x1b[31m"
 #define PRINT_PURPLE "\x1b[35m"
+#define PRINT_GREEN "\x1b[32m"
 #define PRINT_RESET "\x1b[0m"
 typedef struct node {
   tokenElem value;

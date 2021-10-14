@@ -20,6 +20,7 @@
 
   tableNode* table;
   treeNode* root;
+  int lastFunctionType = -1;
 %}
 
 %union{
@@ -130,13 +131,16 @@ variableDeclaration:
 
 
 functionDeclaration:
-  TYPE ID OPEN_PAREN params CLOSE_PAREN compoundStmt  {
-    newSymbol($2.content,  $1.content, 1, currentScope->id, table);
+  TYPE ID <node>{
     $$ = createNode("function declaration");
     $$->children[0] = addLeaf($1, -1);
+    lastFunctionType = stringToType($1.content);
+    newSymbol($2.content,  $1.content, 1, currentScope->id, table);
     $$->children[1] = addLeaf($2, getSymbolType(table, $2.content, currentScope));
-    $$->children[2] = $4;
-    $$->children[3] = $6;
+  } OPEN_PAREN params CLOSE_PAREN compoundStmt  {
+    $$ = $3;
+    $$->children[2] = $5;
+    $$->children[3] = $7;
   }
   | error {yyerrok;}
 
@@ -234,7 +238,7 @@ returnStmt:
     $$ = createNode("return statment");
     $$->children[0] = addLeaf($1, -1);
     $$->children[1] = $2;
-    // TODO: check return type
+    checkReturn($2->nodeType, lastFunctionType);
   }
 
 inOutStmt:

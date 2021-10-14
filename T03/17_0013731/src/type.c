@@ -117,3 +117,16 @@ void checkIOArgs(treeNode* node) {
     totalErrors++;
   }
 }
+
+void checkReturn(int returnType, int functionType) {
+  if (functionType == returnType
+      || ((functionType == 2 || functionType == 3) && returnType == 4)) {
+    return;
+  } else if ((functionType == 1 && returnType == 0) || (functionType == 0 && returnType == 1)) {
+    // TODO: add implicit conversion node
+    return;
+  } else {
+    printf("%3d \t %4d \t " PRINT_RED "Semantic Error: %s return doesn't match function type %s \n" PRINT_RESET, currentLine, currentColumn, getTypeString(returnType), getTypeString(functionType));
+    totalErrors++;
+  } 
+}
