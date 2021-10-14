@@ -124,7 +124,7 @@ variableDeclaration:
     newSymbol($2.content, $1.content, 0, currentScope->id, table);
     $$ = createNode("variable declaration");
     $$->children[0] = addLeaf($1, -1);
-    $$->children[1] = addLeaf($2, getSymbolType(table, $2.content, currentScope->id));
+    $$->children[1] = addLeaf($2, getSymbolType(table, $2.content, currentScope));
   }
   | error ';' {yyerrok;}
 
@@ -134,7 +134,7 @@ functionDeclaration:
     newSymbol($2.content,  $1.content, 1, currentScope->id, table);
     $$ = createNode("function declaration");
     $$->children[0] = addLeaf($1, -1);
-    $$->children[1] = addLeaf($2, getSymbolType(table, $2.content, currentScope->id));
+    $$->children[1] = addLeaf($2, getSymbolType(table, $2.content, currentScope));
     $$->children[2] = $4;
     $$->children[3] = $6;
   }
@@ -157,7 +157,7 @@ param:
     newSymbol($2.content,  $1.content, 2, scopeCounting+1, table);
     $$ = createNode("param");
     $$->children[0] = addLeaf($1, -1);
-    $$->children[1] = addLeaf($2, getSymbolType(table, $2.content, (currentScope->id)+1));
+    $$->children[1] = addLeaf($2, stringToType($1.content));
   }
 
 compoundStmt:
@@ -241,7 +241,7 @@ inOutStmt:
   INPUT OPEN_PAREN ID CLOSE_PAREN SEMICOLON {
     $$ = createNode("input");
     $$->children[0] = addLeaf($1, -1);
-    $$->children[1] = addLeaf($3, getSymbolType(table, $3.content, currentScope->id));
+    $$->children[1] = addLeaf($3, getSymbolType(table, $3.content, currentScope));
     checkIOArgs($$);
   }
   | OUTPUT OPEN_PAREN outputArgs CLOSE_PAREN SEMICOLON  {
@@ -256,7 +256,7 @@ inOutStmt:
 expression:
   ID OP_ASSIG expression  {
     $$ = createNode("assign expression");
-    $$->children[0] = addLeaf($1, getSymbolType(table, $1.content, currentScope->id));
+    $$->children[0] = addLeaf($1, getSymbolType(table, $1.content, currentScope));
     $$->children[1] = addLeaf($2, -1);
     $$->children[2] = $3;
     $$->nodeType = solveType($2, $$->children[0], $3);
@@ -324,7 +324,7 @@ factor:
   | unaryExpression { $$ = $1; }
   | call { $$ = $1; }
   | ID {
-    $$ = addLeaf($1, getSymbolType(table, $1.content, currentScope->id));
+    $$ = addLeaf($1, getSymbolType(table, $1.content, currentScope));
   }
   | FLOAT {
     $$ = addLeaf($1, 1);
@@ -353,7 +353,7 @@ unaryExpression:
 call:
   ID OPEN_PAREN args CLOSE_PAREN {
     $$ = createNode("function call");
-    int type = getSymbolType(table, $1.content, currentScope->id);
+    int type = getSymbolType(table, $1.content, currentScope);
     $$->children[0] = addLeaf($1, type);
     $$->children[1] = $3;
     $$->nodeType = type;

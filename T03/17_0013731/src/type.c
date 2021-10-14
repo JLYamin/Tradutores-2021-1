@@ -101,8 +101,6 @@ int solveUnaryType(tokenElem operator, treeNode* node) {
   } else if (strcmp(operator.content, "-") == 0 || strcmp(operator.content, "+") == 0 ) {
     return node->nodeType;
   }
-  printf("op %s com %d\n", node->value.content, node->nodeType);
-
   printf("%3d \t %4d \t " PRINT_RED "Semantic Error: %s operation on %s is undefined\n" PRINT_RESET, currentLine, currentColumn, operator.content, getTypeString(node->nodeType));
   totalErrors++;
   return -1; // undefined
@@ -111,12 +109,10 @@ int solveUnaryType(tokenElem operator, treeNode* node) {
 void checkIOArgs(treeNode* node) {
   if (strcmp(node->nonTerminal, "input") == 0
       && (node->children[1]->nodeType != 0 && node->children[1]->nodeType != 1)) {
-    printf("%d\n", node->children[1]->nodeType);
     printf("%3d \t %4d \t " PRINT_RED "Semantic Error: invalid input argument %s type \n" PRINT_RESET, currentLine, currentColumn, getTypeString(node->children[1]->nodeType));
     totalErrors++;
   } else if (strcmp(node->nonTerminal, "output") == 0 && node->children[1]->nodeType != 5 
       && node->children[1]->nodeType != 0 && node->children[1]->nodeType != 1) {
-    printf("%d\n", node->children[1]->nodeType);
     printf("%3d \t %4d \t " PRINT_RED "Semantic Error: invalid output argument %s type \n" PRINT_RESET, currentLine, currentColumn, getTypeString(node->children[1]->nodeType));
     totalErrors++;
   }

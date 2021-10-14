@@ -9,6 +9,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "../lib/tree.h"
+#include "../lib/token.h"
+#include "../lib/scope.h"
+#include "../cipl_syn.tab.h"
 
 #define PRINT_CYAN "\x1b[36m"
 #define PRINT_RED "\x1b[31m"
@@ -36,6 +40,7 @@ void printTable(tableNode* table);
 void freeTable(tableNode* table);
 int wasItDeclared(tableNode* table, char* identifier, int currentScope);
 void mainWasDeclared(tableNode* table);
-int getSymbolType(tableNode* table, char* identifier, int currentScope);
+int getSymbolType(tableNode* table, char* identifier, scopeNode* currentScope);
+int stringToType(char* type);
 
 #endif

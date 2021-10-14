@@ -4,9 +4,6 @@
 */
 
 #include "../lib/symbol.h"
-#include "../lib/tree.h"
-#include "../lib/token.h"
-#include "../cipl_syn.tab.h"
 
 extern int totalErrors;
 extern int currentLine;
@@ -114,14 +111,33 @@ void mainWasDeclared(tableNode* table) {
   totalErrors++;
 }
 
-int getSymbolType(tableNode* table, char* identifier, int currentScope) {
-  symbolElem* currentNode = table->symbols;
+int getSymbolType(tableNode* table, char* identifier, scopeNode* currentScope) {
+  symbolElem* currentSymbol;
+  scopeNode* scope = currentScope;
 
-  while (currentNode != NULL) {
-    if (strcmp(currentNode->identifier, identifier) == 0 && currentScope == currentNode->scopeNum) {
-      return currentNode->type;
+  while (scope != NULL) {
+    currentSymbol = table->symbols;
+    while (currentSymbol != NULL) {
+      if (strcmp(currentSymbol->identifier, identifier) == 0 && scope->id == currentSymbol->scopeNum) {
+        return currentSymbol->type;
+      }
+      currentSymbol = currentSymbol->next;
     }
-    currentNode = currentNode->next;
+    scope = scope->parent;
   }
+  printf("%3d \t %4d \t " PRINT_RED "Semantic Error: %s was not declared in this scope\n" PRINT_RESET, currentLine, currentColumn, identifier);
+  totalErrors++;
   return -1;
+}
+
+int stringToType(char* type) {
+  if (strcmp(type, "float") == 0) {
+    return 1;
+  } else if (strcmp(type, "int list") == 0) {
+    return 2;
+  } else if (strcmp(type, "float list") == 0) {
+    return 3;
+  } else {
+    return 0;
+  }
 }

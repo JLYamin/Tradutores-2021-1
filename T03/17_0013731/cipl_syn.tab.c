@@ -2015,7 +2015,7 @@ yyreduce:
     newSymbol((yyvsp[-1].token).content, (yyvsp[-2].token).content, 0, currentScope->id, table);
     (yyval.node) = createNode("variable declaration");
     (yyval.node)->children[0] = addLeaf((yyvsp[-2].token), -1);
-    (yyval.node)->children[1] = addLeaf((yyvsp[-1].token), getSymbolType(table, (yyvsp[-1].token).content, currentScope->id));
+    (yyval.node)->children[1] = addLeaf((yyvsp[-1].token), getSymbolType(table, (yyvsp[-1].token).content, currentScope));
   }
 #line 2021 "cipl_syn.tab.c"
     break;
@@ -2032,7 +2032,7 @@ yyreduce:
     newSymbol((yyvsp[-4].token).content,  (yyvsp[-5].token).content, 1, currentScope->id, table);
     (yyval.node) = createNode("function declaration");
     (yyval.node)->children[0] = addLeaf((yyvsp[-5].token), -1);
-    (yyval.node)->children[1] = addLeaf((yyvsp[-4].token), getSymbolType(table, (yyvsp[-4].token).content, currentScope->id));
+    (yyval.node)->children[1] = addLeaf((yyvsp[-4].token), getSymbolType(table, (yyvsp[-4].token).content, currentScope));
     (yyval.node)->children[2] = (yyvsp[-2].node);
     (yyval.node)->children[3] = (yyvsp[0].node);
   }
@@ -2079,7 +2079,7 @@ yyreduce:
     newSymbol((yyvsp[0].token).content,  (yyvsp[-1].token).content, 2, scopeCounting+1, table);
     (yyval.node) = createNode("param");
     (yyval.node)->children[0] = addLeaf((yyvsp[-1].token), -1);
-    (yyval.node)->children[1] = addLeaf((yyvsp[0].token), getSymbolType(table, (yyvsp[0].token).content, (currentScope->id)+1));
+    (yyval.node)->children[1] = addLeaf((yyvsp[0].token), stringToType((yyvsp[-1].token).content));
   }
 #line 2085 "cipl_syn.tab.c"
     break;
@@ -2276,7 +2276,7 @@ yyreduce:
                                             {
     (yyval.node) = createNode("input");
     (yyval.node)->children[0] = addLeaf((yyvsp[-4].token), -1);
-    (yyval.node)->children[1] = addLeaf((yyvsp[-2].token), getSymbolType(table, (yyvsp[-2].token).content, currentScope->id));
+    (yyval.node)->children[1] = addLeaf((yyvsp[-2].token), getSymbolType(table, (yyvsp[-2].token).content, currentScope));
     checkIOArgs((yyval.node));
   }
 #line 2283 "cipl_syn.tab.c"
@@ -2309,7 +2309,7 @@ yyreduce:
 #line 257 "./src/cipl_syn.y"
                           {
     (yyval.node) = createNode("assign expression");
-    (yyval.node)->children[0] = addLeaf((yyvsp[-2].token), getSymbolType(table, (yyvsp[-2].token).content, currentScope->id));
+    (yyval.node)->children[0] = addLeaf((yyvsp[-2].token), getSymbolType(table, (yyvsp[-2].token).content, currentScope));
     (yyval.node)->children[1] = addLeaf((yyvsp[-1].token), -1);
     (yyval.node)->children[2] = (yyvsp[0].node);
     (yyval.node)->nodeType = solveType((yyvsp[-1].token), (yyval.node)->children[0], (yyvsp[0].node));
@@ -2440,7 +2440,7 @@ yyreduce:
   case 60: /* factor: ID  */
 #line 326 "./src/cipl_syn.y"
        {
-    (yyval.node) = addLeaf((yyvsp[0].token), getSymbolType(table, (yyvsp[0].token).content, currentScope->id));
+    (yyval.node) = addLeaf((yyvsp[0].token), getSymbolType(table, (yyvsp[0].token).content, currentScope));
   }
 #line 2446 "cipl_syn.tab.c"
     break;
@@ -2495,7 +2495,7 @@ yyreduce:
 #line 354 "./src/cipl_syn.y"
                                  {
     (yyval.node) = createNode("function call");
-    int type = getSymbolType(table, (yyvsp[-3].token).content, currentScope->id);
+    int type = getSymbolType(table, (yyvsp[-3].token).content, currentScope);
     (yyval.node)->children[0] = addLeaf((yyvsp[-3].token), type);
     (yyval.node)->children[1] = (yyvsp[-1].node);
     (yyval.node)->nodeType = type;
