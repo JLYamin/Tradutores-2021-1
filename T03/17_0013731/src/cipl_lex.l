@@ -241,7 +241,6 @@ STRING      (\".*\")|(\'.+\')
   yylval.token.column = currentColumn;
   strcpy(yylval.token.content, yytext);
   strcpy(yylval.token.token_type, "ID");
-  yylval.token.scopeNum = currentScope->id;
   currentColumn += yyleng;
   return ID;
 }

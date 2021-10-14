@@ -41,6 +41,7 @@ void freeTable(tableNode* table);
 int wasItDeclared(tableNode* table, char* identifier, int currentScope);
 void mainWasDeclared(tableNode* table);
 int getSymbolType(tableNode* table, char* identifier, scopeNode* currentScope);
+int getSymbolScope(tableNode* table, char* identifier, scopeNode* currentScope);
 int stringToType(char* type);
 
 #endif

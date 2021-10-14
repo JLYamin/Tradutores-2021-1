@@ -126,6 +126,7 @@ variableDeclaration:
     $$ = createNode("variable declaration");
     $$->children[0] = addLeaf($1, -1);
     $$->children[1] = addLeaf($2, getSymbolType(table, $2.content, currentScope));
+    $$->children[1]->value.scopeNum = currentScope->id;
   }
   | error ';' {yyerrok;}
 
@@ -137,6 +138,7 @@ functionDeclaration:
     lastFunctionType = stringToType($1.content);
     newSymbol($2.content,  $1.content, 1, currentScope->id, table);
     $$->children[1] = addLeaf($2, getSymbolType(table, $2.content, currentScope));
+    $$->children[1]->value.scopeNum = currentScope->id;
   } OPEN_PAREN params CLOSE_PAREN compoundStmt  {
     $$ = $3;
     $$->children[2] = $5;
@@ -162,6 +164,7 @@ param:
     $$ = createNode("param");
     $$->children[0] = addLeaf($1, -1);
     $$->children[1] = addLeaf($2, stringToType($1.content));
+    $$->children[1]->value.scopeNum = currentScope->id;
   }
 
 compoundStmt:
@@ -246,6 +249,9 @@ inOutStmt:
     $$ = createNode("input");
     $$->children[0] = addLeaf($1, -1);
     $$->children[1] = addLeaf($3, getSymbolType(table, $3.content, currentScope));
+
+    $$->children[1]->value.scopeNum = getSymbolScope(table, $3.content, currentScope);
+
     checkIOArgs($$);
   }
   | OUTPUT OPEN_PAREN outputArgs CLOSE_PAREN SEMICOLON  {
@@ -261,6 +267,7 @@ expression:
   ID OP_ASSIG expression  {
     $$ = createNode("assign expression");
     $$->children[0] = addLeaf($1, getSymbolType(table, $1.content, currentScope));
+    $$->children[0]->value.scopeNum = getSymbolScope(table, $1.content, currentScope);
     $$->children[1] = addLeaf($2, -1);
     $$->children[2] = $3;
     $$->nodeType = solveType($2, $$->children[0], $3);
@@ -329,6 +336,7 @@ factor:
   | call { $$ = $1; }
   | ID {
     $$ = addLeaf($1, getSymbolType(table, $1.content, currentScope));
+    $$->value.scopeNum = getSymbolScope(table, $1.content, currentScope);
   }
   | FLOAT {
     $$ = addLeaf($1, 1);
@@ -359,6 +367,7 @@ call:
     $$ = createNode("function call");
     int type = getSymbolType(table, $1.content, currentScope);
     $$->children[0] = addLeaf($1, type);
+    $$->children[0]->value.scopeNum = getSymbolScope(table, $1.content, currentScope);
     $$->children[1] = $3;
     $$->nodeType = type;
   }

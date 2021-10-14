@@ -130,6 +130,25 @@ int getSymbolType(tableNode* table, char* identifier, scopeNode* currentScope) {
   return -1;
 }
 
+int getSymbolScope(tableNode* table, char* identifier, scopeNode* currentScope) {
+  symbolElem* currentSymbol;
+  scopeNode* scope = currentScope;
+
+  while (scope != NULL) {
+    currentSymbol = table->symbols;
+    while (currentSymbol != NULL) {
+      if (strcmp(currentSymbol->identifier, identifier) == 0 && scope->id == currentSymbol->scopeNum) {
+        return currentSymbol->scopeNum;
+      }
+      currentSymbol = currentSymbol->next;
+    }
+    scope = scope->parent;
+  }
+  printf("%3d \t %4d \t " PRINT_RED "Semantic Error: %s was not declared in this scope\n" PRINT_RESET, currentLine, currentColumn, identifier);
+  totalErrors++;
+  return -1;
+}
+
 int stringToType(char* type) {
   if (strcmp(type, "float") == 0) {
     return 1;
