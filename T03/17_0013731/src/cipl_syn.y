@@ -91,16 +91,6 @@
 
 %%
 
-/* To do:
-  [X] Adicionar parâmetros das funções na tabela de símbolos junto do escopo dessa função;
-  [X] Verificar se declaração consta na tabela de símbolos no escopo correto;
-  [X] Verificar se tem main ();
-  [ ] Fazer verificação de tipo para cada expressão binária;
-  [ ] Fazer verificação de tipo para cada expressão unária;
-  [ ] Fazer verificação de tipo para atribuição;
-  [ ] Fazer verificação de tipo para return;
-*/
-
 program:
   declarationList {
     $$ = $1;
@@ -164,7 +154,7 @@ param:
     $$ = createNode("param");
     $$->children[0] = addLeaf($1, -1);
     $$->children[1] = addLeaf($2, stringToType($1.content));
-    $$->children[1]->value.scopeNum = currentScope->id;
+    $$->children[1]->value.scopeNum = currentScope->id+1;
   }
 
 compoundStmt:
@@ -370,6 +360,7 @@ call:
     $$->children[0]->value.scopeNum = getSymbolScope(table, $1.content, currentScope);
     $$->children[1] = $3;
     $$->nodeType = type;
+    checkParams($1.content, $3, table);
   }
 
 outputArgs:

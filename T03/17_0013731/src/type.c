@@ -141,3 +141,65 @@ void checkReturn(treeNode* returnNode, int functionType) {
     totalErrors++;
   } 
 }
+
+void checkParams(char* identifier, treeNode* arguments, tableNode* table) {
+  treeNode* currentNode = arguments;
+  symbolElem* currentSymbol = table->symbols;
+  int params[128]; // Maximum of params in C
+  treeNode* args[128];
+  int functionScope = 0;
+
+  // Find function scope
+  while (currentSymbol != NULL) {
+    if (currentSymbol->isFunction == 1 && strcmp(currentSymbol->identifier, identifier) == 0) {
+      functionScope = currentSymbol->thisFunctionScope;
+      break;
+    }
+    currentSymbol = currentSymbol->next;
+  }
+
+  // Find params
+  int symbolIterator = 0;
+  currentSymbol = table->symbols;
+  while (currentSymbol != NULL) {
+    if (currentSymbol->isFunction == 2 && currentSymbol->scopeNum == functionScope) {
+      params[symbolIterator] = currentSymbol->type;
+      symbolIterator++;
+    }
+    currentSymbol = currentSymbol->next;
+  }
+
+  // Iterate args
+  int nodeIterator = 0;
+  while(currentNode != NULL) {
+    if (currentNode->nonTerminal != NULL
+        && strcmp(currentNode->nonTerminal, "arguments list") == 0) {
+      args[nodeIterator] = currentNode->children[1];
+      nodeIterator++;
+    } else {
+      args[nodeIterator] = currentNode;
+      nodeIterator++;
+      break;
+    }
+    currentNode = currentNode->children[0];
+  }
+
+  // Match args and params
+  if (symbolIterator < nodeIterator) {
+    printf("%3d \t %4d \t " PRINT_RED "Semantic Error: too many arguments in %s's call. Expected %d, got %d arguments.\n" PRINT_RESET, currentLine, currentColumn, identifier, symbolIterator, nodeIterator);
+    totalErrors++;
+  } else if (symbolIterator > nodeIterator) {
+    printf("%3d \t %4d \t " PRINT_RED "Semantic Error: arguments missing in %s's call. Expected %d, got %d arguments.\n" PRINT_RESET, currentLine, currentColumn, identifier, symbolIterator, nodeIterator);
+    totalErrors++;
+  } else {
+    for (int i = 0; i < symbolIterator; i++) {
+      if ((args[i]->nodeType == 0 && params[i] == 1) || (args[i]->nodeType == 1 && params[i] == 0)) {
+        args[i]->nodeConversion = args[i]->nodeType;
+      } else if ((args[i]->nodeType == params[i]) || ((params[i] == 2 || params[i] == 3) && args[i]->nodeType == 4)) {
+        continue;
+      } else {
+        printf("%3d \t %4d \t " PRINT_RED "Semantic Error: %s argument doesn't match %s in %s's call.\n" PRINT_RESET, currentLine, currentColumn, getTypeString(args[i]->nodeType), getTypeString(params[i]), identifier);
+      }
+    }
+  }
+}

@@ -8,6 +8,7 @@
 extern int totalErrors;
 extern int currentLine;
 extern int currentColumn;
+extern int scopeCounting;
 
 tableNode* initTable(int counting) {
   tableNode* table = (tableNode*)malloc(sizeof(tableNode));
@@ -24,6 +25,12 @@ void addSymbol(symbolElem* symbol, tableNode* table) {
 void newSymbol(char* identifier, char* type, int isFunction, int scopeNum, tableNode* table) {
   symbolElem* symbol = (symbolElem*)malloc(sizeof(symbolElem));
   symbol->identifier = strdup(identifier);
+
+  if (isFunction == 1) {
+    symbol->thisFunctionScope = scopeCounting+1;
+  } else {
+    symbol->thisFunctionScope = -1;
+  }
 
   if (strcmp(type, "float") == 0) {
     symbol->type = 1;
