@@ -5,8 +5,6 @@
 
 #include "../lib/scope.h"
 
-#include "../lib/tree.h"
-
 scopeNode* currentScope;
 
 scopeNode* newScope(int id, scopeNode* parent, int depth) {

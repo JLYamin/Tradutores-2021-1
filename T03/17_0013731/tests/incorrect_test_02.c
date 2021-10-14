@@ -1,9 +1,11 @@
 int main() {
-  float e;
-  if (10 == 10) {
+  float list a;
+  if (int b) {
     if (21 > 10) {
-      read(e);
+      int c;
+      read(a+3);
+      writeln(?c);
     }
   }
-  return e;
+  return a;
 }

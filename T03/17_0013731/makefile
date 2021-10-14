@@ -34,4 +34,4 @@ flex: bison
 	flex ./src/cipl_lex.l
 
 bison:
-	bison -d ./src/cipl_syn.y -Wmidrule-value -Wcounterexamples
+	bison -d ./src/cipl_syn.y

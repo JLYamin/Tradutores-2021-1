@@ -9,6 +9,7 @@
 extern int totalErrors;
 extern int currentLine;
 extern int currentColumn;
+extern int semanticErrors;
 
 int solveType(tokenElem operator, treeNode* nodeA, treeNode* nodeB) {
 
@@ -82,13 +83,13 @@ int solveType(tokenElem operator, treeNode* nodeA, treeNode* nodeB) {
       return nodeA->nodeType;
     } else {
       printf("%3d \t %4d \t " PRINT_RED "Semantic Error: can't assign %s to %s\n" PRINT_RESET, currentLine, currentColumn, getTypeString(nodeB->nodeType), getTypeString(nodeA->nodeType));
-      totalErrors++;
+      semanticErrors++;
       return -1; // undefined
     }
   }
 
   printf("%3d \t %4d \t " PRINT_RED "Semantic Error: (%s) operation between %s and %s is undefined\n" PRINT_RESET, currentLine, currentColumn, operator.content, getTypeString(nodeA->nodeType), getTypeString(nodeB->nodeType));
-  totalErrors++;
+  semanticErrors++;
   return -1; // undefined
 }
 
@@ -96,7 +97,7 @@ int solveUnaryType(tokenElem operator, treeNode* node) {
 
   if (node->nodeType == 4) {
     printf("%3d \t %4d \t " PRINT_RED "Semantic Error: %s operation on NIL is undefined\n" PRINT_RESET, currentLine, currentColumn, operator.content);
-    totalErrors++;
+    semanticErrors++;
     return -1; // undefined
   }
   
@@ -112,7 +113,7 @@ int solveUnaryType(tokenElem operator, treeNode* node) {
     return node->nodeType;
   }
   printf("%3d \t %4d \t " PRINT_RED "Semantic Error: %s operation on %s is undefined\n" PRINT_RESET, currentLine, currentColumn, operator.content, getTypeString(node->nodeType));
-  totalErrors++;
+  semanticErrors++;
   return -1; // undefined
 }
 
@@ -120,11 +121,11 @@ void checkIOArgs(treeNode* node) {
   if (strcmp(node->nonTerminal, "input") == 0
       && (node->children[1]->nodeType != 0 && node->children[1]->nodeType != 1)) {
     printf("%3d \t %4d \t " PRINT_RED "Semantic Error: invalid input argument %s type \n" PRINT_RESET, currentLine, currentColumn, getTypeString(node->children[1]->nodeType));
-    totalErrors++;
+    semanticErrors++;
   } else if (strcmp(node->nonTerminal, "output") == 0 && node->children[1]->nodeType != 5 
       && node->children[1]->nodeType != 0 && node->children[1]->nodeType != 1) {
     printf("%3d \t %4d \t " PRINT_RED "Semantic Error: invalid output argument %s type \n" PRINT_RESET, currentLine, currentColumn, getTypeString(node->children[1]->nodeType));
-    totalErrors++;
+    semanticErrors++;
   }
 }
 
@@ -138,7 +139,7 @@ void checkReturn(treeNode* returnNode, int functionType) {
     returnNode->nodeConversion = returnType;
   } else {
     printf("%3d \t %4d \t " PRINT_RED "Semantic Error: %s return doesn't match function type %s \n" PRINT_RESET, currentLine, currentColumn, getTypeString(returnType), getTypeString(functionType));
-    totalErrors++;
+    semanticErrors++;
   } 
 }
 
@@ -187,10 +188,10 @@ void checkParams(char* identifier, treeNode* arguments, tableNode* table) {
   // Match args and params
   if (symbolIterator < nodeIterator) {
     printf("%3d \t %4d \t " PRINT_RED "Semantic Error: too many arguments in %s's call. Expected %d, got %d arguments.\n" PRINT_RESET, currentLine, currentColumn, identifier, symbolIterator, nodeIterator);
-    totalErrors++;
+    semanticErrors++;
   } else if (symbolIterator > nodeIterator) {
     printf("%3d \t %4d \t " PRINT_RED "Semantic Error: arguments missing in %s's call. Expected %d, got %d arguments.\n" PRINT_RESET, currentLine, currentColumn, identifier, symbolIterator, nodeIterator);
-    totalErrors++;
+    semanticErrors++;
   } else {
     for (int i = 0; i < symbolIterator; i++) {
       if ((args[i]->nodeType == 0 && params[i] == 1) || (args[i]->nodeType == 1 && params[i] == 0)) {
@@ -199,6 +200,7 @@ void checkParams(char* identifier, treeNode* arguments, tableNode* table) {
         continue;
       } else {
         printf("%3d \t %4d \t " PRINT_RED "Semantic Error: %s argument doesn't match %s in %s's call.\n" PRINT_RESET, currentLine, currentColumn, getTypeString(args[i]->nodeType), getTypeString(params[i]), identifier);
+        semanticErrors++;
       }
     }
   }

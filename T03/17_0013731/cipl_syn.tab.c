@@ -84,12 +84,13 @@
   extern int currentColumn;
   extern int scopeCounting;
   extern int totalErrors;
+  extern int semanticErrors;
 
   tableNode* table;
   treeNode* root;
   int lastFunctionType = -1;
 
-#line 93 "cipl_syn.tab.c"
+#line 94 "cipl_syn.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -560,14 +561,14 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,    95,    95,   101,   106,   110,   111,   114,   121,   125,
-     125,   137,   140,   141,   144,   149,   152,   161,   161,   171,
-     174,   179,   182,   183,   184,   185,   186,   187,   188,   191,
-     192,   195,   203,   209,   212,   213,   214,   215,   216,   217,
-     220,   230,   238,   247,   253,   254,   257,   265,   268,   275,
-     278,   285,   288,   295,   298,   305,   308,   315,   318,   325,
-     326,   327,   331,   334,   337,   342,   348,   356,   367,   368,
-     373,   374,   377,   382
+       0,    96,    96,   102,   107,   111,   112,   115,   122,   126,
+     126,   138,   141,   142,   145,   150,   153,   162,   162,   172,
+     175,   180,   183,   184,   185,   186,   187,   188,   189,   192,
+     193,   196,   204,   210,   213,   214,   215,   216,   217,   218,
+     221,   231,   239,   248,   254,   255,   258,   266,   269,   276,
+     279,   286,   289,   296,   299,   306,   309,   316,   319,   326,
+     327,   328,   332,   335,   338,   343,   349,   357,   368,   369,
+     374,   375,   378,   383
 };
 #endif
 
@@ -1978,45 +1979,45 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* program: declarationList  */
-#line 95 "./src/cipl_syn.y"
+#line 96 "./src/cipl_syn.y"
                   {
     (yyval.node) = (yyvsp[0].node);
     root = (yyval.node);
   }
-#line 1987 "cipl_syn.tab.c"
+#line 1988 "cipl_syn.tab.c"
     break;
 
   case 3: /* declarationList: declarationList declaration  */
-#line 101 "./src/cipl_syn.y"
+#line 102 "./src/cipl_syn.y"
                               {
     (yyval.node) = createNode("invisible node");
     (yyval.node)->children[0] = (yyvsp[-1].node);
     (yyval.node)->children[1] = (yyvsp[0].node);
   }
-#line 1997 "cipl_syn.tab.c"
+#line 1998 "cipl_syn.tab.c"
     break;
 
   case 4: /* declarationList: declaration  */
-#line 106 "./src/cipl_syn.y"
+#line 107 "./src/cipl_syn.y"
                 { (yyval.node) = (yyvsp[0].node); 
   }
-#line 2004 "cipl_syn.tab.c"
+#line 2005 "cipl_syn.tab.c"
     break;
 
   case 5: /* declaration: variableDeclaration  */
-#line 110 "./src/cipl_syn.y"
+#line 111 "./src/cipl_syn.y"
                       { (yyval.node) = (yyvsp[0].node); }
-#line 2010 "cipl_syn.tab.c"
+#line 2011 "cipl_syn.tab.c"
     break;
 
   case 6: /* declaration: functionDeclaration  */
-#line 111 "./src/cipl_syn.y"
+#line 112 "./src/cipl_syn.y"
                         { (yyval.node) = (yyvsp[0].node); }
-#line 2016 "cipl_syn.tab.c"
+#line 2017 "cipl_syn.tab.c"
     break;
 
   case 7: /* variableDeclaration: TYPE ID SEMICOLON  */
-#line 114 "./src/cipl_syn.y"
+#line 115 "./src/cipl_syn.y"
                     {
     newSymbol((yyvsp[-1].token).content, (yyvsp[-2].token).content, 0, currentScope->id, table);
     (yyval.node) = createNode("variable declaration");
@@ -2024,17 +2025,17 @@ yyreduce:
     (yyval.node)->children[1] = addLeaf((yyvsp[-1].token), getSymbolType(table, (yyvsp[-1].token).content, currentScope));
     (yyval.node)->children[1]->value.scopeNum = currentScope->id;
   }
-#line 2028 "cipl_syn.tab.c"
+#line 2029 "cipl_syn.tab.c"
     break;
 
   case 8: /* variableDeclaration: error ';'  */
-#line 121 "./src/cipl_syn.y"
+#line 122 "./src/cipl_syn.y"
               {yyerrok;}
-#line 2034 "cipl_syn.tab.c"
+#line 2035 "cipl_syn.tab.c"
     break;
 
   case 9: /* @1: %empty  */
-#line 125 "./src/cipl_syn.y"
+#line 126 "./src/cipl_syn.y"
                 {
     (yyval.node) = createNode("function declaration");
     (yyval.node)->children[0] = addLeaf((yyvsp[-1].token), -1);
@@ -2043,55 +2044,55 @@ yyreduce:
     (yyval.node)->children[1] = addLeaf((yyvsp[0].token), getSymbolType(table, (yyvsp[0].token).content, currentScope));
     (yyval.node)->children[1]->value.scopeNum = currentScope->id;
   }
-#line 2047 "cipl_syn.tab.c"
+#line 2048 "cipl_syn.tab.c"
     break;
 
   case 10: /* functionDeclaration: TYPE ID @1 OPEN_PAREN params CLOSE_PAREN compoundStmt  */
-#line 132 "./src/cipl_syn.y"
+#line 133 "./src/cipl_syn.y"
                                                 {
     (yyval.node) = (yyvsp[-4].node);
     (yyval.node)->children[2] = (yyvsp[-2].node);
     (yyval.node)->children[3] = (yyvsp[0].node);
   }
-#line 2057 "cipl_syn.tab.c"
+#line 2058 "cipl_syn.tab.c"
     break;
 
   case 11: /* functionDeclaration: error  */
-#line 137 "./src/cipl_syn.y"
+#line 138 "./src/cipl_syn.y"
           {yyerrok;}
-#line 2063 "cipl_syn.tab.c"
+#line 2064 "cipl_syn.tab.c"
     break;
 
   case 12: /* params: paramList  */
-#line 140 "./src/cipl_syn.y"
+#line 141 "./src/cipl_syn.y"
             { (yyval.node) = (yyvsp[0].node); }
-#line 2069 "cipl_syn.tab.c"
+#line 2070 "cipl_syn.tab.c"
     break;
 
   case 13: /* params: %empty  */
-#line 141 "./src/cipl_syn.y"
+#line 142 "./src/cipl_syn.y"
             { (yyval.node) = NULL; }
-#line 2075 "cipl_syn.tab.c"
+#line 2076 "cipl_syn.tab.c"
     break;
 
   case 14: /* paramList: paramList COMMA param  */
-#line 144 "./src/cipl_syn.y"
+#line 145 "./src/cipl_syn.y"
                         {
     (yyval.node) = createNode("invisible node");
     (yyval.node)->children[0] = (yyvsp[-2].node);
     (yyval.node)->children[1] = (yyvsp[0].node);
   }
-#line 2085 "cipl_syn.tab.c"
+#line 2086 "cipl_syn.tab.c"
     break;
 
   case 15: /* paramList: param  */
-#line 149 "./src/cipl_syn.y"
+#line 150 "./src/cipl_syn.y"
           { (yyval.node) = (yyvsp[0].node); }
-#line 2091 "cipl_syn.tab.c"
+#line 2092 "cipl_syn.tab.c"
     break;
 
   case 16: /* param: TYPE ID  */
-#line 152 "./src/cipl_syn.y"
+#line 153 "./src/cipl_syn.y"
           {
     newSymbol((yyvsp[0].token).content,  (yyvsp[-1].token).content, 2, scopeCounting+1, table);
     (yyval.node) = createNode("param");
@@ -2099,108 +2100,108 @@ yyreduce:
     (yyval.node)->children[1] = addLeaf((yyvsp[0].token), stringToType((yyvsp[-1].token).content));
     (yyval.node)->children[1]->value.scopeNum = currentScope->id+1;
   }
-#line 2103 "cipl_syn.tab.c"
+#line 2104 "cipl_syn.tab.c"
     break;
 
   case 17: /* @2: %empty  */
-#line 161 "./src/cipl_syn.y"
+#line 162 "./src/cipl_syn.y"
                                  {
     (yyval.node) = createNode("invisible node");
     (yyval.node)->children[0] = addLeaf((yyvsp[-1].token), -1);
     (yyval.node)->children[1] = (yyvsp[0].node);    
   }
-#line 2113 "cipl_syn.tab.c"
+#line 2114 "cipl_syn.tab.c"
     break;
 
   case 18: /* compoundStmt: OPEN_CURLY statementList @2 CLOSE_CURLY  */
-#line 165 "./src/cipl_syn.y"
+#line 166 "./src/cipl_syn.y"
                 { 
     (yyval.node) = (yyvsp[-1].node);
     (yyval.node)->children[2] = addLeaf((yyvsp[0].token), -1);
     // Return scope
     currentScope = currentScope->parent;
   }
-#line 2124 "cipl_syn.tab.c"
+#line 2125 "cipl_syn.tab.c"
     break;
 
   case 19: /* compoundStmt: error  */
-#line 171 "./src/cipl_syn.y"
+#line 172 "./src/cipl_syn.y"
           {yyerrok;}
-#line 2130 "cipl_syn.tab.c"
+#line 2131 "cipl_syn.tab.c"
     break;
 
   case 20: /* statementList: statementList statement  */
-#line 174 "./src/cipl_syn.y"
+#line 175 "./src/cipl_syn.y"
                           {
     (yyval.node) = createNode("invisible node");
     (yyval.node)->children[0] = (yyvsp[-1].node);
     (yyval.node)->children[1] = (yyvsp[0].node);
   }
-#line 2140 "cipl_syn.tab.c"
+#line 2141 "cipl_syn.tab.c"
     break;
 
   case 21: /* statementList: %empty  */
-#line 179 "./src/cipl_syn.y"
+#line 180 "./src/cipl_syn.y"
             { (yyval.node) = NULL; }
-#line 2146 "cipl_syn.tab.c"
+#line 2147 "cipl_syn.tab.c"
     break;
 
   case 22: /* statement: expressionStmt  */
-#line 182 "./src/cipl_syn.y"
+#line 183 "./src/cipl_syn.y"
                           { (yyval.node) = (yyvsp[0].node); }
-#line 2152 "cipl_syn.tab.c"
+#line 2153 "cipl_syn.tab.c"
     break;
 
   case 23: /* statement: compoundStmt  */
-#line 183 "./src/cipl_syn.y"
+#line 184 "./src/cipl_syn.y"
                           { (yyval.node) = (yyvsp[0].node); }
-#line 2158 "cipl_syn.tab.c"
+#line 2159 "cipl_syn.tab.c"
     break;
 
   case 24: /* statement: conditionalStmt  */
-#line 184 "./src/cipl_syn.y"
+#line 185 "./src/cipl_syn.y"
                           { (yyval.node) = (yyvsp[0].node); }
-#line 2164 "cipl_syn.tab.c"
+#line 2165 "cipl_syn.tab.c"
     break;
 
   case 25: /* statement: loopStmt  */
-#line 185 "./src/cipl_syn.y"
+#line 186 "./src/cipl_syn.y"
                           { (yyval.node) = (yyvsp[0].node); }
-#line 2170 "cipl_syn.tab.c"
+#line 2171 "cipl_syn.tab.c"
     break;
 
   case 26: /* statement: returnStmt  */
-#line 186 "./src/cipl_syn.y"
+#line 187 "./src/cipl_syn.y"
                           { (yyval.node) = (yyvsp[0].node); }
-#line 2176 "cipl_syn.tab.c"
+#line 2177 "cipl_syn.tab.c"
     break;
 
   case 27: /* statement: variableDeclaration  */
-#line 187 "./src/cipl_syn.y"
+#line 188 "./src/cipl_syn.y"
                           { (yyval.node) = (yyvsp[0].node); }
-#line 2182 "cipl_syn.tab.c"
+#line 2183 "cipl_syn.tab.c"
     break;
 
   case 28: /* statement: inOutStmt  */
-#line 188 "./src/cipl_syn.y"
+#line 189 "./src/cipl_syn.y"
                           { (yyval.node) = (yyvsp[0].node); }
-#line 2188 "cipl_syn.tab.c"
+#line 2189 "cipl_syn.tab.c"
     break;
 
   case 29: /* expressionStmt: expression SEMICOLON  */
-#line 191 "./src/cipl_syn.y"
+#line 192 "./src/cipl_syn.y"
                           { (yyval.node) = (yyvsp[-1].node); }
-#line 2194 "cipl_syn.tab.c"
+#line 2195 "cipl_syn.tab.c"
     break;
 
   case 30: /* expressionStmt: SEMICOLON  */
-#line 192 "./src/cipl_syn.y"
+#line 193 "./src/cipl_syn.y"
                           { (yyval.node) = NULL; }
-#line 2200 "cipl_syn.tab.c"
+#line 2201 "cipl_syn.tab.c"
     break;
 
   case 31: /* conditionalStmt: IF OPEN_PAREN expression CLOSE_PAREN conditionalBody ELSE conditionalBody  */
-#line 195 "./src/cipl_syn.y"
+#line 196 "./src/cipl_syn.y"
                                                                             {
     (yyval.node) = createNode("if else statment");
     (yyval.node)->children[0] = addLeaf((yyvsp[-6].token), -1);
@@ -2209,64 +2210,64 @@ yyreduce:
     (yyval.node)->children[3] = addLeaf((yyvsp[-1].token), -1);
     (yyval.node)->children[4] = (yyvsp[0].node);
   }
-#line 2213 "cipl_syn.tab.c"
+#line 2214 "cipl_syn.tab.c"
     break;
 
   case 32: /* conditionalStmt: IF OPEN_PAREN expression CLOSE_PAREN conditionalBody  */
-#line 203 "./src/cipl_syn.y"
+#line 204 "./src/cipl_syn.y"
                                                          {
     (yyval.node) = createNode("if statment");
     (yyval.node)->children[0] = addLeaf((yyvsp[-4].token), -1);
     (yyval.node)->children[1] = (yyvsp[-2].node);
     (yyval.node)->children[2] = (yyvsp[0].node);
   }
-#line 2224 "cipl_syn.tab.c"
+#line 2225 "cipl_syn.tab.c"
     break;
 
   case 33: /* conditionalStmt: IF error CLOSE_PAREN  */
-#line 209 "./src/cipl_syn.y"
+#line 210 "./src/cipl_syn.y"
                          {yyerrok;}
-#line 2230 "cipl_syn.tab.c"
+#line 2231 "cipl_syn.tab.c"
     break;
 
   case 34: /* conditionalBody: expressionStmt  */
-#line 212 "./src/cipl_syn.y"
+#line 213 "./src/cipl_syn.y"
                           { (yyval.node) = (yyvsp[0].node); }
-#line 2236 "cipl_syn.tab.c"
+#line 2237 "cipl_syn.tab.c"
     break;
 
   case 35: /* conditionalBody: compoundStmt  */
-#line 213 "./src/cipl_syn.y"
+#line 214 "./src/cipl_syn.y"
                           { (yyval.node) = (yyvsp[0].node); }
-#line 2242 "cipl_syn.tab.c"
+#line 2243 "cipl_syn.tab.c"
     break;
 
   case 36: /* conditionalBody: conditionalStmt  */
-#line 214 "./src/cipl_syn.y"
+#line 215 "./src/cipl_syn.y"
                           { (yyval.node) = (yyvsp[0].node); }
-#line 2248 "cipl_syn.tab.c"
+#line 2249 "cipl_syn.tab.c"
     break;
 
   case 37: /* conditionalBody: loopStmt  */
-#line 215 "./src/cipl_syn.y"
+#line 216 "./src/cipl_syn.y"
                           { (yyval.node) = (yyvsp[0].node); }
-#line 2254 "cipl_syn.tab.c"
+#line 2255 "cipl_syn.tab.c"
     break;
 
   case 38: /* conditionalBody: returnStmt  */
-#line 216 "./src/cipl_syn.y"
+#line 217 "./src/cipl_syn.y"
                           { (yyval.node) = (yyvsp[0].node); }
-#line 2260 "cipl_syn.tab.c"
+#line 2261 "cipl_syn.tab.c"
     break;
 
   case 39: /* conditionalBody: inOutStmt  */
-#line 217 "./src/cipl_syn.y"
+#line 218 "./src/cipl_syn.y"
                           { (yyval.node) = (yyvsp[0].node); }
-#line 2266 "cipl_syn.tab.c"
+#line 2267 "cipl_syn.tab.c"
     break;
 
   case 40: /* loopStmt: FOR OPEN_PAREN expression SEMICOLON logicExpression SEMICOLON expression CLOSE_PAREN statement  */
-#line 220 "./src/cipl_syn.y"
+#line 221 "./src/cipl_syn.y"
                                                                                                  {
     (yyval.node) = createNode("for statment");
     (yyval.node)->children[0] = addLeaf((yyvsp[-8].token), -1);
@@ -2275,22 +2276,22 @@ yyreduce:
     (yyval.node)->children[3] = (yyvsp[-2].node);
     (yyval.node)->children[4] = (yyvsp[0].node);
   }
-#line 2279 "cipl_syn.tab.c"
+#line 2280 "cipl_syn.tab.c"
     break;
 
   case 41: /* returnStmt: RETURN expression SEMICOLON  */
-#line 230 "./src/cipl_syn.y"
+#line 231 "./src/cipl_syn.y"
                               {
     (yyval.node) = createNode("return statment");
     (yyval.node)->children[0] = addLeaf((yyvsp[-2].token), -1);
     (yyval.node)->children[1] = (yyvsp[-1].node);
     checkReturn((yyvsp[-1].node), lastFunctionType);
   }
-#line 2290 "cipl_syn.tab.c"
+#line 2291 "cipl_syn.tab.c"
     break;
 
   case 42: /* inOutStmt: INPUT OPEN_PAREN ID CLOSE_PAREN SEMICOLON  */
-#line 238 "./src/cipl_syn.y"
+#line 239 "./src/cipl_syn.y"
                                             {
     (yyval.node) = createNode("input");
     (yyval.node)->children[0] = addLeaf((yyvsp[-4].token), -1);
@@ -2300,34 +2301,34 @@ yyreduce:
 
     checkIOArgs((yyval.node));
   }
-#line 2304 "cipl_syn.tab.c"
+#line 2305 "cipl_syn.tab.c"
     break;
 
   case 43: /* inOutStmt: OUTPUT OPEN_PAREN outputArgs CLOSE_PAREN SEMICOLON  */
-#line 247 "./src/cipl_syn.y"
+#line 248 "./src/cipl_syn.y"
                                                         {
     (yyval.node) = createNode("output");
     (yyval.node)->children[0] = addLeaf((yyvsp[-4].token), -1);
     (yyval.node)->children[1] = (yyvsp[-2].node);
     checkIOArgs((yyval.node));
   }
-#line 2315 "cipl_syn.tab.c"
+#line 2316 "cipl_syn.tab.c"
     break;
 
   case 44: /* inOutStmt: INPUT error SEMICOLON  */
-#line 253 "./src/cipl_syn.y"
+#line 254 "./src/cipl_syn.y"
                           {yyerrok;}
-#line 2321 "cipl_syn.tab.c"
+#line 2322 "cipl_syn.tab.c"
     break;
 
   case 45: /* inOutStmt: OUTPUT error SEMICOLON  */
-#line 254 "./src/cipl_syn.y"
+#line 255 "./src/cipl_syn.y"
                            {yyerrok;}
-#line 2327 "cipl_syn.tab.c"
+#line 2328 "cipl_syn.tab.c"
     break;
 
   case 46: /* expression: ID OP_ASSIG expression  */
-#line 257 "./src/cipl_syn.y"
+#line 258 "./src/cipl_syn.y"
                           {
     (yyval.node) = createNode("assign expression");
     (yyval.node)->children[0] = addLeaf((yyvsp[-2].token), getSymbolType(table, (yyvsp[-2].token).content, currentScope));
@@ -2336,17 +2337,17 @@ yyreduce:
     (yyval.node)->children[2] = (yyvsp[0].node);
     (yyval.node)->nodeType = solveType((yyvsp[-1].token), (yyval.node)->children[0], (yyvsp[0].node));
   }
-#line 2340 "cipl_syn.tab.c"
+#line 2341 "cipl_syn.tab.c"
     break;
 
   case 47: /* expression: logicExpression  */
-#line 265 "./src/cipl_syn.y"
+#line 266 "./src/cipl_syn.y"
                     { (yyval.node) = (yyvsp[0].node); }
-#line 2346 "cipl_syn.tab.c"
+#line 2347 "cipl_syn.tab.c"
     break;
 
   case 48: /* logicExpression: logicExpression OP_LOGIC relatExpression  */
-#line 268 "./src/cipl_syn.y"
+#line 269 "./src/cipl_syn.y"
                                             {
     (yyval.node) = createNode("logic expression");
     (yyval.node)->children[0] = (yyvsp[-2].node);
@@ -2354,17 +2355,17 @@ yyreduce:
     (yyval.node)->children[2] = (yyvsp[0].node);
     (yyval.node)->nodeType = 0; // always integer
   }
-#line 2358 "cipl_syn.tab.c"
+#line 2359 "cipl_syn.tab.c"
     break;
 
   case 49: /* logicExpression: relatExpression  */
-#line 275 "./src/cipl_syn.y"
+#line 276 "./src/cipl_syn.y"
                     { (yyval.node) = (yyvsp[0].node); }
-#line 2364 "cipl_syn.tab.c"
+#line 2365 "cipl_syn.tab.c"
     break;
 
   case 50: /* relatExpression: relatExpression OP_RELAT listExpression  */
-#line 278 "./src/cipl_syn.y"
+#line 279 "./src/cipl_syn.y"
                                             {
     (yyval.node) = createNode("relational expression");
     (yyval.node)->children[0] = (yyvsp[-2].node);
@@ -2372,17 +2373,17 @@ yyreduce:
     (yyval.node)->children[2] = (yyvsp[0].node);
     (yyval.node)->nodeType = solveType((yyvsp[-1].token), (yyvsp[-2].node), (yyvsp[0].node));
   }
-#line 2376 "cipl_syn.tab.c"
+#line 2377 "cipl_syn.tab.c"
     break;
 
   case 51: /* relatExpression: listExpression  */
-#line 285 "./src/cipl_syn.y"
+#line 286 "./src/cipl_syn.y"
                     { (yyval.node) = (yyvsp[0].node); }
-#line 2382 "cipl_syn.tab.c"
+#line 2383 "cipl_syn.tab.c"
     break;
 
   case 52: /* listExpression: addExpression OP_LIST listExpression  */
-#line 288 "./src/cipl_syn.y"
+#line 289 "./src/cipl_syn.y"
                                             {
     (yyval.node) = createNode("list expression");
     (yyval.node)->children[0] = (yyvsp[-2].node);
@@ -2390,17 +2391,17 @@ yyreduce:
     (yyval.node)->children[2] = (yyvsp[0].node);
     (yyval.node)->nodeType = solveType((yyvsp[-1].token), (yyvsp[-2].node), (yyvsp[0].node));
   }
-#line 2394 "cipl_syn.tab.c"
+#line 2395 "cipl_syn.tab.c"
     break;
 
   case 53: /* listExpression: addExpression  */
-#line 295 "./src/cipl_syn.y"
+#line 296 "./src/cipl_syn.y"
                     { (yyval.node) = (yyvsp[0].node); }
-#line 2400 "cipl_syn.tab.c"
+#line 2401 "cipl_syn.tab.c"
     break;
 
   case 54: /* addExpression: addExpression OP_ADD mulExpression  */
-#line 298 "./src/cipl_syn.y"
+#line 299 "./src/cipl_syn.y"
                                      {
     (yyval.node) = createNode("additive expression");
     (yyval.node)->children[0] = (yyvsp[-2].node);
@@ -2408,17 +2409,17 @@ yyreduce:
     (yyval.node)->children[2] = (yyvsp[0].node);
     (yyval.node)->nodeType = solveType((yyvsp[-1].token), (yyvsp[-2].node), (yyvsp[0].node));
   }
-#line 2412 "cipl_syn.tab.c"
+#line 2413 "cipl_syn.tab.c"
     break;
 
   case 55: /* addExpression: mulExpression  */
-#line 305 "./src/cipl_syn.y"
+#line 306 "./src/cipl_syn.y"
                     { (yyval.node) = (yyvsp[0].node); }
-#line 2418 "cipl_syn.tab.c"
+#line 2419 "cipl_syn.tab.c"
     break;
 
   case 56: /* mulExpression: mulExpression OP_MUL factor  */
-#line 308 "./src/cipl_syn.y"
+#line 309 "./src/cipl_syn.y"
                               {
     (yyval.node) = createNode("multiplicative expression");
     (yyval.node)->children[0] = (yyvsp[-2].node);
@@ -2426,17 +2427,17 @@ yyreduce:
     (yyval.node)->children[2] = (yyvsp[0].node);
     (yyval.node)->nodeType = solveType((yyvsp[-1].token), (yyvsp[-2].node), (yyvsp[0].node));
   }
-#line 2430 "cipl_syn.tab.c"
+#line 2431 "cipl_syn.tab.c"
     break;
 
   case 57: /* mulExpression: factor  */
-#line 315 "./src/cipl_syn.y"
+#line 316 "./src/cipl_syn.y"
            { (yyval.node) = (yyvsp[0].node); }
-#line 2436 "cipl_syn.tab.c"
+#line 2437 "cipl_syn.tab.c"
     break;
 
   case 58: /* factor: OPEN_PAREN expression CLOSE_PAREN  */
-#line 318 "./src/cipl_syn.y"
+#line 319 "./src/cipl_syn.y"
                                     {
     (yyval.node) = createNode("parenthesis expression");
     (yyval.node)->children[0] = addLeaf((yyvsp[-2].token), -1);
@@ -2444,78 +2445,78 @@ yyreduce:
     (yyval.node)->children[2] = addLeaf((yyvsp[0].token), -1);
     (yyval.node)->nodeType = (yyvsp[-1].node)->nodeType;
   }
-#line 2448 "cipl_syn.tab.c"
+#line 2449 "cipl_syn.tab.c"
     break;
 
   case 59: /* factor: unaryExpression  */
-#line 325 "./src/cipl_syn.y"
+#line 326 "./src/cipl_syn.y"
                     { (yyval.node) = (yyvsp[0].node); }
-#line 2454 "cipl_syn.tab.c"
+#line 2455 "cipl_syn.tab.c"
     break;
 
   case 60: /* factor: call  */
-#line 326 "./src/cipl_syn.y"
+#line 327 "./src/cipl_syn.y"
          { (yyval.node) = (yyvsp[0].node); }
-#line 2460 "cipl_syn.tab.c"
+#line 2461 "cipl_syn.tab.c"
     break;
 
   case 61: /* factor: ID  */
-#line 327 "./src/cipl_syn.y"
+#line 328 "./src/cipl_syn.y"
        {
     (yyval.node) = addLeaf((yyvsp[0].token), getSymbolType(table, (yyvsp[0].token).content, currentScope));
     (yyval.node)->value.scopeNum = getSymbolScope(table, (yyvsp[0].token).content, currentScope);
   }
-#line 2469 "cipl_syn.tab.c"
+#line 2470 "cipl_syn.tab.c"
     break;
 
   case 62: /* factor: FLOAT  */
-#line 331 "./src/cipl_syn.y"
+#line 332 "./src/cipl_syn.y"
           {
     (yyval.node) = addLeaf((yyvsp[0].token), 1);
   }
-#line 2477 "cipl_syn.tab.c"
+#line 2478 "cipl_syn.tab.c"
     break;
 
   case 63: /* factor: INT  */
-#line 334 "./src/cipl_syn.y"
+#line 335 "./src/cipl_syn.y"
         {
     (yyval.node) = addLeaf((yyvsp[0].token), 0);
   }
-#line 2485 "cipl_syn.tab.c"
+#line 2486 "cipl_syn.tab.c"
     break;
 
   case 64: /* factor: NIL  */
-#line 337 "./src/cipl_syn.y"
+#line 338 "./src/cipl_syn.y"
         {
     (yyval.node) = addLeaf((yyvsp[0].token), 4);
   }
-#line 2493 "cipl_syn.tab.c"
+#line 2494 "cipl_syn.tab.c"
     break;
 
   case 65: /* unaryExpression: UN_OP factor  */
-#line 342 "./src/cipl_syn.y"
+#line 343 "./src/cipl_syn.y"
                {
     (yyval.node) = createNode("unary expression");
     (yyval.node)->children[0] = addLeaf((yyvsp[-1].token), -1);
     (yyval.node)->children[1] = (yyvsp[0].node);
     (yyval.node)->nodeType = solveUnaryType((yyvsp[-1].token), (yyvsp[0].node));
   }
-#line 2504 "cipl_syn.tab.c"
+#line 2505 "cipl_syn.tab.c"
     break;
 
   case 66: /* unaryExpression: OP_ADD factor  */
-#line 348 "./src/cipl_syn.y"
+#line 349 "./src/cipl_syn.y"
                   {
     (yyval.node) = createNode("signed expression");
     (yyval.node)->children[0] = addLeaf((yyvsp[-1].token), -1);
     (yyval.node)->children[1] = (yyvsp[0].node);
     (yyval.node)->nodeType = solveUnaryType((yyvsp[-1].token), (yyvsp[0].node));
   }
-#line 2515 "cipl_syn.tab.c"
+#line 2516 "cipl_syn.tab.c"
     break;
 
   case 67: /* call: ID OPEN_PAREN args CLOSE_PAREN  */
-#line 356 "./src/cipl_syn.y"
+#line 357 "./src/cipl_syn.y"
                                  {
     (yyval.node) = createNode("function call");
     int type = getSymbolType(table, (yyvsp[-3].token).content, currentScope);
@@ -2525,53 +2526,53 @@ yyreduce:
     (yyval.node)->nodeType = type;
     checkParams((yyvsp[-3].token).content, (yyvsp[-1].node), table);
   }
-#line 2529 "cipl_syn.tab.c"
+#line 2530 "cipl_syn.tab.c"
     break;
 
   case 68: /* outputArgs: expression  */
-#line 367 "./src/cipl_syn.y"
+#line 368 "./src/cipl_syn.y"
              { (yyval.node) = (yyvsp[0].node); }
-#line 2535 "cipl_syn.tab.c"
+#line 2536 "cipl_syn.tab.c"
     break;
 
   case 69: /* outputArgs: STRING  */
-#line 368 "./src/cipl_syn.y"
+#line 369 "./src/cipl_syn.y"
            {
     (yyval.node) = addLeaf((yyvsp[0].token), 5);
   }
-#line 2543 "cipl_syn.tab.c"
+#line 2544 "cipl_syn.tab.c"
     break;
 
   case 70: /* args: argList  */
-#line 373 "./src/cipl_syn.y"
+#line 374 "./src/cipl_syn.y"
           { (yyval.node) = (yyvsp[0].node); }
-#line 2549 "cipl_syn.tab.c"
+#line 2550 "cipl_syn.tab.c"
     break;
 
   case 71: /* args: %empty  */
-#line 374 "./src/cipl_syn.y"
+#line 375 "./src/cipl_syn.y"
             { (yyval.node) = NULL; }
-#line 2555 "cipl_syn.tab.c"
+#line 2556 "cipl_syn.tab.c"
     break;
 
   case 72: /* argList: argList COMMA expression  */
-#line 377 "./src/cipl_syn.y"
+#line 378 "./src/cipl_syn.y"
                            {
     (yyval.node) = createNode("arguments list");
     (yyval.node)->children[0] = (yyvsp[-2].node);
     (yyval.node)->children[1] = (yyvsp[0].node);
   }
-#line 2565 "cipl_syn.tab.c"
+#line 2566 "cipl_syn.tab.c"
     break;
 
   case 73: /* argList: expression  */
-#line 382 "./src/cipl_syn.y"
+#line 383 "./src/cipl_syn.y"
                { (yyval.node) = (yyvsp[0].node); }
-#line 2571 "cipl_syn.tab.c"
+#line 2572 "cipl_syn.tab.c"
     break;
 
 
-#line 2575 "cipl_syn.tab.c"
+#line 2576 "cipl_syn.tab.c"
 
       default: break;
     }
@@ -2796,7 +2797,7 @@ yyreturn:
   return yyresult;
 }
 
-#line 384 "./src/cipl_syn.y"
+#line 385 "./src/cipl_syn.y"
 
 
 void yyerror (char const *message) {
@@ -2823,12 +2824,15 @@ int main (int argc, char *argv[]) {
 
       yyparse();
       mainWasDeclared(table);
-      if (totalErrors == 0) {
+      if (totalErrors == 0 && semanticErrors == 0) {
         printf(PRINT_CYAN "There's no errors.\n" PRINT_RESET);
       }
-      printf("\nAbstract Syntax Tree:\n");
-      printTree(root, 1);
-      freeTree(root);
+      
+      if (totalErrors == 0) {
+        printf("\nAbstract Syntax Tree:\n");
+        printTree(root, 1);
+        freeTree(root);
+      } 
 
       printTable(table);
       freeTable(table);

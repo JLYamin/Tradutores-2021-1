@@ -17,6 +17,7 @@
   extern int currentColumn;
   extern int scopeCounting;
   extern int totalErrors;
+  extern int semanticErrors;
 
   tableNode* table;
   treeNode* root;
@@ -407,12 +408,15 @@ int main (int argc, char *argv[]) {
 
       yyparse();
       mainWasDeclared(table);
-      if (totalErrors == 0) {
+      if (totalErrors == 0 && semanticErrors == 0) {
         printf(PRINT_CYAN "There's no errors.\n" PRINT_RESET);
       }
-      printf("\nAbstract Syntax Tree:\n");
-      printTree(root, 1);
-      freeTree(root);
+      
+      if (totalErrors == 0) {
+        printf("\nAbstract Syntax Tree:\n");
+        printTree(root, 1);
+        freeTree(root);
+      } 
 
       printTable(table);
       freeTable(table);

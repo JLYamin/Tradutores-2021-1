@@ -3,7 +3,7 @@ float list FL;
 
 // COMENTÁRIO
 
-int list read_list(int n, int t) {
+int list read_list(int n) {
   int i;
   i = -435.7;
   int list new;

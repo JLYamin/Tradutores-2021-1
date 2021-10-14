@@ -18,6 +18,7 @@
   int currentLine = 1;
   int currentColumn = 1;
   int totalErrors = 0;
+  int semanticErrors = 0;
   int scopeCounting = 0;
 
 %}

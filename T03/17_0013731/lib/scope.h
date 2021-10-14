@@ -9,6 +9,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "../lib/tree.h"
+
 typedef struct scope {
   int id;
   int depth;

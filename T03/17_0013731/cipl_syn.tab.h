@@ -87,7 +87,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 26 "./src/cipl_syn.y"
+#line 27 "./src/cipl_syn.y"
 
   tokenElem token;
   treeNode* node;

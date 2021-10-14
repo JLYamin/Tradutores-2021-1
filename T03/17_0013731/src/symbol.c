@@ -9,6 +9,7 @@ extern int totalErrors;
 extern int currentLine;
 extern int currentColumn;
 extern int scopeCounting;
+extern int semanticErrors;
 
 tableNode* initTable(int counting) {
   tableNode* table = (tableNode*)malloc(sizeof(tableNode));
@@ -97,7 +98,7 @@ int wasItDeclared (tableNode* table, char* identifier, int currentScope) {
   while (currentNode != NULL) {
     if (strcmp(currentNode->identifier, identifier) == 0 && currentScope == currentNode->scopeNum) {
       printf("%3d \t %4d \t " PRINT_RED "Semantic Error: redefinition of %s\n" PRINT_RESET, currentLine, currentColumn, currentNode->identifier);
-      totalErrors++;
+      semanticErrors++;
       return 0;
     }
     currentNode = currentNode->next;
@@ -115,7 +116,7 @@ void mainWasDeclared(tableNode* table) {
     currentNode = currentNode->next;
   }
   printf("%3d \t %4d \t " PRINT_RED "Semantic Error: missing main function\n" PRINT_RESET, currentLine, currentColumn);
-  totalErrors++;
+  semanticErrors++;
 }
 
 int getSymbolType(tableNode* table, char* identifier, scopeNode* currentScope) {
@@ -133,7 +134,7 @@ int getSymbolType(tableNode* table, char* identifier, scopeNode* currentScope) {
     scope = scope->parent;
   }
   printf("%3d \t %4d \t " PRINT_RED "Semantic Error: %s was not declared in this scope\n" PRINT_RESET, currentLine, currentColumn, identifier);
-  totalErrors++;
+  semanticErrors++;
   return -1;
 }
 
@@ -152,7 +153,7 @@ int getSymbolScope(tableNode* table, char* identifier, scopeNode* currentScope) 
     scope = scope->parent;
   }
   printf("%3d \t %4d \t " PRINT_RED "Semantic Error: %s was not declared in this scope\n" PRINT_RESET, currentLine, currentColumn, identifier);
-  totalErrors++;
+  semanticErrors++;
   return -1;
 }
 
