@@ -1,4 +1,4 @@
-/* A Bison parser, made by GNU Bison 3.7.6.  */
+/* A Bison parser, made by GNU Bison 3.8.1.  */
 
 /* Bison interface for Yacc-like parsers in C
 
@@ -87,7 +87,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 27 "./src/cipl_syn.y"
+#line 28 "./src/cipl_syn.y"
 
   tokenElem token;
   treeNode* node;
@@ -103,6 +103,8 @@ typedef union YYSTYPE YYSTYPE;
 
 extern YYSTYPE yylval;
 
+
 int yyparse (void);
+
 
 #endif /* !YY_YY_CIPL_SYN_TAB_H_INCLUDED  */

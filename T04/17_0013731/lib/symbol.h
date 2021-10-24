@@ -20,10 +20,10 @@
 
 typedef struct symbol {
   char* identifier;
-  int type;
   // 0 int, 1 float, 2 int list, 3 float list
-  int isFunction;
+  int type;
   // 0 is variable, 1 is function, 2 is param
+  int isFunction;
   int scopeNum;
   int thisFunctionScope;
   struct symbol* next;
