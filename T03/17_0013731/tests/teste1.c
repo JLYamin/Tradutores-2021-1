@@ -1,3 +1,5 @@
+float list list1;
+
 int halfByElem(int a) {
   return 10 / a;
 }
@@ -8,8 +10,12 @@ int notZero(int b) {
   return b;
 }
 
-float relationalExpress(float list a) {
-  return NIL == a;
+float functionExpress(float list a) {
+  if (a != NIL) {
+    return ?a;
+  } else {
+    return 2.2;
+  }
 }
 
 int list execList(int list list1) {
@@ -17,17 +23,19 @@ int list execList(int list list1) {
 }
 
 int operators(int a, int b) {
-  return (12 - 10) / 20.0 + 3 * a || b;
+  return (12 - functionExpress(list1)) / 20.0 + 3 * a || b;
 }
 
 int main () {
   int a;
-  int b;
+  float b;
   a = 20;
-  b = 10;
+  b = 10.1;
   b = a;
 
-  writeln(operators(a, b));
+  if (a == b) {
+    writeln(operators(a, b));
+  }
 
   return 0;
 }

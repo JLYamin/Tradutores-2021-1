@@ -414,10 +414,10 @@ int main (int argc, char *argv[]) {
       }
       
       if (totalErrors == 0) {
-        genCode(createFile(argv[1]), table, root);
 
         printf("\nAbstract Syntax Tree:\n");
         printTree(root, 1);
+        genCode(createFile(argv[1]), table, root);
         freeTree(root);
       } 
 

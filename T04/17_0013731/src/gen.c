@@ -5,6 +5,8 @@
 
 #include "../lib/gen.h"
 
+int tempVarCounter = 0;
+
 FILE* createFile(char* filename) {
 
   char* newName = malloc(strlen(filename) + 5);
@@ -32,6 +34,7 @@ void genCode(FILE* file, tableNode* table, treeNode* root) {
     fprintf(file, ".table\n");
     addTableDeclarations(file, table);
     fprintf(file, ".code\n");
+    addCodeSnippets(file, root);
     fclose(file);
   }
 
@@ -50,4 +53,36 @@ void addTableDeclarations(FILE* file, tableNode* table) {
     }
     currentNode = currentNode->next;
   }
+}
+
+void addCodeSnippets(FILE* file, treeNode* node) {
+  if (node == NULL) {
+    return;
+  }
+
+  for (int i = 0; i < 5; i++) {
+    if (node->children[i] != NULL) {
+      addCodeSnippets(file, node->children[i]);
+    }
+  }
+
+  if (node->nonTerminal != NULL) {
+    if(strcmp(node->nonTerminal, "assign expression") == 0) {
+      fprintf(file, "mov %s%d, ", node->children[0]->value.content, node->children[0]->value.scopeNum);
+
+      if (node->children[2]->nonTerminal == NULL) {
+        if (strcmp(node->children[2]->value.token_type, "ID") == 0) {
+          fprintf(file, "%s%d\n", node->children[2]->value.content, node->children[2]->value.scopeNum);
+        } else {
+          fprintf(file, "%s\n", node->children[2]->value.content);
+        }
+      } else {
+        fprintf(file, "$%d\n", tempVarCounter);
+      }
+    }
+  }
+}
+
+void addTypeConversion(FILE* file, int type, char* operand) {
+  
 }

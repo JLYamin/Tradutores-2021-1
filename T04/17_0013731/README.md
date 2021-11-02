@@ -26,4 +26,4 @@ que irá compilar o código e gerará um executável de nome `tradutor`. Com ist
 
 `./tradutor <caminho_para_o_arquivo>`.
 
-Como dito acima, os testes se encontram no diretório `./tests/`.
+Como dito acima, os testes se encontram no diretório `./tests/`. No mesmo diretório em que se encontra o arquivo de entrada, será adicionado o arquivo gerado com a extensão `.tac`.

@@ -15,5 +15,7 @@
 FILE* createFile(char* filename);
 void genCode(FILE* file, tableNode* table, treeNode* root);
 void addTableDeclarations(FILE* file, tableNode* table);
+void addCodeSnippets(FILE* file, treeNode* root);
+void addTypeConversion(FILE* file, int type, char* operand);
 
 #endif
