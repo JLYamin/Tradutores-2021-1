@@ -1,5 +1,4 @@
 .table
-int f1
 int a1
 .code
-mov a1, $0
+mov a1, $1

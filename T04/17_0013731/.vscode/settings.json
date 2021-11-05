@@ -4,6 +4,9 @@
     "cipl_syn.tab.h": "c",
     "list": "c",
     "random": "c",
-    "typeinfo": "c"
+    "typeinfo": "c",
+    "hash_map": "c",
+    "chrono": "c",
+    "algorithm": "c"
   }
 }

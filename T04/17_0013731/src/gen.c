@@ -77,12 +77,12 @@ void addCodeSnippets(FILE* file, treeNode* node) {
           fprintf(file, "%s\n", node->children[2]->value.content);
         }
       } else {
-        fprintf(file, "$%d\n", tempVarCounter);
+        fprintf(file, "$%d\n", previousCounter(1));
       }
     } else if (strcmp(node->nonTerminal, "signed expression") == 0) {
       // MINUS EXPRESSION
       if (strcmp(node->children[0]->value.content, "-") == 0) {
-        fprintf(file, "minus $%d, ", tempVarCounter);
+        fprintf(file, "minus $%d, ", addCounter());
         // if it's a terminal:
         if (node->children[1]->nonTerminal == NULL) {
           // if it's a variable:
@@ -94,12 +94,12 @@ void addCodeSnippets(FILE* file, treeNode* node) {
           }
         // if it isn't:
         } else {
-          fprintf(file, "$%d\n", tempVarCounter);
+          fprintf(file, "$%d\n", previousCounter(1));
         }
       }
     } else if (strcmp(node->nonTerminal, "unary expression") == 0) {
       if (strcmp(node->children[0]->value.content, "!") == 0 && (node->children[1]->nodeType == 0 || node->children[1]->nodeType == 1)) {
-        fprintf(file, "not $%d, ", tempVarCounter);
+        fprintf(file, "not $%d, ", addCounter());
         // if it's a terminal:
         if (node->children[1]->nonTerminal == NULL) {
           // if it's a variable:
@@ -111,7 +111,7 @@ void addCodeSnippets(FILE* file, treeNode* node) {
           }
         // if it isn't:
         } else {
-          fprintf(file, "$%d\n", tempVarCounter);
+          fprintf(file, "$%d\n", previousCounter(1));
         }
       }
     }
@@ -121,3 +121,14 @@ void addCodeSnippets(FILE* file, treeNode* node) {
 void addTypeConversion(FILE* file, int type, char* operand) {
   // TODO
 }
+
+int addCounter () {
+  int variable = tempVarCounter % 9;
+  tempVarCounter++;
+  return variable;
+}
+
+int previousCounter(int steps) {
+  return abs(tempVarCounter - steps) % 9;
+}
+
