@@ -100,6 +100,10 @@ int solveUnaryType(tokenElem operator, treeNode* node) {
     semanticErrors++;
     return -1; // undefined
   }
+
+  if (strcmp(operator.content, "!") == 0 && (node->nodeType == 0 || node->nodeType == 1)) {
+    return node->nodeType;
+  }
   
   if (strcmp(operator.content, "!") == 0 || strcmp(operator.content, "%") == 0) {
     if (node->nodeType == 2 || node->nodeType == 3) {

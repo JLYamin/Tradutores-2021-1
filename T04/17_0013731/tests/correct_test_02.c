@@ -27,10 +27,9 @@ int main () {
   b = 10;
   b = -a;
   b = -10;
-  b = -(a+b);
+  b = -(a+b-10);
   b = !b;
+  b = b && b;
 
   writeln(operators(a, b));
-
-  return 0;
 }
