@@ -25,7 +25,10 @@ int main () {
   int b;
   a = 20;
   b = 10;
-  b = a;
+  b = -a;
+  b = -10;
+  b = -(a+b);
+  b = !b;
 
   writeln(operators(a, b));
 

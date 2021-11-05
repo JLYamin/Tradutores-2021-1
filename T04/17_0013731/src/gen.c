@@ -79,10 +79,45 @@ void addCodeSnippets(FILE* file, treeNode* node) {
       } else {
         fprintf(file, "$%d\n", tempVarCounter);
       }
+    } else if (strcmp(node->nonTerminal, "signed expression") == 0) {
+      // MINUS EXPRESSION
+      if (strcmp(node->children[0]->value.content, "-") == 0) {
+        fprintf(file, "minus $%d, ", tempVarCounter);
+        // if it's a terminal:
+        if (node->children[1]->nonTerminal == NULL) {
+          // if it's a variable:
+          if (strcmp(node->children[1]->value.token_type, "ID") == 0) {
+            fprintf(file, "%s%d\n", node->children[1]->value.content, node->children[1]->value.scopeNum);
+          } else {
+          // if it's a constant:
+            fprintf(file, "%s\n", node->children[1]->value.content);
+          }
+        // if it isn't:
+        } else {
+          fprintf(file, "$%d\n", tempVarCounter);
+        }
+      }
+    } else if (strcmp(node->nonTerminal, "unary expression") == 0) {
+      if (strcmp(node->children[0]->value.content, "!") == 0 && (node->children[1]->nodeType == 0 || node->children[1]->nodeType == 1)) {
+        fprintf(file, "not $%d, ", tempVarCounter);
+        // if it's a terminal:
+        if (node->children[1]->nonTerminal == NULL) {
+          // if it's a variable:
+          if (strcmp(node->children[1]->value.token_type, "ID") == 0) {
+            fprintf(file, "%s%d\n", node->children[1]->value.content, node->children[1]->value.scopeNum);
+          } else {
+          // if it's a constant:
+            fprintf(file, "%s\n", node->children[1]->value.content);
+          }
+        // if it isn't:
+        } else {
+          fprintf(file, "$%d\n", tempVarCounter);
+        }
+      }
     }
   }
 }
 
 void addTypeConversion(FILE* file, int type, char* operand) {
-  
+  // TODO
 }
