@@ -136,11 +136,12 @@ functionDeclaration:
     $$->children[2] = $5;
     $$->children[3] = $7;
   }
-  | error {yyerrok;}
+  | error OPEN_PAREN { yyerrok; }
 
 params:
   paramList { $$ = $1; }
   | %empty  { $$ = NULL; }
+  | error { yyerrok; }
 
 paramList:
   paramList COMMA param {

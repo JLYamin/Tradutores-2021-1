@@ -58,7 +58,7 @@ OPEN_CURLY  "{"
 OPEN_PAREN  "("
 CLOSE_CURLY "}"
 CLOSE_PAREN ")"
-STRING      (\".*\")|(\'.+\')
+STRING      (\".*\")
 
 %%
 
